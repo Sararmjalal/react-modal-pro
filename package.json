@@ -33,6 +33,8 @@
     ]
   },
   "devDependencies": {
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
     "typescript-plugin-css-modules": "^5.1.0"
   }
 }
