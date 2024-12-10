@@ -2,7 +2,7 @@ import { Fragment, ReactNode } from "react";
 import { createPortal } from "react-dom";
 import styles from "./style.module.css";
 
-const Drawer = (props: DrawerProps & { children: ReactNode }) => {
+const DrawerBase = (props: DrawerProps & { children: ReactNode }) => {
   const {
     open,
     openDuration,
@@ -69,4 +69,4 @@ const Drawer = (props: DrawerProps & { children: ReactNode }) => {
   return null;
 };
 
-export default Drawer;
+export default DrawerBase;

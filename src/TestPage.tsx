@@ -1,5 +1,5 @@
-import Dialog from "./components/dialog";
-import Drawer from "./components/drawer";
+import DialogBase from "./components/dialog";
+import DrawerBase from "./components/drawer";
 import { useModalTransition } from "./lib/hooks/useModalTransition";
 
 const TestPage = () => {
@@ -18,17 +18,17 @@ const TestPage = () => {
             <button onClick={handleOpenDrawer}>
                 open drawer
             </button>
-            <Dialog
+            <DialogBase
                 {...props}
                 handleClose={handleCloseModal}>
                 ThisChildren
-            </Dialog>
-            <Drawer
+            </DialogBase>
+            <DrawerBase
                 handleClose={handleCloseDrawer}
                 {...propss}
             >
                 <div>drawer children</div>
-            </Drawer>
+            </DrawerBase>
         </>
     )
 }

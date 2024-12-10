@@ -4,7 +4,7 @@ import styles from './style.module.css';
 import { createPortal } from "react-dom";
 import { Fragment } from "react/jsx-runtime";
 
-const Dialog = (props: DialogProps & { children: ReactNode }) => {
+const DialogBase = (props: DialogProps & { children: ReactNode }) => {
 
     const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName = "", backdropClassName = "" } = props
     const animations = {
@@ -41,4 +41,4 @@ const Dialog = (props: DialogProps & { children: ReactNode }) => {
     return null
 }
 
-export default Dialog
+export default DialogBase
