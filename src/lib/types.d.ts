@@ -17,8 +17,6 @@ type useScrollNearEdgesProps = {
 }
 
 type useModalTransitionProps = {
-    duration?: number
     key: string
     confirmCb?: () => void
-    canDismiss?: boolean
 }

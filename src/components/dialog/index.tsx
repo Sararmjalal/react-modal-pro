@@ -6,7 +6,7 @@ import { Fragment } from "react/jsx-runtime";
 
 const Dialog = (props: DialogProps & { children: ReactNode }) => {
 
-    const { open, openDuration = 300, willBeClosed, handleClose, closeDuration = 200, children, sheetClassName = "", backdropClassName = "" } = props
+    const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName = "", backdropClassName = "" } = props
     const animations = {
         backdrop: {
             "false": `dialog-fade-in ${openDuration}ms`,

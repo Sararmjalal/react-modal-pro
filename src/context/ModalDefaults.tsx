@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 
 interface ModalDefaultsContextType {
     canDismiss: boolean;
@@ -12,21 +12,26 @@ const ModalDefaultsContext = createContext<ModalDefaultsContextType | undefined>
 
 interface ModalDefaultsProviderProps {
     children: ReactNode;
+    defaultCanDismiss?: boolean;
+    defaultOpenDuration?: number;
+    defaultCloseDuration?: number
+    defaultSheetClassName?: string;
+    defaultBackdropClassName?: string
 }
 
 export const ModalDefaultsProvider: React.FC<ModalDefaultsProviderProps> = (props) => {
 
+    const { children, defaultBackdropClassName, defaultCanDismiss, defaultCloseDuration, defaultOpenDuration, defaultSheetClassName } = props
+
     const modalDefaults = {
-        openDuration: 300,
-        closeDuration: 200,
-        sheetClassName: "",
-        backdropClassName: "",
-        canDismiss: false
+        canDismiss: defaultCanDismiss ?? true,
+        openDuration: defaultOpenDuration ?? 300,
+        closeDuration: defaultCloseDuration ?? 200,
+        sheetClassName: defaultSheetClassName ?? "",
+        backdropClassName: defaultBackdropClassName ?? ""
     }
 
     const { openDuration, closeDuration, sheetClassName, backdropClassName, canDismiss } = modalDefaults
-
-    const { children } = props
 
     return (
         <ModalDefaultsContext.Provider value={{ openDuration, closeDuration, sheetClassName, backdropClassName, canDismiss }}>

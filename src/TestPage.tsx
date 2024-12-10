@@ -4,7 +4,7 @@ import { useModalTransition } from "./lib/hooks/useModalTransition"
 
 const TestPage = () => {
 
-    const { open, handleCloseModal, handleOpenModal, willBeClosed } = useModalTransition({
+    const { handleOpenModal, handleCloseModal, ...props } = useModalTransition({
         key: "hello"
     })
 
@@ -14,8 +14,7 @@ const TestPage = () => {
                 open
             </button>
             <Dialog
-                open={open}
-                willBeClosed={willBeClosed}
+                {...props}
                 handleClose={handleCloseModal}>
                 ThisChildren
             </Dialog>

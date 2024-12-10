@@ -18,3 +18,11 @@ type DrawerProps = {
   backdropClassName?: string;
   direction?: "left" | "right" | "bottom" | "top";
 };
+
+type ModalProviderProps = {
+  defaultCanDismiss?: boolean;
+  defaultOpenDuration?: number;
+  defaultCloseDuration?: number;
+  defaultSheetClassName?: string;
+  defaultBackdropClassName?: string;
+}

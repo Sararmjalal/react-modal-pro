@@ -4,7 +4,7 @@ import { useRouter } from "./useRouter"
 import { useModals } from "../../context"
 
 
-export const useModalTransition = ({ duration = 100, key, confirmCb, canDismiss = true }: useModalTransitionProps) => {
+export const useModalTransition = ({ key, confirmCb }: useModalTransitionProps) => {
 
     const modalKey = `#${key}`
 
@@ -44,7 +44,7 @@ export const useModalTransition = ({ duration = 100, key, confirmCb, canDismiss 
                 timeout = setTimeout(() => {
                     window.history.back()
                     if (confirmCb) confirmCb()
-                }, duration)
+                }, thisModal.closeDuration - 100)
             } else {
                 removeModal(key)
             }
@@ -58,7 +58,7 @@ export const useModalTransition = ({ duration = 100, key, confirmCb, canDismiss 
     }
 
     const handleCloseModal = () => {
-        if (canDismiss) setWillBeClosed(key, true)
+        if (thisModal.canDismiss) setWillBeClosed(key, true)
     }
 
     return { ...thisModal, handleOpenModal, handleCloseModal }
