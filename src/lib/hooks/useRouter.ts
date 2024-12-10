@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
 export const useRouter = () => {
-    const [path, setPath] = useState(window.location.pathname);
+    const [path, setPath] = useState(window.location.pathname + window.location.hash);
 
     useEffect(() => {
-        const handlePopState = () => setPath(window.location.pathname);
+        const handlePopState = () => {
+            setPath(window.location.pathname)
+        };
         window.addEventListener('popstate', handlePopState);
         return () => window.removeEventListener('popstate', handlePopState);
     }, []);
@@ -14,5 +16,5 @@ export const useRouter = () => {
         setPath(to);
     };
 
-    return { pathname: path, navigate };
-}
+    return { path, navigate };
+};

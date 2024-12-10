@@ -1,48 +1,51 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { useModalDefaults } from "./ModalDefaults";
 
 interface Modal {
     open: boolean;
+    canDismiss: boolean;
     willBeClosed: boolean;
-    openDuration?: number;
-    closeDuration?: number
-    sheetClassName?: string;
-    backdropClassName?: string
+    openDuration: number;
+    closeDuration: number
+    sheetClassName: string;
+    backdropClassName: string
 }
 
 interface ModalsContextType {
     modals: Record<string, Modal>;
     setModal: (key: string) => void;
+    removeModal: (key: string) => void;
     setOpen: (key: string, open: boolean) => void;
     setWillBeClosed: (key: string, willBeClosed: boolean) => void;
+    initialModal: Modal;
 }
 
 const ModalsContext = createContext<ModalsContextType | undefined>(undefined);
 
 interface ModalsProviderProps {
     children: ReactNode;
-    openDuration?: number;
-    closeDuration?: number
-    sheetClassName?: string;
-    backdropClassName?: string
 }
 
-export const ModalsProvider: React.FC<ModalsProviderProps> = (props) => {
+export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
-    const { children, openDuration = 300, closeDuration = 200, sheetClassName = "", backdropClassName = "" } = props
+    const { openDuration, closeDuration, sheetClassName, backdropClassName, canDismiss } = useModalDefaults()
+
+    const initialModal = JSON.parse(JSON.stringify({
+        canDismiss,
+        open: false,
+        openDuration,
+        closeDuration,
+        sheetClassName,
+        backdropClassName,
+        willBeClosed: false
+    }))
 
     const [modals, setModals] = useState<Record<string, Modal>>({});
 
     const setModal = (key: string) => {
         setModals((prev) => ({
             ...prev,
-            [key]: {
-                open: false,
-                openDuration,
-                closeDuration,
-                sheetClassName,
-                backdropClassName,
-                willBeClosed: false
-            },
+            [key]: initialModal,
         }));
     };
 
@@ -60,8 +63,18 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = (props) => {
         }));
     };
 
+    const removeModal = (key: string) => {
+        setModals((prev) => {
+            const newModals = { ...prev };
+            if (newModals[key]) {
+                newModals[key] = initialModal
+            }
+            return newModals;
+        });
+    };
+
     return (
-        <ModalsContext.Provider value={{ modals, setModal, setOpen, setWillBeClosed }}>
+        <ModalsContext.Provider value={{ modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal }}>
             {children}
         </ModalsContext.Provider>
     );

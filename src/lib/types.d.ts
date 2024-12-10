@@ -15,3 +15,10 @@ type useScrollNearEdgesProps = {
     ref?: React.RefObject<HTMLElement>,
     offset?: number
 }
+
+type useModalTransitionProps = {
+    duration?: number
+    key: string
+    confirmCb?: () => void
+    canDismiss?: boolean
+}

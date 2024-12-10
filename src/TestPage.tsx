@@ -1,16 +1,22 @@
 import { useState } from "react"
 import Dialog from "./components/dialog"
+import { useModalTransition } from "./lib/hooks/useModalTransition"
 
 const TestPage = () => {
-    const [open, setOpen] = useState(false)
 
+    const { open, handleCloseModal, handleOpenModal, willBeClosed } = useModalTransition({
+        key: "hello"
+    })
 
     return (
         <>
-            <button onClick={() => setOpen(true)}>
+            <button onClick={handleOpenModal}>
                 open
             </button>
-            <Dialog open={open} willBeClosed={false} handleClose={() => setOpen(false)}>
+            <Dialog
+                open={open}
+                willBeClosed={willBeClosed}
+                handleClose={handleCloseModal}>
                 ThisChildren
             </Dialog>
         </>
