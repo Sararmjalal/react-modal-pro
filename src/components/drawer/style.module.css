@@ -1,0 +1,76 @@
+.backdrop {
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 990;
+  position: fixed;
+  opacity: 1;
+  background: var(--react-modal-pro-backdrop-background);
+}
+
+.sheet {
+  position: fixed;
+  opacity: 1;
+  z-index: 1000;
+  background: var(--react-modal-pro-sheet-background);
+  padding: var(--react-modal-pro-sheet-padding);
+}
+
+.sheet.bottom {
+  left: 50%;
+  bottom: 0;
+  border-top-right-radius: var(--react-modal-pro-sheet-radius);
+  border-top-left-radius: var(--react-modal-pro-sheet-radius);
+  transform: translateX(-50%);
+}
+
+.sheet.top {
+  left: 50%;
+  top: 0;
+  border-bottom-right-radius: var(--react-modal-pro-sheet-radius);
+  border-bottom-left-radius: var(--react-modal-pro-sheet-radius);
+  transform: translateX(-50%);
+}
+
+.sheet.left {
+  top: 0;
+  left: 0;
+  border-top-right-radius: var(--react-modal-pro-sheet-radius);
+  border-bottom-right-radius: var(--react-modal-pro-sheet-radius);
+  height: 100%;
+}
+
+.sheet.right {
+  top: 0;
+  right: 0;
+  border-top-left-radius: var(--react-modal-pro-sheet-radius);
+  border-bottom-left-radius: var(--react-modal-pro-sheet-radius);
+  height: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .sheet.bottom,
+  .sheet.top {
+    width: 100vw;
+    max-width: 80%;
+    min-height: 458px;
+  }
+  .sheet.left,
+  .sheet.right {
+    min-width: 50%;
+    max-width: 80%;
+  }
+}
+
+@media only screen and (min-width: 601px) {
+  .sheet.bottom,
+  .sheet.top {
+    min-width: 580px;
+    min-height: 458px;
+  }
+  .sheet.left,
+  .sheet.right {
+    max-width: 50%;
+  }
+}
