@@ -5,6 +5,15 @@
   --react-modal-pro-backdrop-background: #0000004a;
 }
 
+html {
+  height: -webkit-fill-available;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
 @keyframes dialog-fade-in {
   0% {
     opacity: 0;
@@ -29,6 +38,7 @@
   0% {
     bottom: -100%;
   }
+
   100% {
     bottom: 0;
   }
@@ -38,6 +48,7 @@
   0% {
     bottom: 0;
   }
+
   100% {
     bottom: -100%;
   }
@@ -47,6 +58,7 @@
   0% {
     top: -100%;
   }
+
   100% {
     top: 0;
   }
@@ -56,6 +68,7 @@
   0% {
     top: 0;
   }
+
   100% {
     top: -100%;
   }
@@ -65,6 +78,7 @@
   0% {
     left: -100%;
   }
+
   100% {
     left: 0;
   }
@@ -74,6 +88,7 @@
   0% {
     left: 0;
   }
+
   100% {
     left: -100%;
   }
@@ -83,6 +98,7 @@
   0% {
     right: -100%;
   }
+
   100% {
     right: 0;
   }
@@ -92,6 +108,7 @@
   0% {
     right: 0;
   }
+
   100% {
     right: -100%;
   }

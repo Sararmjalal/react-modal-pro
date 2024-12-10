@@ -3,7 +3,6 @@ import { useEffect } from "react"
 import { useRouter } from "./useRouter"
 import { useModals } from "../../context"
 
-
 export const useModalTransition = ({ key, confirmCb }: useModalTransitionProps) => {
 
     const modalKey = `#${key}`
@@ -18,7 +17,6 @@ export const useModalTransition = ({ key, confirmCb }: useModalTransitionProps) 
     const checkHash = () => {
         const currentHash = window.location.hash
         const isAlreadyInHash = currentHash.split("#").some(item => item === key)
-        console.log({ isAlreadyInHash })
         return { isAlreadyInHash, currentHash }
     }
 
@@ -44,7 +42,7 @@ export const useModalTransition = ({ key, confirmCb }: useModalTransitionProps) 
                 timeout = setTimeout(() => {
                     window.history.back()
                     if (confirmCb) confirmCb()
-                }, thisModal.closeDuration - 100)
+                }, thisModal.closeDuration - 50)
             } else {
                 removeModal(key)
             }

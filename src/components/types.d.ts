@@ -10,12 +10,12 @@ type DialogProps = {
 
 type DrawerProps = {
   open: boolean;
-  openDuration?: number;
+  openDuration: number;
   willBeClosed: boolean;
-  closeDuration?: number;
+  closeDuration: number;
   handleClose: () => void;
-  sheetClassName?: string;
-  backdropClassName?: string;
+  sheetClassName: string;
+  backdropClassName: string;
   direction?: "left" | "right" | "bottom" | "top";
 };
 

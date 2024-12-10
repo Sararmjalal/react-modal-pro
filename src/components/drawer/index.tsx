@@ -5,13 +5,13 @@ import styles from "./style.module.css";
 const Drawer = (props: DrawerProps & { children: ReactNode }) => {
   const {
     open,
-    openDuration = 300,
+    openDuration,
     willBeClosed,
     handleClose,
-    closeDuration = 200,
+    closeDuration,
     children,
-    sheetClassName = "",
-    backdropClassName = "",
+    sheetClassName,
+    backdropClassName,
     direction = "bottom",
   } = props;
 
@@ -37,7 +37,7 @@ const Drawer = (props: DrawerProps & { children: ReactNode }) => {
   const animations = {
     backdrop: {
       false: `dialog-fade-in ${openDuration}ms`,
-      true: `dialog-fade-in ${closeDuration}ms`,
+      true: `dialog-fade-out ${closeDuration}ms`,
     },
     sheet: {
       false: `${directionKeyframes[direction].open} ${openDuration}ms`,

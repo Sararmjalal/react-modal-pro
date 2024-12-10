@@ -25,8 +25,8 @@ export const ModalDefaultsProvider: React.FC<ModalDefaultsProviderProps> = (prop
 
     const modalDefaults = {
         canDismiss: defaultCanDismiss ?? true,
-        openDuration: defaultOpenDuration ?? 300,
-        closeDuration: defaultCloseDuration ?? 200,
+        openDuration: defaultOpenDuration ?? 400,
+        closeDuration: defaultCloseDuration ?? 300,
         sheetClassName: defaultSheetClassName ?? "",
         backdropClassName: defaultBackdropClassName ?? ""
     }
