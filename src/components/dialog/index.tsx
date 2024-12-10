@@ -1,10 +1,10 @@
 
-import { DialogProps } from '../types';
+import { ReactNode } from 'react';
 import styles from './style.module.css';
 import { createPortal } from "react-dom";
 import { Fragment } from "react/jsx-runtime";
 
-const Dialog = (props: DialogProps) => {
+const Dialog = (props: DialogProps & { children: ReactNode }) => {
 
     const { open, openDuration = 300, willBeClosed, handleClose, closeDuration = 200, children, sheetClassName = "", backdropClassName = "" } = props
 

@@ -1,8 +1,5 @@
-import { ReactNode } from "react"
-
-export type DialogProps = {
+type DialogProps = {
     open: boolean
-    children: ReactNode
     openDuration?: number
     willBeClosed: boolean
     closeDuration?: number
