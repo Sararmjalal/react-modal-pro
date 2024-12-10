@@ -1,4 +1,3 @@
-import './index.css';
 import React from 'react';
 import TestPage from './TestPage';
 import ReactDOM from 'react-dom/client';
