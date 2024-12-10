@@ -12,12 +12,25 @@
 .sheet {
     top: 50%;
     left: 50%;
+    opacity: 1;
+    padding: var(--react-modal-pro-sheet-padding);
     z-index: 1010;
     position: fixed;
-    min-width: 400px;
-    min-height: 250px;
     transform: translate(-50%, -50%);
-    opacity: 1;
     border-radius: var(--react-modal-pro-sheet-radius);
     background: var(--react-modal-pro-sheet-background);
+}
+
+@media only screen and (max-width: 600px) {
+    .sheet {
+        min-width: 80%;
+        min-height: 200px;
+    }
+}
+
+@media only screen and (min-width: 601px) {
+    .sheet {
+        min-width: 400px;
+        min-height: 250px;
+    }
 }
