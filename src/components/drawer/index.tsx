@@ -2,7 +2,7 @@ import { Fragment, ReactNode } from "react";
 import { createPortal } from "react-dom";
 import styles from "./style.module.css";
 
-const DrawerBase = (props: DrawerProps & { children: ReactNode }) => {
+const DrawerBase = (props: DrawerProps & { children: ReactNode, ref?: React.RefObject<HTMLDivElement> }) => {
   const {
     open,
     openDuration,
@@ -13,6 +13,7 @@ const DrawerBase = (props: DrawerProps & { children: ReactNode }) => {
     sheetClassName,
     backdropClassName,
     direction = "bottom",
+    ref
   } = props;
 
   const directionKeyframes = {
@@ -56,6 +57,7 @@ const DrawerBase = (props: DrawerProps & { children: ReactNode }) => {
           }}
         />
         <div
+          ref={ref}
           className={`${styles.sheet} ${sheetClassName} ${styles[direction]}`}
           style={{
             animation: animations.sheet[`${willBeClosed}`],

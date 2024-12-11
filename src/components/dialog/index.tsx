@@ -4,9 +4,9 @@ import styles from './style.module.css';
 import { createPortal } from "react-dom";
 import { Fragment } from "react/jsx-runtime";
 
-const DialogBase = (props: DialogProps & { children: ReactNode }) => {
+const DialogBase = (props: DialogProps & { children: ReactNode, ref?: React.RefObject<HTMLDivElement> }) => {
 
-    const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName = "", backdropClassName = "" } = props
+    const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName = "", backdropClassName = "", ref } = props
     const animations = {
         backdrop: {
             "false": `dialog-fade-in ${openDuration}ms`,
@@ -29,6 +29,7 @@ const DialogBase = (props: DialogProps & { children: ReactNode }) => {
                 }}
             />
             <div
+                ref={ref}
                 className={`${styles.sheet} ${sheetClassName}`}
                 style={{
                     animation: animations.sheet[`${willBeClosed}`]
