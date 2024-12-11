@@ -11,15 +11,35 @@ type UseSwiperProps = {
   key?: string;
 };
 
-type useScrollNearEdgesProps = {
+type UseScrollNearEdgesProps = {
   ref?: React.RefObject<HTMLElement | undefined>;
   offset?: number;
   key?: string;
 };
 
-type useModalTransitionProps = {
+type UseModalTransitionProps = {
   key: string;
   closeCb?: () => void;
   canDismiss: boolean
   closeDuration: number
 };
+
+type DrawerDirection = "left" | "right" | "top" | "bottom"
+
+type ModalControls = {
+  modalKey?: string;
+  openDuration?: number;
+  closeDuration?: number;
+  sheetClassName?: string;
+  backdropClassName?: string;
+}
+
+type UseModalProProps = {
+  canDismiss?: boolean;
+  swipeToOpen?: boolean;
+  swipeToClose?: boolean;
+  swipeThreshold?: number;
+  closeCb?: () => void;
+  sheetRef: React.RefObject<HTMLElement | undefined>;
+  sidebarDirection?: DrawerDirection;
+} & ModalControls;

@@ -2,7 +2,7 @@ import { Fragment, ReactNode, Ref } from "react";
 import { createPortal } from "react-dom";
 import styles from "./style.module.css";
 
-const DrawerBase = (props: DrawerProps & { children: ReactNode, ref?: Ref<HTMLDivElement> }) => {
+const DrawerBase = (props: DrawerBaseProps & { children: ReactNode, ref?: Ref<HTMLDivElement> }) => {
 
   const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName, backdropClassName, direction, ref } = props;
 

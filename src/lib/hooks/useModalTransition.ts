@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "./useRouter";
 import { useModals } from "../../context";
 
-export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: useModalTransitionProps) => {
+export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
   const modalKey = `#${key}`;
 
   const { navigate, path } = useRouter();

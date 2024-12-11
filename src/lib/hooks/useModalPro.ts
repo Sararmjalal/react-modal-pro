@@ -4,24 +4,9 @@ import { useModalTransition } from "./useModalTransition";
 import { useScrollNearEdges } from "./useScrollNearEdges";
 import { useModalDefaults } from "../../context";
 
-type useModalProProps = {
-  modalKey?: string;
-  canDismiss?: boolean;
-  openDuration?: number;
-  swipeToOpen?: boolean;
-  closeDuration?: number;
-  swipeToClose?: boolean;
-  swipeThreshold?: number;
-  sheetClassName?: string;
-  backdropClassName?: string;
-  closeCb?: () => void;
-  sheetRef: React.RefObject<HTMLElement | undefined>;
-  sidebarDirection?: "left" | "right" | "top" | "bottom";
-};
-
 const initialKey = uid("modal");
 
-export const useModalPro = (props: useModalProProps) => {
+export const useModalPro = (props: UseModalProProps) => {
   const { modalKey, swipeThreshold, swipeToClose = false, swipeToOpen = false, sidebarDirection, backdropClassName,
     sheetClassName, canDismiss, openDuration, closeDuration, sheetRef, closeCb } = props;
 

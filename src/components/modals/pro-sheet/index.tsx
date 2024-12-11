@@ -2,23 +2,12 @@ import DrawerBase from "../../drawer";
 import { useModalPro } from "../../../lib";
 import { Fragment, ReactNode, Ref, useEffect, useRef } from "react";
 
-type ProSheetProps = {
-    modalKey?: string;
+type ProSheetExtendedProps = {
     children: ReactNode;
-    canDismiss?: boolean;
-    closeCb?: () => void;
-    openDuration?: number;
-    swipeToOpen?: boolean;
-    closeDuration?: number;
-    swipeToClose?: boolean;
-    swipeThreshold?: number;
-    sheetClassName?: string;
     TriggerElement: ReactNode;
-    backdropClassName?: string;
-    direction: "top" | "bottom";
 }
 
-const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetProps) => {
+const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetModalProps & ProSheetExtendedProps) => {
 
     const drawerRef = useRef<HTMLDivElement>(undefined)
 

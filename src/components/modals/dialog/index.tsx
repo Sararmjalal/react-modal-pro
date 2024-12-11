@@ -2,19 +2,12 @@ import DialogBase from "../../dialog";
 import { useModalPro } from "../../../lib";
 import { Fragment, ReactNode, Ref, useEffect, useRef } from "react";
 
-type DialogProps = {
-    modalKey?: string;
+type DialogExtendedProps = {
     children: ReactNode;
-    canDismiss?: boolean;
-    closeCb?: () => void;
-    openDuration?: number;
-    closeDuration?: number;
-    sheetClassName?: string;
     TriggerElement: ReactNode;
-    backdropClassName?: string;
 }
 
-const Dialog = ({ TriggerElement, children, ...props }: DialogProps) => {
+const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps & DialogExtendedProps) => {
 
     const dialogRef = useRef<HTMLDivElement>(undefined)
 

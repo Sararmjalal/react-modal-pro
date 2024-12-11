@@ -2,37 +2,34 @@ import DrawerBase from "../../drawer";
 import { useModalPro } from "../../../lib";
 import { Fragment, ReactNode, Ref, useRef } from "react";
 
-type Props = {
-  modalKey?: string;
-  canDismiss?: boolean;
-  openDuration?: number;
-  swipeToOpen?: boolean;
-  closeDuration?: number;
-  swipeToClose?: boolean;
-  swipeThreshold?: number;
-  sheetClassName?: string;
-  backdropClassName?: string;
-  closeCb?: () => void;
-  direction: "left" | "right";
+type SidebarExtendedProps = {
   children: ReactNode;
   TriggerElement: ReactNode;
-};
+}
 
-const Sidebar = ({ direction, ...sidebarProps }: Props) => {
+const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps & SidebarExtendedProps) => {
 
   const sheetRef = useRef<HTMLDivElement>(undefined);
-  const { handleOpenModal, handleCloseModal, ...props } = useModalPro({ sheetRef, ...sidebarProps, sidebarDirection: direction });
+
+  const { handleOpenModal, handleCloseModal, currentModalKey, ...props } = useModalPro({
+    sheetRef,
+    ...sidebarProps,
+    sidebarDirection: direction
+  });
 
   return (
     <Fragment>
-      <div style={{ width: "fit-content" }} onClick={() => handleOpenModal()}>
+      <div
+        style={{ width: "fit-content" }}
+        onClick={() => handleOpenModal()}>
         {sidebarProps.TriggerElement}
       </div>
       <DrawerBase
         {...props}
+        key={currentModalKey}
         direction={direction}
-        ref={sheetRef as Ref<HTMLDivElement | null>}
         handleClose={handleCloseModal}
+        ref={sheetRef as Ref<HTMLDivElement | null>}
       >
         {sidebarProps.children}
       </DrawerBase>

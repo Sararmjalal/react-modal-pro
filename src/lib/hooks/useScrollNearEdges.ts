@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export const useScrollNearEdges = ({ ref, offset = 100, key }: useScrollNearEdgesProps) => {
+export const useScrollNearEdges = ({ ref, offset = 100, key }: UseScrollNearEdgesProps) => {
 
     const [isNearEnd, setIsNearEnd] = useState(false)
     const [isNearStart, setIsNearStart] = useState(true)
