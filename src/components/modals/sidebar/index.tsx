@@ -13,16 +13,17 @@ type Props = {
   sheetClassName?: string;
   backdropClassName?: string;
   closeCb?: () => void;
-  sidebarDirection: "left" | "right";
+  direction: "left" | "right";
   children: ReactNode;
   TriggerElement: ReactNode;
 };
 
-const Sidebar = ({ ...sidebarProps }: Props) => {
+const Sidebar = ({ direction, ...sidebarProps }: Props) => {
   const sheetRef = useRef<HTMLDivElement>(undefined);
   const { handleOpenModal, handleCloseModal, ...props } = useModalPro({
-    ...sidebarProps,
     sheetRef,
+    ...sidebarProps,
+    sidebarDirection: direction,
   });
 
   return (
@@ -33,7 +34,7 @@ const Sidebar = ({ ...sidebarProps }: Props) => {
       <Fragment>
         <DrawerBase
           {...props}
-          direction={sidebarProps.sidebarDirection}
+          direction={direction}
           ref={sheetRef as Ref<HTMLDivElement | null>}
           handleClose={handleCloseModal}
         >

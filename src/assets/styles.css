@@ -113,3 +113,13 @@ html {
     right: -100%;
   }
 }
+
+.mysidebarbackdrop {
+  opacity: 100% !important;
+  background-color: red !important;
+}
+
+.mysidebar {
+  min-width: 20% !important;
+  background: blue !important;
+}
