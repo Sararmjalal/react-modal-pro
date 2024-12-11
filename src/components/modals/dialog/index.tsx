@@ -1,31 +1,26 @@
-import DrawerBase from "../../drawer";
+import DialogBase from "../../dialog";
 import { useModalPro } from "../../../lib";
 import { Fragment, ReactNode, Ref, useEffect, useRef } from "react";
 
-type ProSheetProps = {
+type DialogProps = {
     modalKey?: string;
     children: ReactNode;
     canDismiss?: boolean;
     closeCb?: () => void;
     openDuration?: number;
-    swipeToOpen?: boolean;
     closeDuration?: number;
-    swipeToClose?: boolean;
-    swipeThreshold?: number;
     sheetClassName?: string;
     TriggerElement: ReactNode;
     backdropClassName?: string;
-    direction: "top" | "bottom";
 }
 
-const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetProps) => {
+const Dialog = ({ TriggerElement, children, ...props }: DialogProps) => {
 
-    const drawerRef = useRef<HTMLDivElement>(undefined)
+    const dialogRef = useRef<HTMLDivElement>(undefined)
 
     const { handleOpenModal, handleCloseModal, currentModalKey, ...modalProps } = useModalPro({
         ...props,
-        sheetRef: drawerRef,
-        sidebarDirection: direction
+        sheetRef: dialogRef
     })
 
     useEffect(() => {
@@ -42,16 +37,15 @@ const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetPro
             <div onClick={handleOpenModal}>
                 {TriggerElement}
             </div>
-            <DrawerBase
+            <DialogBase
                 {...modalProps}
-                direction={direction}
                 key={currentModalKey}
                 handleClose={handleCloseModal}
-                ref={drawerRef as Ref<HTMLDivElement | null>}>
+                ref={dialogRef as Ref<HTMLDivElement | null>}>
                 {children}
-            </DrawerBase >
+            </DialogBase>
         </Fragment>
     )
 }
 
-export default ProSheet
+export default Dialog

@@ -1,21 +1,15 @@
 import { Fragment } from "react";
-import Sidebar from "./components/modals/sidebar";
+import Dialog from "./components/modals/dialog";
 
 const SidebarTest = () => {
   return (
     <Fragment>
-      <Sidebar
+      <Dialog
         canDismiss={true}
-        modalKey="sidebar"
-        direction="right"
-        backdropClassName="mysidebarbackdrop"
-        sheetClassName="mysidebar"
-        swipeToOpen={true}
-        swipeToClose={true}
-        TriggerElement={<button>Open Sidebar</button>}
-      >
+        modalKey="dialog"
+        TriggerElement={<button>Open Dialog</button>}>
         Hey
-      </Sidebar>
+      </Dialog>
     </Fragment>
   );
 };
