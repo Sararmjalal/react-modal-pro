@@ -25,6 +25,15 @@ export const useModalTransition = ({ key, confirmCb }: useModalTransitionProps) 
     }, [])
 
     useEffect(() => {
+        if (thisModal.open) {
+            document.body.style.overscrollBehavior = "none"
+            return () => {
+                document.body.style.overscrollBehavior = "initial"
+            }
+        }
+    }, [thisModal.open])
+
+    useEffect(() => {
         const { isAlreadyInHash } = checkHash()
         setOpen(key, isAlreadyInHash)
         if (!isAlreadyInHash && willBeClosed) setWillBeClosed(key, false)

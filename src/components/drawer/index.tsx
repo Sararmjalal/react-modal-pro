@@ -1,8 +1,8 @@
-import { Fragment, ReactNode } from "react";
+import { Fragment, ReactNode, Ref } from "react";
 import { createPortal } from "react-dom";
 import styles from "./style.module.css";
 
-const DrawerBase = (props: DrawerProps & { children: ReactNode, ref?: React.RefObject<HTMLDivElement> }) => {
+const DrawerBase = (props: DrawerProps & { children: ReactNode, ref?: Ref<HTMLDivElement> }) => {
   const {
     open,
     openDuration,
@@ -61,6 +61,8 @@ const DrawerBase = (props: DrawerProps & { children: ReactNode, ref?: React.RefO
           className={`${styles.sheet} ${sheetClassName} ${styles[direction]}`}
           style={{
             animation: animations.sheet[`${willBeClosed}`],
+            maxHeight: "80vh",
+            overflowY: "auto"
           }}
         >
           {children}

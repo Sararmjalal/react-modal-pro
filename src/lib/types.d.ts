@@ -15,6 +15,7 @@ type UseSwiperProps = {
 type useScrollNearEdgesProps = {
     ref?: React.RefObject<HTMLElement | undefined>,
     offset?: number
+    key?: string
 }
 
 type useModalTransitionProps = {

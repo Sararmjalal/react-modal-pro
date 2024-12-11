@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export const useScrollNearEdges = ({ ref, offset = 100 }: useScrollNearEdgesProps) => {
+export const useScrollNearEdges = ({ ref, offset = 100, key }: useScrollNearEdgesProps) => {
 
     const [isNearEnd, setIsNearEnd] = useState(false)
     const [isNearStart, setIsNearStart] = useState(true)
@@ -13,7 +13,6 @@ export const useScrollNearEdges = ({ ref, offset = 100 }: useScrollNearEdgesProp
             const { scrollTop, scrollHeight, clientHeight } = element
             const distanceFromStart = scrollTop
             const remainingScroll = scrollHeight - (scrollTop + clientHeight)
-
             setIsNearStart(distanceFromStart <= offset)
             setIsNearEnd(remainingScroll <= offset)
         }
@@ -24,7 +23,7 @@ export const useScrollNearEdges = ({ ref, offset = 100 }: useScrollNearEdgesProp
         return () => {
             element.removeEventListener("scroll", handleScroll)
         }
-    }, [ref, offset])
+    }, [ref, offset, key])
 
     return { isNearEnd, isNearStart }
 }

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 export const useSwiper = ({ direction, onSwipeUp, onSwipeDown, onSwipeLeft,
     onSwipeRight, threshold = 100, enabled = true, key }: UseSwiperProps) => {
-    console.log({ direction, enabled })
+
     const touchStartRef = useRef<{ x: number; y: number } | null>(null);
     const touchDeltaRef = useRef({ x: 0, y: 0 });
 
@@ -62,11 +62,9 @@ export const useSwiper = ({ direction, onSwipeUp, onSwipeDown, onSwipeLeft,
 
     useEffect(() => {
         if (enabled) {
-            console.log("yes")
             window.addEventListener("touchstart", handleTouchStart);
             window.addEventListener("touchmove", handleTouchMove);
             window.addEventListener("touchend", handleTouchEnd);
-            console.log("salam")
             return () => {
                 window.removeEventListener("touchstart", handleTouchStart);
                 window.removeEventListener("touchmove", handleTouchMove);

@@ -2,7 +2,6 @@ import { Ref, useRef } from "react";
 import DialogBase from "./components/dialog";
 import DrawerBase from "./components/drawer";
 import { useModalPro } from "./lib";
-import { useModalTransition } from "./lib/hooks/useModalTransition";
 
 const TestPage = () => {
 
@@ -13,16 +12,18 @@ const TestPage = () => {
         modalKey: "hello1",
         sheetRef: DialogRef
     })
+
     const { handleOpenModal: handleOpenDrawer, handleCloseModal: handleCloseDrawer, currentModalKey, ...propss } = useModalPro({
         sheetRef: DrawerRef,
         swipeToClose: true,
         swipeToOpen: true,
-        sidebarDirection: "top",
-        sheetClassName: "salam"
+        sidebarDirection: "bottom"
     })
-    console.log({ open: propss.open })
+
     return (
-        <>
+        <div style={{
+            overscrollBehavior: "none"
+        }}>
             <button onClick={handleOpenModal}>
                 open
             </button>
@@ -37,13 +38,14 @@ const TestPage = () => {
             </DialogBase>
             <DrawerBase
                 key={currentModalKey}
-                direction="top"
+                direction="bottom"
+                ref={DrawerRef as Ref<HTMLDivElement | null>}
                 handleClose={handleCloseDrawer}
                 {...propss}
             >
-                <div>drawer children</div>
-            </DrawerBase>
-        </>
+                <div style={{ height: "200vh" }}>drawer children</div>
+            </DrawerBase >
+        </div>
     )
 }
 

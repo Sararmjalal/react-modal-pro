@@ -33,10 +33,15 @@ export const useModalPro = (props: useModalProProps) => {
         })
 
     const { isNearStart, isNearEnd } = useScrollNearEdges({
+        key: currentModalKey,
         ref: open ? sheetRef : undefined
     })
-    const swipeEnabled = swipeToOpen ? true : swipeToClose && (sidebarDirection === "top" ? isNearStart : isNearEnd)
-    console.log({ isNearStart, swipeEnabled })
+
+    const swipeEnabled = swipeToClose ?
+        (sidebarDirection === "bottom" && isNearStart) || (sidebarDirection === "bottom" && isNearEnd)
+        || (sidebarDirection === "left" || sidebarDirection === "right")
+        :
+        swipeToOpen
 
     const swipeDirection = (sidebarDirection === "left" || sidebarDirection === "right") ? "horizontal" : "vertical"
 
