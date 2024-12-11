@@ -13,16 +13,18 @@ type useModalProProps = {
     swipeThreshold?: number
     sheetClassName?: string
     backdropClassName?: string
-    sheetRef: React.RefObject<HTMLElement>
-    sidebarDirection: "left" | "right" | "top" | "bottom"
+    sheetRef: React.RefObject<HTMLElement | undefined>
+    sidebarDirection?: "left" | "right" | "top" | "bottom"
 }
+
+const initialKey = uid("modal")
 
 export const useModalPro = (props: useModalProProps) => {
 
     const { modalKey, swipeThreshold, swipeToClose = false, swipeToOpen = false, sidebarDirection, backdropClassName,
         sheetClassName, canDismiss, openDuration, closeDuration, sheetRef } = props
 
-    const currentModalKey = modalKey ?? uid("modal")
+    const currentModalKey = modalKey ?? initialKey
 
     const { open, willBeClosed, handleOpenModal, handleCloseModal, backdropClassName: defaultBackdropClassName,
         canDismiss: defaultCanDismiss, closeDuration: defaultCloseDuration, openDuration: defaultOpenDuration,
@@ -33,13 +35,13 @@ export const useModalPro = (props: useModalProProps) => {
     const { isNearStart, isNearEnd } = useScrollNearEdges({
         ref: open ? sheetRef : undefined
     })
-
-    const swipeEnabled = swipeToOpen ? true : swipeToClose && sidebarDirection === "top" ? isNearStart : isNearEnd
+    const swipeEnabled = swipeToOpen ? true : swipeToClose && (sidebarDirection === "top" ? isNearStart : isNearEnd)
+    console.log({ isNearStart, swipeEnabled })
 
     const swipeDirection = (sidebarDirection === "left" || sidebarDirection === "right") ? "horizontal" : "vertical"
 
     const swipeFunctions = {
-        onSwipeTop: () => {
+        onSwipeUp: () => {
             if (sidebarDirection === "top" && swipeToClose) return handleCloseModal()
             if (sidebarDirection === "bottom" && swipeToOpen) return handleOpenModal()
         },
@@ -47,11 +49,11 @@ export const useModalPro = (props: useModalProProps) => {
             if (sidebarDirection === "top" && swipeToOpen) return handleOpenModal()
             if (sidebarDirection === "bottom" && swipeToClose) return handleCloseModal()
         },
-        onSwipeLeft: () => {
+        onSwipeRight: () => {
             if (sidebarDirection === "left" && swipeToOpen) return handleOpenModal()
             if (sidebarDirection === "right" && swipeToClose) return handleCloseModal()
         },
-        onSwipeRight: () => {
+        onSwipeLeft: () => {
             if (sidebarDirection === "right" && swipeToOpen) return handleOpenModal()
             if (sidebarDirection === "left" && swipeToClose) return handleCloseModal()
         }
@@ -59,6 +61,7 @@ export const useModalPro = (props: useModalProProps) => {
 
     useSwiper({
         ...swipeFunctions,
+        key: currentModalKey,
         enabled: swipeEnabled,
         threshold: swipeThreshold,
         direction: swipeDirection

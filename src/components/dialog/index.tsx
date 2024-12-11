@@ -1,10 +1,10 @@
 
-import { ReactNode } from 'react';
+import { ReactNode, Ref } from 'react';
 import styles from './style.module.css';
 import { createPortal } from "react-dom";
 import { Fragment } from "react/jsx-runtime";
 
-const DialogBase = (props: DialogProps & { children: ReactNode, ref?: React.RefObject<HTMLDivElement> }) => {
+const DialogBase = (props: DialogProps & { children: ReactNode, ref?: React.Ref<HTMLDivElement | null> }) => {
 
     const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName = "", backdropClassName = "", ref } = props
     const animations = {

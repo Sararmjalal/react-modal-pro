@@ -9,10 +9,11 @@ type UseSwiperProps = {
     onSwipeRight?: () => void;
     threshold?: number;
     enabled?: boolean
+    key?: string
 }
 
 type useScrollNearEdgesProps = {
-    ref?: React.RefObject<HTMLElement>,
+    ref?: React.RefObject<HTMLElement | undefined>,
     offset?: number
 }
 
