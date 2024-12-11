@@ -22,20 +22,8 @@ type useModalProProps = {
 const initialKey = uid("modal");
 
 export const useModalPro = (props: useModalProProps) => {
-  const {
-    modalKey,
-    swipeThreshold,
-    swipeToClose = false,
-    swipeToOpen = false,
-    sidebarDirection,
-    backdropClassName,
-    sheetClassName,
-    canDismiss,
-    openDuration,
-    closeDuration,
-    sheetRef,
-    closeCb,
-  } = props;
+  const { modalKey, swipeThreshold, swipeToClose = false, swipeToOpen = false, sidebarDirection, backdropClassName,
+    sheetClassName, canDismiss, openDuration, closeDuration, sheetRef, closeCb } = props;
 
   const currentModalKey = modalKey ?? initialKey;
 
@@ -50,7 +38,6 @@ export const useModalPro = (props: useModalProProps) => {
     closeCb,
     canDismiss: canDismiss ?? defaultCanDismiss,
     closeDuration: closeDuration ?? defaultCloseDuration
-
   });
 
   const { isNearStart, isNearEnd } = useScrollNearEdges({

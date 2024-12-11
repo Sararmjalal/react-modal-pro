@@ -3,18 +3,8 @@ import { createPortal } from "react-dom";
 import styles from "./style.module.css";
 
 const DrawerBase = (props: DrawerProps & { children: ReactNode, ref?: Ref<HTMLDivElement> }) => {
-  const {
-    open,
-    openDuration,
-    willBeClosed,
-    handleClose,
-    closeDuration,
-    children,
-    sheetClassName,
-    backdropClassName,
-    direction = "bottom",
-    ref
-  } = props;
+
+  const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName, backdropClassName, direction, ref } = props;
 
   const directionKeyframes = {
     bottom: {

@@ -22,11 +22,7 @@ const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetPro
 
     const drawerRef = useRef<HTMLDivElement>(undefined)
 
-    const { handleOpenModal, handleCloseModal, currentModalKey, ...modalProps } = useModalPro({
-        ...props,
-        sheetRef: drawerRef,
-        sidebarDirection: direction
-    })
+    const { handleOpenModal, handleCloseModal, currentModalKey, ...modalProps } = useModalPro({ ...props, sheetRef: drawerRef, sidebarDirection: direction })
 
     useEffect(() => {
         if (modalProps.open) {

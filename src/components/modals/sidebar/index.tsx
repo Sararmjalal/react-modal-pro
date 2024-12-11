@@ -1,6 +1,6 @@
-import { Fragment, ReactNode, Ref, useRef } from "react";
-import { useModalPro } from "../../../lib";
 import DrawerBase from "../../drawer";
+import { useModalPro } from "../../../lib";
+import { Fragment, ReactNode, Ref, useRef } from "react";
 
 type Props = {
   modalKey?: string;
@@ -19,28 +19,23 @@ type Props = {
 };
 
 const Sidebar = ({ direction, ...sidebarProps }: Props) => {
+
   const sheetRef = useRef<HTMLDivElement>(undefined);
-  const { handleOpenModal, handleCloseModal, ...props } = useModalPro({
-    sheetRef,
-    ...sidebarProps,
-    sidebarDirection: direction,
-  });
+  const { handleOpenModal, handleCloseModal, ...props } = useModalPro({ sheetRef, ...sidebarProps, sidebarDirection: direction });
 
   return (
     <Fragment>
       <div style={{ width: "fit-content" }} onClick={() => handleOpenModal()}>
         {sidebarProps.TriggerElement}
       </div>
-      <Fragment>
-        <DrawerBase
-          {...props}
-          direction={direction}
-          ref={sheetRef as Ref<HTMLDivElement | null>}
-          handleClose={handleCloseModal}
-        >
-          {sidebarProps.children}
-        </DrawerBase>
-      </Fragment>
+      <DrawerBase
+        {...props}
+        direction={direction}
+        ref={sheetRef as Ref<HTMLDivElement | null>}
+        handleClose={handleCloseModal}
+      >
+        {sidebarProps.children}
+      </DrawerBase>
     </Fragment>
   );
 };

@@ -1,14 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { useModalDefaults } from "./ModalDefaults";
 
 interface Modal {
     open: boolean;
-    // canDismiss: boolean;
     willBeClosed: boolean;
-    // openDuration: number;
-    // closeDuration: number
-    // sheetClassName: string;
-    // backdropClassName: string
 }
 
 interface ModalsContextType {
@@ -28,17 +22,7 @@ interface ModalsProviderProps {
 
 export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
-    const { openDuration, closeDuration, sheetClassName, backdropClassName, canDismiss } = useModalDefaults()
-
-    const initialModal = JSON.parse(JSON.stringify({
-        // canDismiss,
-        open: false,
-        // openDuration,
-        // closeDuration,
-        // sheetClassName,
-        // backdropClassName,
-        willBeClosed: false
-    }))
+    const initialModal = JSON.parse(JSON.stringify({ open: false, willBeClosed: false }))
 
     const [modals, setModals] = useState<Record<string, Modal>>({});
 

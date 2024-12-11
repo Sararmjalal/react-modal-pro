@@ -16,7 +16,7 @@ type DrawerProps = {
   handleClose: () => void;
   sheetClassName: string;
   backdropClassName: string;
-  direction?: "left" | "right" | "bottom" | "top";
+  direction: "left" | "right" | "bottom" | "top";
 };
 
 type ModalProviderProps = {

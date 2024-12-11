@@ -1,9 +1,8 @@
 import React from "react";
 import "./assets/styles.css";
-import TestPage from "./TestPage";
 import ReactDOM from "react-dom/client";
-import ModalProvider from "./components/providers/ModalProvider";
 import SidebarTest from "./SidebarTest";
+import ModalProvider from "./components/providers/ModalProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
