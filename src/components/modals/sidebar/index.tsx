@@ -30,14 +30,16 @@ const Sidebar = ({ ...sidebarProps }: Props) => {
       <div style={{ width: "fit-content" }} onClick={() => handleOpenModal()}>
         {sidebarProps.TriggerElement}
       </div>
-      <DrawerBase
-        {...props}
-        direction={sidebarProps.sidebarDirection}
-        ref={sheetRef as Ref<HTMLDivElement | null>}
-        handleClose={handleCloseModal}
-      >
-        {sidebarProps.children}
-      </DrawerBase>
+      <Fragment>
+        <DrawerBase
+          {...props}
+          direction={sidebarProps.sidebarDirection}
+          ref={sheetRef as Ref<HTMLDivElement | null>}
+          handleClose={handleCloseModal}
+        >
+          {sidebarProps.children}
+        </DrawerBase>
+      </Fragment>
     </Fragment>
   );
 };
