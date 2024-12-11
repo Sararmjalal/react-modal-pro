@@ -27,7 +27,6 @@ export const useModalTransition = ({ key, confirmCb }: useModalTransitionProps) 
     useEffect(() => {
         const { isAlreadyInHash } = checkHash()
         setOpen(key, isAlreadyInHash)
-        console.log("is Already in hash", { isAlreadyInHash, path, open: thisModal.open })
         if (!isAlreadyInHash && willBeClosed) setWillBeClosed(key, false)
     }, [path]);
 
@@ -38,7 +37,6 @@ export const useModalTransition = ({ key, confirmCb }: useModalTransitionProps) 
             console.log({ isAlreadyInHash })
             if (timeout) timeout = undefined
             if (isAlreadyInHash) {
-                console.log("hello here")
                 timeout = setTimeout(() => {
                     window.history.back()
                     if (confirmCb) confirmCb()
