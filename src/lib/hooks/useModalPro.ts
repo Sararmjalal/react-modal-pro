@@ -2,6 +2,7 @@ import { uid } from "../utils/uid";
 import { useSwiper } from "./useSwiper";
 import { useModalTransition } from "./useModalTransition";
 import { useScrollNearEdges } from "./useScrollNearEdges";
+import { useModalDefaults } from "../../context";
 
 type useModalProProps = {
   modalKey?: string;
@@ -38,19 +39,18 @@ export const useModalPro = (props: useModalProProps) => {
 
   const currentModalKey = modalKey ?? initialKey;
 
-  const {
-    open,
-    willBeClosed,
-    handleOpenModal,
-    handleCloseModal,
-    backdropClassName: defaultBackdropClassName,
+  const { backdropClassName: defaultBackdropClassName,
     canDismiss: defaultCanDismiss,
     closeDuration: defaultCloseDuration,
     openDuration: defaultOpenDuration,
-    sheetClassName: defaultSheetClassName,
-  } = useModalTransition({
+    sheetClassName: defaultSheetClassName, } = useModalDefaults()
+
+  const { open, willBeClosed, handleOpenModal, handleCloseModal } = useModalTransition({
     key: currentModalKey,
     closeCb,
+    canDismiss: canDismiss ?? defaultCanDismiss,
+    closeDuration: closeDuration ?? defaultCloseDuration
+
   });
 
   const { isNearStart, isNearEnd } = useScrollNearEdges({

@@ -14,16 +14,16 @@ type ProSheetProps = {
     sheetClassName?: string;
     backdropClassName?: string;
     direction?: "top" | "bottom";
-    sheetRef: React.RefObject<HTMLElement | undefined>;
     TriggerElement: ReactNode
 }
 
 const ProSheet = ({ TriggerElement, direction, ...props }: ProSheetProps) => {
 
-    const DrawerRef = useRef<HTMLDivElement>(undefined)
+    const drawerRef = useRef<HTMLDivElement>(undefined)
 
     const { handleOpenModal, handleCloseModal, currentModalKey, ...modalProps } = useModalPro({
         ...props,
+        sheetRef: drawerRef,
         sidebarDirection: direction
     })
 
@@ -37,7 +37,7 @@ const ProSheet = ({ TriggerElement, direction, ...props }: ProSheetProps) => {
                 direction={direction}
                 key={currentModalKey}
                 handleClose={handleCloseModal}
-                ref={DrawerRef as Ref<HTMLDivElement | null>}>
+                ref={drawerRef as Ref<HTMLDivElement | null>}>
                 <div style={{ height: "200vh" }}>drawer children</div>
             </DrawerBase >
         </Fragment>

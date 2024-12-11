@@ -3,21 +3,11 @@ import { useEffect } from "react";
 import { useRouter } from "./useRouter";
 import { useModals } from "../../context";
 
-export const useModalTransition = ({
-  key,
-  closeCb,
-}: useModalTransitionProps) => {
+export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: useModalTransitionProps) => {
   const modalKey = `#${key}`;
 
   const { navigate, path } = useRouter();
-  const {
-    modals,
-    setModal,
-    setOpen,
-    setWillBeClosed,
-    removeModal,
-    initialModal,
-  } = useModals();
+  const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
 
   const thisModal = modals[key] ?? initialModal;
 
@@ -34,15 +24,6 @@ export const useModalTransition = ({
   }, []);
 
   useEffect(() => {
-    if (thisModal.open) {
-      document.body.style.overscrollBehavior = "none";
-      return () => {
-        document.body.style.overscrollBehavior = "initial";
-      };
-    }
-  }, [thisModal.open]);
-
-  useEffect(() => {
     const { isAlreadyInHash } = checkHash();
     setOpen(key, isAlreadyInHash);
     if (!isAlreadyInHash && willBeClosed) setWillBeClosed(key, false);
@@ -52,13 +33,12 @@ export const useModalTransition = ({
     if (willBeClosed) {
       let timeout;
       const { isAlreadyInHash } = checkHash();
-      console.log({ isAlreadyInHash });
       if (timeout) timeout = undefined;
       if (isAlreadyInHash) {
         timeout = setTimeout(() => {
           window.history.back();
           if (closeCb) closeCb();
-        }, thisModal.closeDuration - 50);
+        }, closeDuration - 50);
       } else {
         removeModal(key);
       }
@@ -72,7 +52,7 @@ export const useModalTransition = ({
   };
 
   const handleCloseModal = () => {
-    if (thisModal.canDismiss) setWillBeClosed(key, true);
+    if (canDismiss) setWillBeClosed(key, true);
   };
 
   return { ...thisModal, handleOpenModal, handleCloseModal };
