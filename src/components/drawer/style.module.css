@@ -15,6 +15,7 @@
   z-index: 1000;
   background: var(--react-modal-pro-sheet-background);
   padding: var(--react-modal-pro-sheet-padding);
+  overflow-y: auto;
 }
 
 .sheet.bottom {
@@ -23,6 +24,7 @@
   border-top-right-radius: var(--react-modal-pro-sheet-radius);
   border-top-left-radius: var(--react-modal-pro-sheet-radius);
   transform: translateX(-50%);
+  max-height: 80vh;
 }
 
 .sheet.top {
@@ -31,6 +33,7 @@
   border-bottom-right-radius: var(--react-modal-pro-sheet-radius);
   border-bottom-left-radius: var(--react-modal-pro-sheet-radius);
   transform: translateX(-50%);
+  max-height: 80vh;
 }
 
 .sheet.left {

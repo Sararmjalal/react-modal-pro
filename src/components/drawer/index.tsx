@@ -60,9 +60,7 @@ const DrawerBase = (props: DrawerProps & { children: ReactNode, ref?: Ref<HTMLDi
           ref={ref}
           className={`${styles.sheet} ${sheetClassName} ${styles[direction]}`}
           style={{
-            animation: animations.sheet[`${willBeClosed}`],
-            maxHeight: "80vh",
-            overflowY: "auto"
+            animation: animations.sheet[`${willBeClosed}`]
           }}
         >
           {children}

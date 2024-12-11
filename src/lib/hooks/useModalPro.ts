@@ -60,9 +60,9 @@ export const useModalPro = (props: useModalProProps) => {
 
   const swipeEnabled = swipeToClose
     ? (sidebarDirection === "bottom" && isNearStart) ||
-      (sidebarDirection === "bottom" && isNearEnd) ||
-      sidebarDirection === "left" ||
-      sidebarDirection === "right"
+    (sidebarDirection === "top" && isNearEnd) ||
+    sidebarDirection === "left" ||
+    sidebarDirection === "right"
     : swipeToOpen;
 
   const swipeDirection =
