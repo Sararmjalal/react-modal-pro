@@ -1,9 +1,10 @@
-import { Fragment, ReactNode, Ref, useRef } from "react"
-import DrawerBase from "../../drawer"
-import { useModalPro } from "../../../lib"
+import DrawerBase from "../../drawer";
+import { useModalPro } from "../../../lib";
+import { Fragment, ReactNode, Ref, useEffect, useRef } from "react";
 
 type ProSheetProps = {
     modalKey?: string;
+    children: ReactNode;
     canDismiss?: boolean;
     closeCb?: () => void;
     openDuration?: number;
@@ -12,12 +13,12 @@ type ProSheetProps = {
     swipeToClose?: boolean;
     swipeThreshold?: number;
     sheetClassName?: string;
+    TriggerElement: ReactNode;
     backdropClassName?: string;
-    direction?: "top" | "bottom";
-    TriggerElement: ReactNode
+    direction: "top" | "bottom";
 }
 
-const ProSheet = ({ TriggerElement, direction, ...props }: ProSheetProps) => {
+const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetProps) => {
 
     const drawerRef = useRef<HTMLDivElement>(undefined)
 
@@ -26,6 +27,15 @@ const ProSheet = ({ TriggerElement, direction, ...props }: ProSheetProps) => {
         sheetRef: drawerRef,
         sidebarDirection: direction
     })
+
+    useEffect(() => {
+        if (modalProps.open) {
+            document.body.style.overscrollBehavior = "none";
+            return () => {
+                document.body.style.overscrollBehavior = "initial";
+            };
+        }
+    }, [modalProps.open]);
 
     return (
         <Fragment>
@@ -38,7 +48,7 @@ const ProSheet = ({ TriggerElement, direction, ...props }: ProSheetProps) => {
                 key={currentModalKey}
                 handleClose={handleCloseModal}
                 ref={drawerRef as Ref<HTMLDivElement | null>}>
-                <div style={{ height: "200vh" }}>drawer children</div>
+                {children}
             </DrawerBase >
         </Fragment>
     )

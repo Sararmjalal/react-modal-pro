@@ -1,7 +1,7 @@
 import { Ref, useRef } from "react";
 import { useModalPro } from "./lib";
 import DialogBase from "./components/dialog";
-import DrawerBase from "./components/drawer";
+import ProSheet from "./components/modals/pro-sheet";
 
 const TestPage = () => {
 
@@ -36,15 +36,15 @@ const TestPage = () => {
                 handleClose={handleCloseModal}>
                 ThisChildren
             </DialogBase>
-            <DrawerBase
-                key={currentModalKey}
-                direction="top"
-                ref={DrawerRef as Ref<HTMLDivElement | null>}
-                handleClose={handleCloseDrawer}
-                {...propss}
-            >
+            <ProSheet
+                swipeToOpen={false}
+                swipeToClose={true}
+                direction="bottom"
+                TriggerElement={
+                    <button>hello sheet</button>
+                }>
                 <div style={{ height: "200vh" }}>drawer children</div>
-            </DrawerBase >
+            </ProSheet>
         </div>
     )
 }
