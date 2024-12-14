@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { UseScrollNearEdgesProps } from "../types"
 
 export const useScrollNearEdges = ({ ref, offset = 100, key }: UseScrollNearEdgesProps) => {
 

@@ -3,6 +3,7 @@ import { useSwiper } from "./useSwiper";
 import { useModalTransition } from "./useModalTransition";
 import { useScrollNearEdges } from "./useScrollNearEdges";
 import { useModalDefaults } from "../../context";
+import { UseModalProProps } from "../types";
 
 const initialKey = uid("modal");
 
