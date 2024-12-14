@@ -1,6 +1,6 @@
 {
   "name": "react-modal-pro",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Reusable react modal with dialog, sidebar and sheet.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -37,11 +37,11 @@
     "@types/react-dom": "^19.0.2",
     "css-modules-typescript-loader": "^4.0.1",
     "react": "^19.0.0",
+    "rollup": "^4.28.1",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.2",
-    "rollup": "^4.28.1",
-    "rollup-plugin-postcss": "^4.0.2"
+    "typescript": "^5.7.2"
   }
 }

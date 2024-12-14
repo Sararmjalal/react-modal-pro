@@ -1,6 +1,7 @@
 import { ReactNode, useEffect } from "react"
 import { ModalDefaultsProvider, ModalsProvider } from "../../context"
 import { ModalProviderProps } from "../types"
+import "../../assets/styles.css";
 
 const ProModalProvider = ({ children, ...props }: ModalProviderProps & { children: ReactNode }) => {
 
