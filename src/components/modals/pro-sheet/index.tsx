@@ -1,6 +1,7 @@
 import DrawerBase from "../../drawer";
 import { useModalPro } from "../../../lib";
 import { Fragment, ReactNode, Ref, useEffect, useRef } from "react";
+import { ProSheetModalProps } from "../../types";
 
 type ProSheetExtendedProps = {
     children: ReactNode;

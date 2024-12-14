@@ -1,6 +1,7 @@
 import DrawerBase from "../../drawer";
 import { useModalPro } from "../../../lib";
 import { Fragment, ReactNode, Ref, useRef } from "react";
+import { SidebarModalProps } from "../../types";
 
 type SidebarExtendedProps = {
   children: ReactNode;

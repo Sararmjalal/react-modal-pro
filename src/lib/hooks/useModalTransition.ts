@@ -1,4 +1,3 @@
-"use client";
 import { useEffect } from "react";
 import { useRouter } from "./useRouter";
 import { useModals } from "../../context";

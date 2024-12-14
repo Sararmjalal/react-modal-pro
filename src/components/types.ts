@@ -1,16 +1,16 @@
-type ModalProps = {
+export type ModalProps = {
   open: boolean;
   willBeClosed: boolean;
   handleClose: () => void;
 }
 
-type DialogBaseProps = ModalProps & Required<Omit<ModalControls, "modalKey">>;
+export type DialogBaseProps = ModalProps & Required<Omit<ModalControls, "modalKey">>;
 
-type DrawerBaseProps = {
+export type DrawerBaseProps = {
   direction: DrawerDirection;
 } & ModalProps & Required<Omit<ModalControls, "modalKey">>;
 
-type ModalProviderProps = {
+export type ModalProviderProps = {
   defaultCanDismiss?: boolean;
   defaultOpenDuration?: number;
   defaultCloseDuration?: number;
@@ -18,12 +18,12 @@ type ModalProviderProps = {
   defaultBackdropClassName?: string;
 };
 
-type SidebarModalProps = {
+export type SidebarModalProps = {
   direction: "left" | "right";
 } & Omit<UseModalProProps, "sheetRef">;
 
-type ProSheetModalProps = {
+export type ProSheetModalProps = {
   direction: "top" | "bottom";
 } & Omit<UseModalProProps, "sheetRef">;
 
-type DialogModalProps = & Omit<UseModalProProps, "sheetRef">
+export type DialogModalProps = & Omit<UseModalProProps, "sheetRef">

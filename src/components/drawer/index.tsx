@@ -1,6 +1,7 @@
 import { Fragment, ReactNode, Ref } from "react";
 import { createPortal } from "react-dom";
-import styles from "./style.module.css";
+import "./drawer.css";
+import { DrawerBaseProps } from "../types";
 
 const DrawerBase = (props: DrawerBaseProps & { children: ReactNode, ref?: Ref<HTMLDivElement> }) => {
 
@@ -41,14 +42,14 @@ const DrawerBase = (props: DrawerBaseProps & { children: ReactNode, ref?: Ref<HT
       <Fragment>
         <div
           onClick={handleClose}
-          className={`${styles.backdrop} ${backdropClassName}`}
+          className={`backdrop ${backdropClassName}`}
           style={{
             animation: animations.backdrop[`${willBeClosed}`],
           }}
         />
         <div
           ref={ref}
-          className={`${styles.sheet} ${sheetClassName} ${styles[direction]}`}
+          className={`sheet ${sheetClassName} sheet${[direction]}`}
           style={{
             animation: animations.sheet[`${willBeClosed}`]
           }}

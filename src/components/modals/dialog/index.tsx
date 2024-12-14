@@ -1,6 +1,7 @@
 import DialogBase from "../../dialog";
 import { useModalPro } from "../../../lib";
 import { Fragment, ReactNode, Ref, useEffect, useRef } from "react";
+import { DialogModalProps } from "../../types";
 
 type DialogExtendedProps = {
     children: ReactNode;
