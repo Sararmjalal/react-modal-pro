@@ -1,13 +1,20 @@
+import { ReactNode, Ref } from "react";
+import { DrawerDirection, ModalControls, UseModalProProps } from "../lib/types";
+
 export type ModalProps = {
   open: boolean;
   willBeClosed: boolean;
   handleClose: () => void;
 }
 
-export type DialogBaseProps = ModalProps & Required<Omit<ModalControls, "modalKey">>;
+export type DialogBaseProps = {
+  children: ReactNode, ref?: React.Ref<HTMLDivElement | null>
+} & ModalProps & Required<Omit<ModalControls, "modalKey">>;
 
 export type DrawerBaseProps = {
   direction: DrawerDirection;
+  children: ReactNode;
+  ref?: Ref<HTMLDivElement>
 } & ModalProps & Required<Omit<ModalControls, "modalKey">>;
 
 export type ModalProviderProps = {
@@ -18,12 +25,27 @@ export type ModalProviderProps = {
   defaultBackdropClassName?: string;
 };
 
+export type SidebarExtendedProps = {
+  children: ReactNode;
+  TriggerElement: ReactNode;
+}
+
 export type SidebarModalProps = {
   direction: "left" | "right";
-} & Omit<UseModalProProps, "sheetRef">;
+} & Omit<UseModalProProps, "sheetRef"> & SidebarExtendedProps;
+
+export type ProSheetExtendedProps = {
+  children: ReactNode;
+  TriggerElement: ReactNode;
+}
 
 export type ProSheetModalProps = {
   direction: "top" | "bottom";
-} & Omit<UseModalProProps, "sheetRef">;
+} & Omit<UseModalProProps, "sheetRef"> & ProSheetExtendedProps;
 
-export type DialogModalProps = & Omit<UseModalProProps, "sheetRef">
+export type DialogExtendedProps = {
+  children: ReactNode;
+  TriggerElement: ReactNode;
+}
+
+export type DialogModalProps = DialogExtendedProps & Omit<UseModalProProps, "sheetRef">

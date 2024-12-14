@@ -1,14 +1,9 @@
 import DrawerBase from "../../drawer";
 import { useModalPro } from "../../../lib";
-import { Fragment, ReactNode, Ref, useEffect, useRef } from "react";
 import { ProSheetModalProps } from "../../types";
+import { Fragment, Ref, useEffect, useRef } from "react";
 
-type ProSheetExtendedProps = {
-    children: ReactNode;
-    TriggerElement: ReactNode;
-}
-
-const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetModalProps & ProSheetExtendedProps) => {
+const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetModalProps) => {
 
     const drawerRef = useRef<HTMLDivElement>(undefined)
 

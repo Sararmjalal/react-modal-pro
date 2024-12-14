@@ -7,6 +7,7 @@ const ProModalProvider = ({ children, ...props }: ModalProviderProps & { childre
         <ModalDefaultsProvider {...props}>
             <ModalsProvider>
                 {children}
+                <div id="pro-modal-root" />
             </ModalsProvider>
         </ModalDefaultsProvider>
     )
