@@ -16,7 +16,7 @@ type ProSheetModalProps = {
 } & Omit<UseModalProProps, "sheetRef">;
 type DialogModalProps = Omit<UseModalProProps, "sheetRef">;
 
-declare const ModalProvider: ({ children, ...props }: ModalProviderProps & {
+declare const ProModalProvider: ({ children, ...props }: ModalProviderProps & {
     children: ReactNode;
 }) => react_jsx_runtime.JSX.Element;
 
@@ -51,4 +51,4 @@ declare const useModalPro: (props: UseModalProProps) => {
     willBeClosed: boolean;
 };
 
-export { Dialog, ModalProvider, ProSheet, Sidebar, useModalPro };
+export { Dialog, ProModalProvider, ProSheet, Sidebar, useModalPro };

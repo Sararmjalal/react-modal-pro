@@ -1,9 +1,9 @@
 
 import { ReactNode } from 'react';
-import "./dialog.css";
 import { createPortal } from "react-dom";
 import { Fragment } from "react/jsx-runtime";
 import { DialogBaseProps } from '../types';
+import styles from './style.module.css'
 
 const DialogBase = (props: DialogBaseProps & { children: ReactNode, ref?: React.Ref<HTMLDivElement | null> }) => {
 
@@ -24,14 +24,14 @@ const DialogBase = (props: DialogBaseProps & { children: ReactNode, ref?: React.
         <Fragment>
             <div
                 onClick={handleClose}
-                className={`backdrop ${backdropClassName}`}
+                className={`${styles.backdrop} ${backdropClassName}`}
                 style={{
                     animation: animations.backdrop[`${willBeClosed}`]
                 }}
             />
             <div
                 ref={ref}
-                className={`sheet ${sheetClassName}`}
+                className={`${styles.sheet} ${sheetClassName}`}
                 style={{
                     animation: animations.sheet[`${willBeClosed}`]
                 }}>

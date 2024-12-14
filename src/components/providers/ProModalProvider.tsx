@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 import { ModalDefaultsProvider, ModalsProvider } from "../../context"
 import { ModalProviderProps } from "../types"
 
-const ModalProvider = ({ children, ...props }: ModalProviderProps & { children: ReactNode }) => {
+const ProModalProvider = ({ children, ...props }: ModalProviderProps & { children: ReactNode }) => {
     return (
         <ModalDefaultsProvider {...props}>
             <ModalsProvider>
@@ -12,4 +12,4 @@ const ModalProvider = ({ children, ...props }: ModalProviderProps & { children: 
     )
 }
 
-export default ModalProvider
+export default ProModalProvider
