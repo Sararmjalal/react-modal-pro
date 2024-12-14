@@ -1,7 +1,7 @@
-"use client";
 import { useEffect } from "react";
 import { useRouter } from "./useRouter";
 import { useModals } from "../../context";
+import { UseModalTransitionProps } from "../types";
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
   const modalKey = `#${key}`;

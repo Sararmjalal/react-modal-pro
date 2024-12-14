@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { UseSwiperProps } from "../types";
 
 export const useSwiper = ({ direction, onSwipeUp, onSwipeDown, onSwipeLeft,
     onSwipeRight, threshold = 100, enabled = true, key }: UseSwiperProps) => {

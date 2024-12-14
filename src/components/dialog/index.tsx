@@ -1,10 +1,10 @@
 
-import { ReactNode } from 'react';
-import styles from './style.module.css';
 import { createPortal } from "react-dom";
 import { Fragment } from "react/jsx-runtime";
+import { DialogBaseProps } from '../types';
+import styles from './style.module.css';
 
-const DialogBase = (props: DialogBaseProps & { children: ReactNode, ref?: React.Ref<HTMLDivElement | null> }) => {
+const DialogBase = (props: DialogBaseProps) => {
 
     const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName = "", backdropClassName = "", ref } = props
 
@@ -37,7 +37,7 @@ const DialogBase = (props: DialogBaseProps & { children: ReactNode, ref?: React.
                 {children}
             </div>
         </Fragment>,
-        document.getElementById("modal-root")!
+        document.getElementById("pro-modal-root")!
     )
     return null
 }

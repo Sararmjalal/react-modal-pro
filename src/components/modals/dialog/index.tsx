@@ -1,13 +1,9 @@
 import DialogBase from "../../dialog";
 import { useModalPro } from "../../../lib";
-import { Fragment, ReactNode, Ref, useEffect, useRef } from "react";
+import { DialogModalProps } from "../../types";
+import { Fragment, Ref, useEffect, useRef } from "react";
 
-type DialogExtendedProps = {
-    children: ReactNode;
-    TriggerElement: ReactNode;
-}
-
-const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps & DialogExtendedProps) => {
+const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
 
     const dialogRef = useRef<HTMLDivElement>(undefined)
 

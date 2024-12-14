@@ -1,8 +1,9 @@
-import { Fragment, ReactNode, Ref } from "react";
+import { Fragment } from "react";
 import { createPortal } from "react-dom";
-import styles from "./style.module.css";
+import { DrawerBaseProps } from "../types";
+import styles from './style.module.css';
 
-const DrawerBase = (props: DrawerBaseProps & { children: ReactNode, ref?: Ref<HTMLDivElement> }) => {
+const DrawerBase = (props: DrawerBaseProps) => {
 
   const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName, backdropClassName, direction, ref } = props;
 
@@ -56,7 +57,7 @@ const DrawerBase = (props: DrawerBaseProps & { children: ReactNode, ref?: Ref<HT
           {children}
         </div>
       </Fragment>,
-      document.getElementById("modal-root")!
+      document.getElementById("pro-modal-root")!
     );
   return null;
 };

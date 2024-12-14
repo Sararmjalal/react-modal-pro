@@ -1,6 +1,6 @@
-type SwipeDirection = "vertical" | "horizontal";
+export type SwipeDirection = "vertical" | "horizontal";
 
-type UseSwiperProps = {
+export type UseSwiperProps = {
   direction: SwipeDirection;
   onSwipeUp?: () => void;
   onSwipeDown?: () => void;
@@ -11,22 +11,22 @@ type UseSwiperProps = {
   key?: string;
 };
 
-type UseScrollNearEdgesProps = {
+export type UseScrollNearEdgesProps = {
   ref?: React.RefObject<HTMLElement | undefined>;
   offset?: number;
   key?: string;
 };
 
-type UseModalTransitionProps = {
+export type UseModalTransitionProps = {
   key: string;
   closeCb?: () => void;
   canDismiss: boolean
   closeDuration: number
 };
 
-type DrawerDirection = "left" | "right" | "top" | "bottom"
+export type DrawerDirection = "left" | "right" | "top" | "bottom"
 
-type ModalControls = {
+export type ModalControls = {
   modalKey?: string;
   openDuration?: number;
   closeDuration?: number;
@@ -34,7 +34,7 @@ type ModalControls = {
   backdropClassName?: string;
 }
 
-type UseModalProProps = {
+export type UseModalProProps = {
   canDismiss?: boolean;
   swipeToOpen?: boolean;
   swipeToClose?: boolean;
