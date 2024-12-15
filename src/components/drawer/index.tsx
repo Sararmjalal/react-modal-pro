@@ -1,11 +1,11 @@
-import { Fragment } from "react";
+import styles from "./style.module.css";
 import { createPortal } from "react-dom";
 import { DrawerBaseProps } from "../types";
-import styles from './style.module.css';
+import { Fragment, forwardRef } from "react";
 
-const DrawerBase = (props: DrawerBaseProps) => {
+const DrawerBase = forwardRef<HTMLDivElement, DrawerBaseProps>((props, ref) => {
 
-  const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName, backdropClassName, direction, ref } = props;
+  const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName, backdropClassName, direction } = props;
 
   const directionKeyframes = {
     bottom: {
@@ -51,7 +51,7 @@ const DrawerBase = (props: DrawerBaseProps) => {
           ref={ref}
           className={`${styles.sheet} ${sheetClassName} ${styles[direction]}`}
           style={{
-            animation: animations.sheet[`${willBeClosed}`]
+            animation: animations.sheet[`${willBeClosed}`],
           }}
         >
           {children}
@@ -60,6 +60,6 @@ const DrawerBase = (props: DrawerBaseProps) => {
       document.getElementById("pro-modal-root")!
     );
   return null;
-};
+});
 
 export default DrawerBase;
