@@ -2,6 +2,7 @@ import styles from "./style.module.css";
 import { createPortal } from "react-dom";
 import { DialogBaseProps } from "../types";
 import { Fragment, forwardRef } from "react";
+import keyframes from '../../assets/keyframes.module.css'
 
 const DialogBase = forwardRef<HTMLDivElement, DialogBaseProps>((props, ref) => {
 
@@ -9,12 +10,12 @@ const DialogBase = forwardRef<HTMLDivElement, DialogBaseProps>((props, ref) => {
 
     const animations = {
         backdrop: {
-            false: `dialog-fade-in ${openDuration}ms`,
-            true: `dialog-fade-out ${closeDuration}ms`,
+            false: `${keyframes["dialog-fade-in"]} ${openDuration}ms`,
+            true: `${keyframes["dialog-fade-out"]} ${closeDuration}ms`,
         },
         sheet: {
-            false: `dialog-fade-in ${openDuration}ms`,
-            true: `dialog-fade-out ${closeDuration}ms`,
+            false: `${keyframes["dialog-fade-in"]} ${openDuration}ms`,
+            true: `${keyframes["dialog-fade-out"]} ${closeDuration}ms`,
         },
     };
 

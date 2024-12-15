@@ -1,4 +1,5 @@
 import styles from "./style.module.css";
+import keyframes from '../../assets/keyframes.module.css'
 import { createPortal } from "react-dom";
 import { DrawerBaseProps } from "../types";
 import { Fragment, forwardRef } from "react";
@@ -9,27 +10,27 @@ const DrawerBase = forwardRef<HTMLDivElement, DrawerBaseProps>((props, ref) => {
 
   const directionKeyframes = {
     bottom: {
-      open: `slide-bottom-in`,
-      close: `slide-bottom-out`,
+      open: `${keyframes["slide-bottom-in"]}`,
+      close: `${keyframes["slide-bottom-out"]}`,
     },
     top: {
-      open: `slide-top-in`,
-      close: `slide-top-out`,
+      open: `${keyframes["slide-top-in"]}`,
+      close: `${keyframes["slide-top-out"]}`,
     },
     left: {
-      open: `slide-left-in`,
-      close: `slide-left-out`,
+      open: `${keyframes["slide-left-in"]}`,
+      close: `${keyframes["slide-left-out"]}`,
     },
     right: {
-      open: `slide-right-in`,
-      close: `slide-right-out`,
+      open: `${keyframes["slide-right-in"]}`,
+      close: `${keyframes["slide-right-out"]}`,
     },
   };
 
   const animations = {
     backdrop: {
-      false: `dialog-fade-in ${openDuration}ms`,
-      true: `dialog-fade-out ${closeDuration}ms`,
+      false: `${keyframes["dialog-fade-in"]} ${openDuration}ms`,
+      true: `${keyframes["dialog-fade-out"]} ${closeDuration}ms`,
     },
     sheet: {
       false: `${directionKeyframes[direction].open} ${openDuration}ms`,
