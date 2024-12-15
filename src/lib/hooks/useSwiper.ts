@@ -34,12 +34,10 @@ export const useSwiper = ({ direction, onSwipeUp, onSwipeDown, onSwipeLeft,
 
         const swipeFunctions = {
             vertical: () => {
-                console.log({ absDiffY })
                 if (absDiffY > threshold) {
                     if (diffY > 0 && onSwipeDown) {
                         onSwipeDown();
                     } else if (onSwipeUp) {
-                        console.log("yessssssss")
                         onSwipeUp();
                     }
                 }

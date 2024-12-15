@@ -48,4 +48,4 @@ export type DialogExtendedProps = {
   TriggerElement: ReactNode;
 }
 
-export type DialogModalProps = DialogExtendedProps & Omit<UseModalProProps, "sheetRef">
+export type DialogModalProps = DialogExtendedProps & Omit<UseModalProProps, "sheetRef" | "swipeToOpen" | "swipeToClose" | "swipeThreshold"> 
