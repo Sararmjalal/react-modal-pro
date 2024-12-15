@@ -1,11 +1,23 @@
+import { useEffect } from "react";
 import { useModals } from "../../context"
 import { useRouter } from "./useRouter";
 
 export const useModalController = (modalKey: string) => {
 
-    const { modals, setWillBeClosed } = useModals()
+    const { modals, setModal, setWillBeClosed, setOpen, initialModal } = useModals()
 
-    const { navigate } = useRouter();
+    const { path, navigate } = useRouter();
+
+    const thisModal = modals[modalKey] ?? initialModal;
+
+    useEffect(() => {
+        if (!modals[modalKey]) setModal(modalKey);
+    }, []);
+
+    useEffect(() => {
+        const { isAlreadyInHash } = checkHash();
+        if (isAlreadyInHash) setOpen(modalKey, true);
+    }, [modalKey, path]);
 
     const checkHash = () => {
         const currentHash = window.location.hash;
@@ -23,7 +35,7 @@ export const useModalController = (modalKey: string) => {
         setWillBeClosed(modalKey, true);
     };
 
-    const { open } = modals[modalKey]
+    const { open } = thisModal
 
     return { open, handleOpenModal, handleCloseModal }
 
