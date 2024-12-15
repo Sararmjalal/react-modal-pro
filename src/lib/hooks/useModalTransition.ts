@@ -4,8 +4,8 @@ import { useModals } from "../../context";
 import { UseModalTransitionProps } from "../types";
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
-  const modalKey = `#${key}`;
 
+  const modalKey = `#${key}`;
   const { navigate, path } = useRouter();
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
 

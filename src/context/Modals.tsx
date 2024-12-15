@@ -6,12 +6,12 @@ interface Modal {
 }
 
 interface ModalsContextType {
+    initialModal: Modal;
     modals: Record<string, Modal>;
     setModal: (key: string) => void;
     removeModal: (key: string) => void;
     setOpen: (key: string, open: boolean) => void;
     setWillBeClosed: (key: string, willBeClosed: boolean) => void;
-    initialModal: Modal;
 }
 
 const ModalsContext = createContext<ModalsContextType | undefined>(undefined);
