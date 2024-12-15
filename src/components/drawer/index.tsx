@@ -63,3 +63,5 @@ const DrawerBase = forwardRef<HTMLDivElement, DrawerBaseProps>((props, ref) => {
 });
 
 export default DrawerBase;
+
+DrawerBase.displayName = "drawer"

@@ -44,3 +44,5 @@ const DialogBase = forwardRef<HTMLDivElement, DialogBaseProps>((props, ref) => {
 });
 
 export default DialogBase;
+
+DialogBase.displayName = "dialog"
