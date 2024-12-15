@@ -5,7 +5,7 @@ import { SidebarModalProps } from "../../types";
 
 const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
 
-  const sheetRef = useRef<HTMLDivElement>(undefined);
+  const sheetRef = useRef<HTMLDivElement>(null);
 
   const { handleOpenModal, handleCloseModal, currentModalKey, ...props } = useModalPro({
     sheetRef,
@@ -22,10 +22,11 @@ const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
       </div>
       <DrawerBase
         {...props}
+        mode="sidebar"
         key={currentModalKey}
         direction={direction}
         handleClose={handleCloseModal}
-        ref={sheetRef as Ref<HTMLDivElement | null>}
+        ref={sheetRef}
       >
         {sidebarProps.children}
       </DrawerBase>

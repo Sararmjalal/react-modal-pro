@@ -14,7 +14,8 @@ export type DialogBaseProps = {
 export type DrawerBaseProps = {
   direction: DrawerDirection;
   children: ReactNode;
-  ref?: Ref<HTMLDivElement>
+  ref?: Ref<HTMLDivElement>;
+  mode: "sidebar" | "prosheet"
 } & ModalProps & Required<Omit<ModalControls, "modalKey">>;
 
 export type ModalProviderProps = {
@@ -32,7 +33,7 @@ export type SidebarExtendedProps = {
 
 export type SidebarModalProps = {
   direction: "left" | "right";
-} & Omit<UseModalProProps, "sheetRef"> & SidebarExtendedProps;
+} & Omit<UseModalProProps, "sheetRef" | "sidebarDirection"> & SidebarExtendedProps;
 
 export type ProSheetExtendedProps = {
   children: ReactNode;
@@ -41,11 +42,11 @@ export type ProSheetExtendedProps = {
 
 export type ProSheetModalProps = {
   direction: "top" | "bottom";
-} & Omit<UseModalProProps, "sheetRef"> & ProSheetExtendedProps;
+} & Omit<UseModalProProps, "sheetRef" | "sidebarDirection"> & ProSheetExtendedProps;
 
 export type DialogExtendedProps = {
   children: ReactNode;
   TriggerElement: ReactNode;
 }
 
-export type DialogModalProps = DialogExtendedProps & Omit<UseModalProProps, "sheetRef">
+export type DialogModalProps = DialogExtendedProps & Omit<UseModalProProps, "sheetRef" | "swipeToOpen" | "swipeToClose" | "swipeThreshold" | "sidebarDirection">

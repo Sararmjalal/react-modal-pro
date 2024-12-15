@@ -5,7 +5,7 @@ export const useRouter = () => {
 
     useEffect(() => {
         const handlePopState = () => {
-            setPath(window.location.pathname)
+            setPath(window.location.pathname + window.location.hash)
         };
         window.addEventListener('popstate', handlePopState);
         return () => window.removeEventListener('popstate', handlePopState);

@@ -1,35 +1,36 @@
-import { Fragment } from "react";
+import styles from "./style.module.css";
+import keyframes from '../../assets/keyframes.module.css'
 import { createPortal } from "react-dom";
 import { DrawerBaseProps } from "../types";
-import styles from './style.module.css';
+import { Fragment, forwardRef } from "react";
 
-const DrawerBase = (props: DrawerBaseProps) => {
+const DrawerBase = forwardRef<HTMLDivElement, DrawerBaseProps>((props, ref) => {
 
-  const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName, backdropClassName, direction, ref } = props;
+  const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName, backdropClassName, direction, mode } = props;
 
   const directionKeyframes = {
     bottom: {
-      open: `slide-bottom-in`,
-      close: `slide-bottom-out`,
+      open: `${keyframes["slide-bottom-in"]}`,
+      close: `${keyframes["slide-bottom-out"]}`,
     },
     top: {
-      open: `slide-top-in`,
-      close: `slide-top-out`,
+      open: `${keyframes["slide-top-in"]}`,
+      close: `${keyframes["slide-top-out"]}`,
     },
     left: {
-      open: `slide-left-in`,
-      close: `slide-left-out`,
+      open: `${keyframes["slide-left-in"]}`,
+      close: `${keyframes["slide-left-out"]}`,
     },
     right: {
-      open: `slide-right-in`,
-      close: `slide-right-out`,
+      open: `${keyframes["slide-right-in"]}`,
+      close: `${keyframes["slide-right-out"]}`,
     },
   };
 
   const animations = {
     backdrop: {
-      false: `dialog-fade-in ${openDuration}ms`,
-      true: `dialog-fade-out ${closeDuration}ms`,
+      false: `${keyframes["dialog-fade-in"]} ${openDuration}ms`,
+      true: `${keyframes["dialog-fade-out"]} ${closeDuration}ms`,
     },
     sheet: {
       false: `${directionKeyframes[direction].open} ${openDuration}ms`,
@@ -42,16 +43,16 @@ const DrawerBase = (props: DrawerBaseProps) => {
       <Fragment>
         <div
           onClick={handleClose}
-          className={`${styles.backdrop} ${backdropClassName}`}
+          className={`${styles.backdrop} ${styles[mode]} ${backdropClassName}`}
           style={{
             animation: animations.backdrop[`${willBeClosed}`],
           }}
         />
         <div
           ref={ref}
-          className={`${styles.sheet} ${sheetClassName} ${styles[direction]}`}
+          className={`${styles.sheet} ${styles[mode]} ${styles[direction]} ${sheetClassName}`}
           style={{
-            animation: animations.sheet[`${willBeClosed}`]
+            animation: animations.sheet[`${willBeClosed}`],
           }}
         >
           {children}
@@ -60,6 +61,8 @@ const DrawerBase = (props: DrawerBaseProps) => {
       document.getElementById("pro-modal-root")!
     );
   return null;
-};
+});
 
 export default DrawerBase;
+
+DrawerBase.displayName = "drawer"

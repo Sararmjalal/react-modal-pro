@@ -5,7 +5,7 @@ import { Fragment, Ref, useEffect, useRef } from "react";
 
 const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
 
-    const dialogRef = useRef<HTMLDivElement>(undefined)
+    const dialogRef = useRef<HTMLDivElement>(null)
 
     const { handleOpenModal, handleCloseModal, currentModalKey, ...modalProps } = useModalPro({
         ...props,
@@ -23,14 +23,16 @@ const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
 
     return (
         <Fragment>
-            <div onClick={handleOpenModal}>
+            <div
+                style={{ width: "fit-content" }}
+                onClick={handleOpenModal}>
                 {TriggerElement}
             </div>
             <DialogBase
                 {...modalProps}
                 key={currentModalKey}
                 handleClose={handleCloseModal}
-                ref={dialogRef as Ref<HTMLDivElement | null>}>
+                ref={dialogRef}>
                 {children}
             </DialogBase>
         </Fragment>
