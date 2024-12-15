@@ -24,11 +24,14 @@ const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetMod
 
     return (
         <Fragment>
-            <div onClick={handleOpenModal}>
+            <div
+                style={{ width: "fit-content" }}
+                onClick={handleOpenModal}>
                 {TriggerElement}
             </div>
             <DrawerBase
                 {...modalProps}
+                mode="prosheet"
                 direction={direction}
                 key={currentModalKey}
                 handleClose={handleCloseModal}

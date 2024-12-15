@@ -11,7 +11,7 @@ export const useModalPro = (props: UseModalProProps) => {
   const { modalKey, swipeThreshold, swipeToClose = false, swipeToOpen = false, sidebarDirection, backdropClassName,
     sheetClassName, canDismiss, openDuration, closeDuration, sheetRef, closeCb } = props;
 
-  const currentModalKey = modalKey?.replaceAll(" ", "") ?? initialKey;
+  const currentModalKey = modalKey.replaceAll(" ", "");
 
   const { backdropClassName: defaultBackdropClassName,
     canDismiss: defaultCanDismiss,

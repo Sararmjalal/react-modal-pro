@@ -14,7 +14,8 @@ export type DialogBaseProps = {
 export type DrawerBaseProps = {
   direction: DrawerDirection;
   children: ReactNode;
-  ref?: Ref<HTMLDivElement>
+  ref?: Ref<HTMLDivElement>;
+  mode: "sidebar" | "prosheet"
 } & ModalProps & Required<Omit<ModalControls, "modalKey">>;
 
 export type ModalProviderProps = {

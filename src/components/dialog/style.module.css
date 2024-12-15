@@ -3,7 +3,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1000;
+    z-index: 10199;
     position: fixed;
     opacity: 1;
     background: var(--react-modal-pro-backdrop-background);
@@ -14,7 +14,7 @@
     left: 50%;
     opacity: 1;
     padding: var(--react-modal-pro-sheet-padding);
-    z-index: 1010;
+    z-index: 10200;
     position: fixed;
     transform: translate(-50%, -50%);
     border-radius: var(--react-modal-pro-sheet-radius);

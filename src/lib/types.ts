@@ -27,7 +27,7 @@ export type UseModalTransitionProps = {
 export type DrawerDirection = "left" | "right" | "top" | "bottom"
 
 export type ModalControls = {
-  modalKey?: string;
+  modalKey: string;
   openDuration?: number;
   closeDuration?: number;
   sheetClassName?: string;

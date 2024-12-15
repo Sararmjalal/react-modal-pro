@@ -6,7 +6,7 @@ import { Fragment, forwardRef } from "react";
 
 const DrawerBase = forwardRef<HTMLDivElement, DrawerBaseProps>((props, ref) => {
 
-  const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName, backdropClassName, direction } = props;
+  const { open, openDuration, willBeClosed, handleClose, closeDuration, children, sheetClassName, backdropClassName, direction, mode } = props;
 
   const directionKeyframes = {
     bottom: {
@@ -43,14 +43,14 @@ const DrawerBase = forwardRef<HTMLDivElement, DrawerBaseProps>((props, ref) => {
       <Fragment>
         <div
           onClick={handleClose}
-          className={`${styles.backdrop} ${backdropClassName}`}
+          className={`${styles.backdrop} ${styles[mode]} ${backdropClassName}`}
           style={{
             animation: animations.backdrop[`${willBeClosed}`],
           }}
         />
         <div
           ref={ref}
-          className={`${styles.sheet} ${sheetClassName} ${styles[direction]}`}
+          className={`${styles.sheet} ${styles[mode]} ${styles[direction]} ${sheetClassName}`}
           style={{
             animation: animations.sheet[`${willBeClosed}`],
           }}

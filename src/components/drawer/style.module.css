@@ -3,7 +3,6 @@
   left: 0;
   width: 100svw;
   height: 100svh;
-  z-index: 990;
   position: fixed;
   opacity: 1;
   background: var(--react-modal-pro-backdrop-background);
@@ -12,10 +11,25 @@
 .sheet {
   position: fixed;
   opacity: 1;
-  z-index: 1000;
   background: var(--react-modal-pro-sheet-background);
   padding: var(--react-modal-pro-sheet-padding);
   overflow-y: auto;
+}
+
+.backdrop.sidebar {
+  z-index: 9999;
+}
+
+.backdrop.prosheet {
+  z-index: 10099;
+}
+
+.sheet.sidebar {
+  z-index: 10000;
+}
+
+.sheet.prosheet {
+  z-index: 10100;
 }
 
 .sheet.bottom {

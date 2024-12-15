@@ -18,16 +18,20 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
     const isAlreadyInHash = currentHash.split("#").some((item) => item === key);
     return { isAlreadyInHash, currentHash };
   };
-
+  console.log({ modals })
   useEffect(() => {
     if (!modals[key]) setModal(key);
-  }, []);
+  }, [key]);
 
   useEffect(() => {
     const { isAlreadyInHash } = checkHash();
+    console.log(path, isAlreadyInHash, key)
     setOpen(key, isAlreadyInHash);
-    if (!isAlreadyInHash && willBeClosed) setWillBeClosed(key, false);
-  }, [path]);
+    if (!isAlreadyInHash && willBeClosed) {
+      console.log("in last if", key)
+      setWillBeClosed(key, false);
+    }
+  }, [key, path]);
 
   useEffect(() => {
     if (willBeClosed) {
@@ -43,7 +47,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
         removeModal(key);
       }
     }
-  }, [willBeClosed]);
+  }, [key, willBeClosed]);
 
   const handleOpenModal = () => {
     const { isAlreadyInHash, currentHash } = checkHash();

@@ -22,6 +22,7 @@ const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
       </div>
       <DrawerBase
         {...props}
+        mode="sidebar"
         key={currentModalKey}
         direction={direction}
         handleClose={handleCloseModal}
