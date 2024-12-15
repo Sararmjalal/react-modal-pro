@@ -2,6 +2,16 @@
 
 **React-Modal-Pro** is a versatile and lightweight library for managing modals in React applications. It offers seamless support for dialogs, sidebars, and sheets, giving you full control over their behavior and appearance. With native-like navigation integration, modals can close when navigating back in history, without actually reverting to the previous page—providing a smooth, app-like user experience.
 
+## Key Features:
+- Effortlessly manage multiple modals.
+- Native-like modal behavior with history-based closing.
+- Swipe-to-open and swipe-to-close functionality for sidebars and sheets.
+- Simple yet powerful API for fine-tuned control.
+
+With **React-Modal-Pro**, creating professional, responsive, and intuitive modals has never been easier.
+
+---
+
 ## Installation
 
 To install `React-Modal-Pro`, you can use **npm** or **yarn**:
@@ -13,16 +23,6 @@ $ npm install --save react-modal-pro
 # Using yarn
 $ yarn add react-modal-pro
 ```
-
-## Key Features:
-- Effortlessly manage multiple modals.
-- Native-like modal behavior with history-based closing.
-- Swipe-to-open and swipe-to-close functionality for sidebars and sheets.
-- Simple yet powerful API for fine-tuned control.
-
-With **React-Modal-Pro**, creating professional, responsive, and intuitive modals has never been easier.
-
----
 
 ## Example: Building Modals with React-Modal-Pro
 
