@@ -5,7 +5,7 @@ import { Fragment, Ref, useEffect, useRef } from "react";
 
 const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetModalProps) => {
 
-    const drawerRef = useRef<HTMLDivElement>(undefined)
+    const drawerRef = useRef<HTMLDivElement>(null)
 
     const { handleOpenModal, handleCloseModal, currentModalKey, ...modalProps } = useModalPro({
         ...props,
@@ -32,7 +32,7 @@ const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetMod
                 direction={direction}
                 key={currentModalKey}
                 handleClose={handleCloseModal}
-                ref={drawerRef as Ref<HTMLDivElement | null>}>
+                ref={drawerRef}>
                 {children}
             </DrawerBase >
         </Fragment>
