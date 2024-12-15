@@ -1,4 +1,4 @@
-export { useModalPro, useModalTransition } from "./lib";
+export { useModalController } from "./lib";
 export { default as Dialog } from "./components/modals/dialog";
 export { default as Sidebar } from "./components/modals/sidebar";
 export { default as ProSheet } from "./components/modals/pro-sheet";
