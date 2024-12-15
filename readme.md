@@ -143,7 +143,7 @@ root.render(
 #### Sidebar
 | **Prop**             | **Type**       | **Default** | **Required** | **Description**                                |
 |-----------------------|----------------|-------------|--------------|------------------------------------------------|
-| `direction`          | `left | right` | -           | **Yes**      | Direction the sidebar opens (`left` or `right`). |
+| `direction`          | `left` `right` | -           | **Yes**      | Direction the sidebar opens (`left` or `right`). |
 | `swipeToOpen`        | `boolean`      | `false`     | No           | Enables swipe-to-open functionality.            |
 | `swipeToClose`       | `boolean`      | `false`     | No           | Enables swipe-to-close functionality.           |
 | `swipeThreshold`     | `number`       | `undefined` | No           | Threshold for swipe gestures.                   |
@@ -151,7 +151,7 @@ root.render(
 #### ProSheet
 | **Prop**             | **Type**       | **Default** | **Required** | **Description**                                |
 |-----------------------|----------------|-------------|--------------|------------------------------------------------|
-| `direction`          | `bottom | top` | -           | **Yes**      | Direction the sheet opens (`bottom` or `top`). |
+| `direction`          | `bottom` `top` | -           | **Yes**      | Direction the sheet opens (`bottom` or `top`). |
 | `swipeToOpen`        | `boolean`      | `false`     | No           | Enables swipe-to-open functionality.            |
 | `swipeToClose`       | `boolean`      | `false`     | No           | Enables swipe-to-close functionality.           |
 | `swipeThreshold`     | `number`       | `undefined` | No           | Threshold for swipe gestures.                   |
