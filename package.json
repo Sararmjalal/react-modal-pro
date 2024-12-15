@@ -1,6 +1,6 @@
 {
   "name": "react-modal-pro",
-  "version": "0.2.4",
+  "version": "0.2.8",
   "description": "Reusable react modal with dialog, sidebar and sheet.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -25,8 +25,8 @@
   "author": "Sara Jalal",
   "license": "ISC",
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": ">=18.0.0 <20.0.0",
+    "react-dom": ">=18.0.0 <20.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.1",
