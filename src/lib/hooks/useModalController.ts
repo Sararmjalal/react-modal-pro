@@ -3,8 +3,9 @@ import { useModals, useRouter } from "../../context";
 
 export const useModalController = (key: string) => {
     const { navigate } = useRouter();
-    const { setWillBeClosed } = useModals();
+    const { modals, setWillBeClosed, initialModal } = useModals();
     const modalKey = key.replaceAll(" ", "");
+    const thisModal = modals[key] ?? initialModal
 
     const handleOpenModal = () => {
         const { isAlreadyInHash, currentHash } = checkHash(modalKey);
@@ -17,5 +18,5 @@ export const useModalController = (key: string) => {
         setWillBeClosed(modalKey, true);
     };
 
-    return { handleOpenModal, handleCloseModal };
+    return { open: thisModal.open, willBeClosed: thisModal.willBeClosed, handleOpenModal, handleCloseModal };
 };
