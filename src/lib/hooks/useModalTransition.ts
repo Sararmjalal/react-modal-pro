@@ -11,7 +11,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
 
   const thisModal = modals[key] ?? initialModal;
 
-  const { willBeClosed } = thisModal;
+  const { open, willBeClosed } = thisModal;
 
   useEffect(() => {
     if (!modals[key]) setModal(key);
@@ -26,7 +26,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   }, [key, path]);
 
   useEffect(() => {
-    if (willBeClosed) {
+    if (willBeClosed && open) {
       let timeout;
       const { isAlreadyInHash } = checkHash(key);
       if (timeout) timeout = undefined;

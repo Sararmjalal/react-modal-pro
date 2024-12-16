@@ -16,13 +16,21 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
 
     useEffect(() => {
         const updatePath = () => {
-            setPath(window.location.pathname + window.location.hash);
+            const newPathname = window.location.pathname
+            if (path.startsWith(newPathname)) {
+                setPath(window.location.pathname + window.location.hash);
+                console.log("startsWith is correct", window.location.pathname + window.location.hash)
+            }
+            else {
+                setPath(newPathname)
+                console.log("startsWith is wrong", newPathname);
+            }
         };
         window.addEventListener("popstate", updatePath);
         window.addEventListener("hashchange", updatePath);
 
         return () => {
-            window.removeEventListener("popstate", updatePath);
+            window.removeEventListener("", updatePath);
             window.removeEventListener("hashchange", updatePath);
         };
     }, []);
