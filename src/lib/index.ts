@@ -1,4 +1,5 @@
 export { uid } from "./utils/uid"
+export { checkHash } from "./utils/checkHash"
 
 export { useSwiper } from "./hooks/useSwiper"
 export { useModalPro } from "./hooks/useModalPro"
