@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useRouter } from "./useRouter";
-import { useModals } from "../../context";
+import { useModals, useRouter } from "../../context";
 import { UseModalTransitionProps } from "../types";
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {

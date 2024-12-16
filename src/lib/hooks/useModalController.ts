@@ -1,5 +1,4 @@
-import { useRouter } from "./useRouter";
-import { useModals } from "../../context";
+import { useModals, useRouter } from "../../context";
 
 export const useModalController = (modalKey: string) => {
     const { navigate } = useRouter();

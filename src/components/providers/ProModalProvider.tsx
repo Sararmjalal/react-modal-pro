@@ -1,7 +1,7 @@
-import { ReactNode, useEffect } from "react"
-import { ModalDefaultsProvider, ModalsProvider } from "../../context"
-import { ModalProviderProps } from "../types"
 import "../../assets/styles.css";
+import { ReactNode, useEffect } from "react"
+import { ModalProviderProps } from "../types"
+import { ModalDefaultsProvider, ModalsProvider, RouterProvider } from "../../context"
 
 const ProModalProvider = ({ children, ...props }: ModalProviderProps & { children: ReactNode }) => {
 
@@ -16,9 +16,11 @@ const ProModalProvider = ({ children, ...props }: ModalProviderProps & { childre
 
     return (
         <ModalDefaultsProvider {...props}>
-            <ModalsProvider>
-                {children}
-            </ModalsProvider>
+            <RouterProvider>
+                <ModalsProvider>
+                    {children}
+                </ModalsProvider>
+            </RouterProvider>
         </ModalDefaultsProvider>
     )
 }
