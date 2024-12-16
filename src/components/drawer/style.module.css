@@ -71,14 +71,14 @@
   .sheet.bottom,
   .sheet.top {
     width: 100vw;
-    max-width: 80%;
+    max-width: calc(100% - 24px);
     min-height: 458px;
   }
 
   .sheet.left,
   .sheet.right {
-    min-width: 50%;
-    max-width: 80%;
+    min-width: 33%;
+    max-width: calc(100% - 24px);
   }
 }
 
