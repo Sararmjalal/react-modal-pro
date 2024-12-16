@@ -20,13 +20,19 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   };
 
   useEffect(() => {
-    if (!modals[key]) setModal(key);
-  }, [key]);
+    if (!modals[key]) {
+      console.log("in use transition - set modal")
+      setModal(key)
+    };
+    console.log("in use transition - set modal")
+  }, [key, path]);
 
   useEffect(() => {
     const { isAlreadyInHash } = checkHash();
+    console.log("in use transition - update open", { open: isAlreadyInHash })
     setOpen(key, isAlreadyInHash);
     if (!isAlreadyInHash && willBeClosed) {
+      console.log("in use transition - update will be closed to false",)
       setWillBeClosed(key, false);
     }
   }, [key, path]);

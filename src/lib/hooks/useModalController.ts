@@ -1,18 +1,9 @@
-import { useEffect } from "react";
 import { useRouter } from "./useRouter";
 import { useModals } from "../../context";
 
 export const useModalController = (modalKey: string) => {
-
-    const { modals, setModal, setWillBeClosed, initialModal } = useModals()
-
     const { navigate } = useRouter();
-
-    const thisModal = modals[modalKey] ?? initialModal;
-
-    useEffect(() => {
-        if (!modals[modalKey]) setModal(modalKey);
-    }, []);
+    const { setWillBeClosed } = useModals();
 
     const checkHash = () => {
         const currentHash = window.location.hash;
@@ -24,14 +15,16 @@ export const useModalController = (modalKey: string) => {
         const { isAlreadyInHash, currentHash } = checkHash();
         if (isAlreadyInHash) return;
         navigate(currentHash + `#${modalKey}`);
+        console.log("in modal controller handle open")
+
     };
 
     const handleCloseModal = () => {
         setWillBeClosed(modalKey, true);
+        console.log("in modal controller handle close")
     };
 
-    const { open } = thisModal
+    console.log("in modal controller", { modalKey })
 
-    return { open, handleOpenModal, handleCloseModal }
-
-}
+    return { handleOpenModal, handleCloseModal };
+};
