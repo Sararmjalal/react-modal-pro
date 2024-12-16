@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from "react";
 
 interface RouterContextType {
     path: string;
     navigate: (to: string) => void;
+    isPushStateOccured: boolean;
+    historyRef: string[]
 }
 
 const RouterContext = createContext<RouterContextType | null>(null);
@@ -13,35 +15,44 @@ interface RouterProviderProps {
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const [path, setPath] = useState(window.location.pathname + window.location.hash);
+    const isPushStateOccured = useRef(false)
+    const historyRef = useRef<string[]>([])
+
+    const handleEvents = () => setPath(window.location.pathname + window.location.hash)
 
     useEffect(() => {
-        const updatePath = () => {
-            const newPathname = window.location.pathname
-            if (path.startsWith(newPathname)) {
-                setPath(window.location.pathname + window.location.hash);
-                console.log("startsWith is correct", window.location.pathname + window.location.hash)
-            }
-            else {
-                setPath(newPathname)
-                console.log("startsWith is wrong", newPathname);
-            }
+        const originalPushState = window.history.pushState;
+        window.history.pushState = function (...args) {
+            console.log("push state in going to run")
+            isPushStateOccured.current = true
+            console.log("AFTER TRUE", { isPushStateOccured })
+            originalPushState.apply(window.history, args);
+            const newPath = window.location.pathname + window.location.hash;
+            historyRef.current = [...historyRef.current, newPath]
+            console.log("HISTORY IS UPDATING", { historyRef, newPath })
+            setPath(newPath);
         };
-        window.addEventListener("popstate", updatePath);
-        window.addEventListener("hashchange", updatePath);
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener("popstate", handleEvents);
+        window.addEventListener("hashchange", handleEvents);
 
         return () => {
-            window.removeEventListener("", updatePath);
-            window.removeEventListener("hashchange", updatePath);
+            window.removeEventListener("", handleEvents);
+            window.removeEventListener("hashchange", handleEvents);
         };
     }, []);
 
     const navigate = (to: string) => {
         window.history.pushState({}, "", to);
-        setPath(to);
+        isPushStateOccured.current = false
+        console.log("AFTER FALSE", { isPushStateOccured })
+        console.log("push state is updating to false")
     };
 
     return (
-        <RouterContext.Provider value={{ path, navigate }}>
+        <RouterContext.Provider value={{ path, navigate, isPushStateOccured: isPushStateOccured.current, historyRef: historyRef.current }}>
             {children}
         </RouterContext.Provider>
     );
