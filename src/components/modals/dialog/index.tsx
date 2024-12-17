@@ -1,7 +1,7 @@
 import DialogBase from "../../dialog";
 import { DialogModalProps } from "../../types";
-import { Fragment, useEffect, useRef } from "react";
-import { useModalPro, useModalUnmount } from "../../../lib";
+import { Fragment, useRef } from "react";
+import { useModalPro, useModalUnmount, usePreventBgScroll } from "../../../lib";
 
 const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
 
@@ -12,16 +12,8 @@ const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
         sheetRef: dialogRef
     })
 
-    useEffect(() => {
-        if (modalProps.open) {
-            document.body.style.overscrollBehavior = "none";
-            return () => {
-                document.body.style.overscrollBehavior = "initial";
-            };
-        }
-    }, [modalProps.open]);
-
     useModalUnmount(props.modalKey);
+    usePreventBgScroll(modalProps.open);
 
     return (
         <Fragment>

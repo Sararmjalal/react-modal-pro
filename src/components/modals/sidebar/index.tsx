@@ -1,7 +1,7 @@
 import DrawerBase from "../../drawer";
 import { Fragment, useRef } from "react";
 import { SidebarModalProps } from "../../types";
-import { useModalPro, useModalUnmount } from "../../../lib";
+import { useModalPro, useModalUnmount, usePreventBgScroll } from "../../../lib";
 
 const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
 
@@ -13,6 +13,7 @@ const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
     sidebarDirection: direction
   });
 
+  usePreventBgScroll(props.open);
   useModalUnmount(sidebarProps.modalKey);
 
   return (
