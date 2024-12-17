@@ -5,7 +5,7 @@ import { useModals, useRouter } from "../../context";
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
   const modalKey = `#${key}`;
-  const { navigate, path, isPushStateOccured, historyRef } = useRouter();
+  const { navigate, path } = useRouter();
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
 
   const thisModal = modals[key] ?? initialModal;
@@ -22,28 +22,17 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
       setWillBeClosed(key, false);
     }
   }, [key, path]);
-  console.log("IN MODAL TRANSITION", key, { historyRef, pathname: window.location.pathname })
+
   useEffect(() => {
     if (willBeClosed) {
       let timeout;
-      const { isAlreadyInHash } = checkHash(key);
       if (timeout) timeout = undefined;
-      if (isAlreadyInHash) {
-        timeout = setTimeout(() => {
-          const { isAlreadyInHash } = checkHash(key)
-          if (isAlreadyInHash) {
-            window.history.back();
-            console.log("GOING BACK - IS IN HASH", { windowHash: window.location.hash, isAlreadyInHash })
-          }
-          else {
-            removeModal(key);
-            console.log("BACK DIDNT OCCURE")
-          }
-          if (closeCb) closeCb();
-        }, closeDuration - 50);
-      } else {
-        removeModal(key);
-      }
+      timeout = setTimeout(() => {
+        const { isAlreadyInHash } = checkHash(key)
+        if (isAlreadyInHash) window.history.back();
+        else removeModal(key);
+        if (closeCb) closeCb();
+      }, closeDuration - 50);
     }
   }, [key, willBeClosed]);
 
