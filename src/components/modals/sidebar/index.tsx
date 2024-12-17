@@ -1,7 +1,7 @@
 import DrawerBase from "../../drawer";
-import { useModalPro } from "../../../lib";
-import { Fragment, Ref, useRef } from "react";
+import { Fragment, useRef } from "react";
 import { SidebarModalProps } from "../../types";
+import { useModalPro, useModalUnmount } from "../../../lib";
 
 const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
 
@@ -12,6 +12,8 @@ const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
     ...sidebarProps,
     sidebarDirection: direction
   });
+
+  useModalUnmount(sidebarProps.modalKey);
 
   return (
     <Fragment>

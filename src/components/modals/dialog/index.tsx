@@ -1,7 +1,7 @@
 import DialogBase from "../../dialog";
-import { useModalPro } from "../../../lib";
 import { DialogModalProps } from "../../types";
-import { Fragment, Ref, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
+import { useModalPro, useModalUnmount } from "../../../lib";
 
 const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
 
@@ -20,6 +20,8 @@ const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
             };
         }
     }, [modalProps.open]);
+
+    useModalUnmount(props.modalKey);
 
     return (
         <Fragment>

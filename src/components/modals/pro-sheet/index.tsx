@@ -1,7 +1,7 @@
 import DrawerBase from "../../drawer";
-import { useModalPro } from "../../../lib";
 import { ProSheetModalProps } from "../../types";
-import { Fragment, Ref, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
+import { useModalPro, useModalUnmount } from "../../../lib";
 
 const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetModalProps) => {
 
@@ -21,6 +21,8 @@ const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetMod
             };
         }
     }, [modalProps.open]);
+
+    useModalUnmount(props.modalKey);
 
     return (
         <Fragment>

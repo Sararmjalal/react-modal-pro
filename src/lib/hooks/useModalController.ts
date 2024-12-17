@@ -11,7 +11,6 @@ export const useModalController = (key: string) => {
         const { isAlreadyInHash, currentHash } = checkHash(modalKey);
         if (isAlreadyInHash) return;
         navigate(currentHash + `#${modalKey}`);
-
     };
 
     const handleCloseModal = () => {
