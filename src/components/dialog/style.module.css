@@ -1,24 +1,24 @@
 .backdrop {
     top: 0;
     left: 0;
+    opacity: 1;
     width: 100vw;
     height: 100vh;
-    z-index: 10199;
     position: fixed;
-    opacity: 1;
     background: var(--react-modal-pro-backdrop-background);
+    z-index: var(--react-modal-pro-dialog-backdrop-z-index);
 }
 
 .sheet {
     top: 50%;
     left: 50%;
     opacity: 1;
-    padding: var(--react-modal-pro-sheet-padding);
-    z-index: 10200;
     position: fixed;
     transform: translate(-50%, -50%);
+    padding: var(--react-modal-pro-sheet-padding);
     border-radius: var(--react-modal-pro-sheet-radius);
     background: var(--react-modal-pro-sheet-background);
+    z-index: var(--react-modal-pro-dialog-sheet-z-index);
 }
 
 @media only screen and (max-width: 600px) {

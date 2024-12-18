@@ -17,19 +17,19 @@
 }
 
 .backdrop.sidebar {
-  z-index: 9999;
+  z-index: var(--react-modal-pro-sidebar-backdrop-z-index);
 }
 
 .backdrop.prosheet {
-  z-index: 10099;
+  z-index: var(--react-modal-pro-pro-sheet-backdrop-z-index);
 }
 
 .sheet.sidebar {
-  z-index: 10000;
+  z-index: var(--react-modal-pro-sidebar-sheet-z-index);
 }
 
 .sheet.prosheet {
-  z-index: 10100;
+  z-index: var(--react-modal-pro-pro-sheet-sheet-z-index);
 }
 
 .sheet.bottom {
