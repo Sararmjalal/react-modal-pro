@@ -1,11 +1,8 @@
-import { uid } from "../utils/uid";
 import { useSwiper } from "./useSwiper";
 import { useModalTransition } from "./useModalTransition";
 import { useScrollNearEdges } from "./useScrollNearEdges";
 import { useModalDefaults } from "../../context";
 import { UseModalProProps } from "../types";
-
-const initialKey = uid("modal");
 
 export const useModalPro = (props: UseModalProProps) => {
   const { modalKey, swipeThreshold, swipeToClose = false, swipeToOpen = false, sidebarDirection, backdropClassName,
