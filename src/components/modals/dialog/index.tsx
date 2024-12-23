@@ -18,7 +18,7 @@ const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
     return (
         <Fragment>
             <div
-                style={{ width: "fit-content" }}
+                className="modal_pro_trigger_element"
                 onClick={handleOpenModal}>
                 {TriggerElement}
             </div>

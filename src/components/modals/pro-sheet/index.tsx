@@ -19,7 +19,7 @@ const ProSheet = ({ TriggerElement, direction, children, ...props }: ProSheetMod
     return (
         <Fragment>
             <div
-                style={{ width: "fit-content" }}
+                className="modal_pro_trigger_element"
                 onClick={handleOpenModal}>
                 {TriggerElement}
             </div>

@@ -19,7 +19,7 @@ const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
   return (
     <Fragment>
       <div
-        style={{ width: "fit-content" }}
+        className="modal_pro_trigger_element"
         onClick={() => handleOpenModal()}>
         {sidebarProps.TriggerElement}
       </div>
