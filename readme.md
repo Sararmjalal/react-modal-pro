@@ -2,7 +2,20 @@
 
 **React-Modal-Pro** is a versatile and lightweight library for managing modals in React applications. It offers seamless support for dialogs, sidebars, and sheets, giving you full control over their behavior and appearance. With native-like navigation integration, modals can close when navigating back in history, without actually reverting to the previous page—providing a smooth, app-like user experience.
 
-## Key Features:
+---
+
+# Table of Contents
+
+- [Key Features](#key-features)
+- [Installation](#installation)
+- [Example: Building Modals with React-Modal-Pro](#example-building-modals-with-react-modal-pro)
+- [Styling & Customization](#styling--customization)
+- [Props Reference](#props-reference)
+- [Demo](#demo)
+
+---
+
+## Key Features
 - Effortlessly manage multiple modals.
 - Native-like modal behavior with history-based closing.
 - Swipe-to-open and swipe-to-close functionality for sidebars and sheets.
@@ -108,6 +121,88 @@ root.render(
   </React.StrictMode>
 );
 ```
+
+## Styling & Customization
+
+This library offers extensive styling options through CSS variables, allowing you to customize the appearance of modals and sheets easily. Below is a list of the root styles provided, along with their default values and descriptions:
+
+```css
+:root {
+  --react-modal-pro-sheet-radius: 12px; /* Corner radius for sheet modals */
+  --react-modal-pro-sheet-padding: 24px; /* Inner padding for sheet modals */
+  --react-modal-pro-sheet-background: #ffffff; /* Background color of the sheet modals */
+  --react-modal-pro-backdrop-background: #0000004a; /* Background color of the modal backdrop */
+  --react-modal-pro-dialog-sheet-z-index: 1200; /* Z-index for dialog modals */
+  --react-modal-pro-dialog-backdrop-z-index: 1199; /* Z-index for dialog modal backdrops */
+  --react-modal-pro-sidebar-sheet-z-index: 1000; /* Z-index for sidebar modals */
+  --react-modal-pro-sidebar-backdrop-z-index: 999; /* Z-index for sidebar modal backdrops */
+  --react-modal-pro-pro-sheet-sheet-z-index: 1100; /* Z-index for pro-sheet modals */
+  --react-modal-pro-pro-sheet-backdrop-z-index: 1099; /* Z-index for pro-sheet modal backdrops */
+}
+```
+
+You can override these variables in your global CSS to match your project's design requirements. For example:
+
+```css
+:root {
+  --react-modal-pro-sheet-radius: 16px;
+  --react-modal-pro-backdrop-background: rgba(0, 0, 0, 0.7);
+}
+```
+
+These changes will seamlessly update the modal appearance across your application.
+
+### Additional Customization Options
+
+The library also provides several className-based options for styling:
+
+#### Default Class Names for All Modals
+
+You can specify default class names for all modals by using the `defaultSheetClassName` and `defaultBackdropClassName` props when setting up the `ProModalProvider`. These class names will be applied to all modals within the provider's scope.
+
+Example:
+
+```jsx
+<ProModalProvider
+  defaultSheetClassName="modal-sheet-root"
+  defaultBackdropClassName="modal-backdrop-root">
+  {children}
+</ProModalProvider>
+```
+
+#### Per-Modal Class Names
+
+If you want to apply specific class names to individual modals, you can use the `sheetClassName` and `backdropClassName` props directly on the modal components (`Dialog`, `ProSheet`, `Sidebar`).
+
+Example with `Dialog` (works seamlessly for `ProSheet` and `Sidebar`):
+
+```jsx
+<Dialog
+  modalKey="dialog"
+  sheetClassName="dialog-sheet"
+  backdropClassName="dialog-backdrop"
+  TriggerElement={<button>open dialog</button>}>
+  Hey, This is dialog content!
+</Dialog>
+```
+
+#### Static Class Name for Trigger Element
+
+The library applies a static class name, `modal_pro_trigger_element`, to the `TriggerElement` of all modals. This ensures consistent styling across all trigger elements.
+
+Example:
+
+```css
+.modal_pro_trigger_element {
+  cursor: pointer;
+  color: #007bff;
+}
+```
+
+By combining these options, you can achieve a highly customizable and consistent design for your modal components.
+
+---
+
 ### Key Takeaways
 - **Unique Keys**: Assign a unique `modalKey` (e.g., `'bottom-sheet'`, `'sidebar-left'`) for independent modal control.
 - **Dynamic Control**: Use the `useModalController` hook to dynamically manage modals, such as closing a modal from within its content using `handleCloseModal`.
