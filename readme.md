@@ -135,15 +135,15 @@ This library offers extensive styling options through CSS variables, allowing yo
 
 ```css
 :root {
-  --react-modal-pro-sheet-radius: 12px; /* Corner radius for sheet modals */
-  --react-modal-pro-sheet-padding: 24px; /* Inner padding for sheet modals */
-  --react-modal-pro-sheet-background: #ffffff; /* Background color of the sheet modals */
+  --react-modal-pro-sheet-radius: 12px; /* Corner radius for modal sheets */
+  --react-modal-pro-sheet-padding: 24px; /* Inner padding for modal sheets */
+  --react-modal-pro-sheet-background: #ffffff; /* Background color of the modal sheets */
   --react-modal-pro-backdrop-background: #0000004a; /* Background color of the modal backdrop */
-  --react-modal-pro-dialog-sheet-z-index: 1200; /* Z-index for dialog modals */
+  --react-modal-pro-dialog-sheet-z-index: 1200; /* Z-index for dialog modal sheets */
   --react-modal-pro-dialog-backdrop-z-index: 1199; /* Z-index for dialog modal backdrops */
-  --react-modal-pro-sidebar-sheet-z-index: 1000; /* Z-index for sidebar modals */
+  --react-modal-pro-sidebar-sheet-z-index: 1000; /* Z-index for sidebar modal sheets */
   --react-modal-pro-sidebar-backdrop-z-index: 999; /* Z-index for sidebar modal backdrops */
-  --react-modal-pro-pro-sheet-sheet-z-index: 1100; /* Z-index for pro-sheet modals */
+  --react-modal-pro-pro-sheet-sheet-z-index: 1100; /* Z-index for pro-sheet modal sheets */
   --react-modal-pro-pro-sheet-backdrop-z-index: 1099; /* Z-index for pro-sheet modal backdrops */
 }
 ```
