@@ -122,6 +122,13 @@ root.render(
 );
 ```
 
+### Key Takeaways
+- **Unique Keys**: Assign a unique `modalKey` (e.g., `'bottom-sheet'`, `'sidebar-left'`) for independent modal control.
+- **Dynamic Control**: Use the `useModalController` hook to dynamically manage modals, such as closing a modal from within its content using `handleCloseModal`.
+- **Customizable Props**: Configure modals with props for directions, gestures, animations, and more.
+
+---
+
 ## Styling & Customization
 
 This library offers extensive styling options through CSS variables, allowing you to customize the appearance of modals and sheets easily. Below is a list of the root styles provided, along with their default values and descriptions:
@@ -203,13 +210,6 @@ By combining these options, you can achieve a highly customizable and consistent
 
 ---
 
-### Key Takeaways
-- **Unique Keys**: Assign a unique `modalKey` (e.g., `'bottom-sheet'`, `'sidebar-left'`) for independent modal control.
-- **Dynamic Control**: Use the `useModalController` hook to dynamically manage modals, such as closing a modal from within its content using `handleCloseModal`.
-- **Customizable Props**: Configure modals with props for directions, gestures, animations, and more.
-
----
-
 ## Props Reference
 
 ### ProModalProvider Props
@@ -253,7 +253,7 @@ By combining these options, you can achieve a highly customizable and consistent
 | `direction`          | `left` `right` | -           | **Yes**      | Direction the sidebar opens (`left` or `right`). |
 | `swipeToOpen`        | `boolean`      | `false`     | No           | Enables swipe-to-open functionality.            |
 | `swipeToClose`       | `boolean`      | `false`     | No           | Enables swipe-to-close functionality.           |
-| `swipeThreshold`     | `number`       | `undefined` | No           | Threshold for swipe gestures.                   |
+| `swipeThreshold`     | `number`       | `100` | No           | Threshold for swipe gestures.                   |
 
 #### ProSheet
 | **Prop**             | **Type**       | **Default** | **Required** | **Description**                                |
@@ -261,7 +261,7 @@ By combining these options, you can achieve a highly customizable and consistent
 | `direction`          | `bottom` `top` | -           | **Yes**      | Direction the sheet opens (`bottom` or `top`). |
 | `swipeToOpen`        | `boolean`      | `false`     | No           | Enables swipe-to-open functionality.            |
 | `swipeToClose`       | `boolean`      | `false`     | No           | Enables swipe-to-close functionality.           |
-| `swipeThreshold`     | `number`       | `undefined` | No           | Threshold for swipe gestures.                   |
+| `swipeThreshold`     | `number`       | `100` | No           | Threshold for swipe gestures.                   |
 
 ---
 
