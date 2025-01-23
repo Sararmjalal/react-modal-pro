@@ -1,21 +1,17 @@
-import { checkHash } from "../utils/checkHash";
-import { useModals, useRouter } from "../../context";
+import { useModals } from "../../context";
 
 export const useModalController = (key: string) => {
-    const { navigate } = useRouter();
-    const { modals, setWillBeClosed, initialModal } = useModals();
-    const modalKey = key.replaceAll(" ", "");
-    const thisModal = modals[key] ?? initialModal
+  const { modals, setWillBeClosed, initialModal, setOpen } = useModals();
+  const modalKey = key.replaceAll(" ", "");
+  const thisModal = modals[key] ?? initialModal
 
-    const handleOpenModal = () => {
-        const { isAlreadyInHash, currentHash } = checkHash(modalKey);
-        if (isAlreadyInHash) return;
-        navigate(currentHash + `#${modalKey}`);
-    };
+  const handleOpenModal = () => {
+    setOpen(modalKey, true)
+  };
 
-    const handleCloseModal = () => {
-        setWillBeClosed(modalKey, true);
-    };
+  const handleCloseModal = () => {
+    setWillBeClosed(modalKey, true);
+  };
 
-    return { open: thisModal.open, willBeClosed: thisModal.willBeClosed, handleOpenModal, handleCloseModal };
+  return { open: thisModal.open, willBeClosed: thisModal.willBeClosed, handleOpenModal, handleCloseModal };
 };
