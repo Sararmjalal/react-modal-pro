@@ -3,7 +3,7 @@ import { checkHash } from "../utils/checkHash";
 import { UseModalTransitionProps } from "../types";
 import { useModals, useRouter } from "../../context";
 
-export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
+export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, preserveOnRoute = true }: UseModalTransitionProps) => {
   const modalKey = `#${key}`;
   const { navigate, path } = useRouter();
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
@@ -16,10 +16,12 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   }, [key, path]);
 
   useEffect(() => {
-    const { isAlreadyInHash } = checkHash(key);
-    setOpen(key, isAlreadyInHash);
-    if (!isAlreadyInHash && willBeClosed) {
-      setWillBeClosed(key, false);
+    if (preserveOnRoute) {
+      const { isAlreadyInHash } = checkHash(key);
+      if (!isAlreadyInHash) {
+        setOpen(key, false);
+        setWillBeClosed(key, false);
+      }
     }
   }, [key, path]);
 
@@ -28,8 +30,10 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
       let timeout;
       if (timeout) timeout = undefined;
       timeout = setTimeout(() => {
-        const { isAlreadyInHash } = checkHash(key)
-        if (isAlreadyInHash) window.history.back();
+        if (preserveOnRoute) {
+          const { isAlreadyInHash } = checkHash(key)
+          if (isAlreadyInHash) window.history.back();
+        }
         else removeModal(key);
         if (closeCb) closeCb();
       }, closeDuration - 50);
@@ -37,9 +41,12 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   }, [key, willBeClosed]);
 
   const handleOpenModal = () => {
-    const { isAlreadyInHash, currentHash } = checkHash(key);
-    if (isAlreadyInHash) return;
-    navigate(currentHash + modalKey);
+    if (preserveOnRoute) {
+      const { isAlreadyInHash, currentHash } = checkHash(key);
+      if (isAlreadyInHash) return;
+      navigate(currentHash + modalKey);
+    }
+    setOpen(key, true);
   };
 
   const handleCloseModal = () => {

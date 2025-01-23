@@ -1,12 +1,12 @@
 import { useSwiper } from "./useSwiper";
+import { UseModalProProps } from "../types";
+import { useModalDefaults } from "../../context";
 import { useModalTransition } from "./useModalTransition";
 import { useScrollNearEdges } from "./useScrollNearEdges";
-import { useModalDefaults } from "../../context";
-import { UseModalProProps } from "../types";
 
 export const useModalPro = (props: UseModalProProps) => {
   const { modalKey, swipeThreshold, swipeToClose = false, swipeToOpen = false, sidebarDirection, backdropClassName,
-    sheetClassName, canDismiss, openDuration, closeDuration, sheetRef, closeCb } = props;
+    sheetClassName, canDismiss, openDuration, closeDuration, sheetRef, closeCb, preserveOnRoute } = props;
 
   const currentModalKey = modalKey.replaceAll(" ", "");
 
@@ -17,8 +17,9 @@ export const useModalPro = (props: UseModalProProps) => {
     sheetClassName: defaultSheetClassName, } = useModalDefaults()
 
   const { open, willBeClosed, handleOpenModal, handleCloseModal } = useModalTransition({
-    key: currentModalKey,
     closeCb,
+    preserveOnRoute,
+    key: currentModalKey,
     canDismiss: canDismiss ?? defaultCanDismiss,
     closeDuration: closeDuration ?? defaultCloseDuration
   });
@@ -80,6 +81,7 @@ export const useModalPro = (props: UseModalProProps) => {
     sheetClassName: sheetClassName ?? defaultSheetClassName,
     handleOpenModal,
     handleCloseModal,
+    preserveOnRoute,
     open,
     willBeClosed,
   };
