@@ -1,55 +1,56 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+  useRef,
+} from "react";
 
 interface RouterContextType {
-    path: string;
-    navigate: (to: string) => void;
+  path: string;
+  navigate: (to: string) => void;
+  updatePath: () => void;
 }
 
 const RouterContext = createContext<RouterContextType | null>(null);
 
 interface RouterProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
-    const [path, setPath] = useState(window.location.pathname + window.location.hash);
+  const [path, setPath] = useState(
+    window.location.pathname + window.location.hash
+  );
 
-    const handleEvents = () => setPath(window.location.pathname + window.location.hash)
+  const updatePath = () =>
+    setPath(window.location.pathname + window.location.hash);
 
-    useEffect(() => {
-        const originalPushState = window.history.pushState;
-        window.history.pushState = function (...args) {
-            originalPushState.apply(window.history, args);
-            const newPath = window.location.pathname + window.location.hash;
-            setPath(newPath);
-        };
-    }, []);
-
-    useEffect(() => {
-        window.addEventListener("popstate", handleEvents);
-        window.addEventListener("hashchange", handleEvents);
-
-        return () => {
-            window.removeEventListener("", handleEvents);
-            window.removeEventListener("hashchange", handleEvents);
-        };
-    }, []);
-
-    const navigate = (to: string) => {
-        window.history.pushState({}, "", to);
+  useEffect(() => {
+    const originalPushState = window.history.pushState;
+    window.history.pushState = function (...args) {
+      originalPushState.apply(window.history, args);
+      const newPath = window.location.pathname + window.location.hash;
+      setPath(newPath);
     };
+  }, []);
 
-    return (
-        <RouterContext.Provider value={{ path, navigate }}>
-            {children}
-        </RouterContext.Provider>
-    );
+  const navigate = (to: string) => {
+    window.history.pushState({}, "", to);
+  };
+
+  return (
+    <RouterContext.Provider value={{ path, navigate, updatePath }}>
+      {children}
+    </RouterContext.Provider>
+  );
 };
 
 export const useRouter = (): RouterContextType => {
-    const context = useContext(RouterContext);
-    if (!context) {
-        throw new Error("useRouter must be used within a RouterProvider");
-    }
-    return context;
+  const context = useContext(RouterContext);
+  if (!context) {
+    throw new Error("useRouter must be used within a RouterProvider");
+  }
+  return context;
 };

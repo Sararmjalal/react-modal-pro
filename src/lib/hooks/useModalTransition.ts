@@ -2,27 +2,35 @@ import { useEffect } from "react";
 import { checkHash } from "../utils/checkHash";
 import { UseModalTransitionProps } from "../types";
 import { useModals, useRouter } from "../../context";
+import { useModalRouter } from "./useModalRouter";
 
-export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, preserveOnRoute = true }: UseModalTransitionProps) => {
+export const useModalTransition = ({
+  key,
+  closeCb,
+  canDismiss,
+  closeDuration,
+  preserveOnRoute = true,
+}: UseModalTransitionProps) => {
   const modalKey = `#${key}`;
-  const { navigate, path } = useRouter();
-  const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
+  const {
+    modals,
+    setModal,
+    setOpen,
+    setWillBeClosed,
+    removeModal,
+    initialModal,
+  } = useModals();
 
   const thisModal = modals[key] ?? initialModal;
   const { willBeClosed, open } = thisModal;
 
-  useEffect(() => {
-    if (!modals[key]) setModal(key);
-  }, [key, path]);
+  const { navigate, path } = useModalRouter({
+    closeDuration,
+    preserveOnRoute,
+  });
 
   useEffect(() => {
-    if (preserveOnRoute) {
-      const { isAlreadyInHash } = checkHash(key);
-      if (!isAlreadyInHash) {
-        setOpen(key, false);
-        setWillBeClosed(key, false);
-      }
-    }
+    if (!modals[key]) setModal(key);
   }, [key, path]);
 
   useEffect(() => {
@@ -30,8 +38,16 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
       const { isAlreadyInHash, currentHash } = checkHash(key);
       if (isAlreadyInHash) return;
       navigate(currentHash + modalKey);
+      window.history.pushState({ _fake: true }, "", "");
     }
-  }, [open, preserveOnRoute])
+  }, [open, preserveOnRoute]);
+
+  useEffect(() => {
+    const { isAlreadyInHash } = checkHash(key);
+    if (!open && isAlreadyInHash) {
+      window.history.back();
+    }
+  }, [open, path]);
 
   useEffect(() => {
     if (willBeClosed) {
@@ -39,11 +55,11 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
       if (timeout) timeout = undefined;
       timeout = setTimeout(() => {
         if (preserveOnRoute) {
-          const { isAlreadyInHash } = checkHash(key)
+          const { isAlreadyInHash } = checkHash(key);
           if (isAlreadyInHash) window.history.back();
         }
-        else removeModal(key);
         if (closeCb) closeCb();
+        removeModal(key);
       }, closeDuration - 50);
     }
   }, [key, willBeClosed]);
