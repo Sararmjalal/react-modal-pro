@@ -21,7 +21,7 @@ export const useModalRouter = ({
             e.preventDefault();
             setWillBeClosed(thisModalKey, true);
             await new Promise((res) => setTimeout(res, closeDuration - 100));
-            updatePath();
+            // updatePath();
           }
         }
       }
@@ -41,5 +41,5 @@ export const useModalRouter = ({
     };
   }, []);
 
-  return { navigate, path };
+  return { navigate, path, updatePath };
 };

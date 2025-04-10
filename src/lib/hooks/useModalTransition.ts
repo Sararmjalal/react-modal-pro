@@ -24,7 +24,7 @@ export const useModalTransition = ({
   const thisModal = modals[key] ?? initialModal;
   const { willBeClosed, open } = thisModal;
 
-  const { navigate, path } = useModalRouter({
+  const { navigate, path, updatePath } = useModalRouter({
     closeDuration,
     preserveOnRoute,
   });
@@ -40,14 +40,7 @@ export const useModalTransition = ({
       navigate(currentHash + modalKey);
       window.history.pushState({ _fake: true }, "", "");
     }
-  }, [open, preserveOnRoute]);
-
-  useEffect(() => {
-    const { isAlreadyInHash } = checkHash(key);
-    if (!open && isAlreadyInHash) {
-      window.history.back();
-    }
-  }, [open, path]);
+  }, [open, modalKey, preserveOnRoute]);
 
   useEffect(() => {
     if (willBeClosed) {
@@ -60,6 +53,7 @@ export const useModalTransition = ({
         }
         if (closeCb) closeCb();
         removeModal(key);
+        updatePath();
       }, closeDuration - 50);
     }
   }, [key, willBeClosed]);
