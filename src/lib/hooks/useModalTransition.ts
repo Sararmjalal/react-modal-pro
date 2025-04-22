@@ -41,18 +41,22 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
 
   useEffect(() => {
     if (willBeClosed) {
-      let timeout;
-      if (timeout) timeout = undefined;
-      timeout = setTimeout(() => {
-        if (preserveOnRoute) {
-          const { isAlreadyInHash } = checkHash(key)
-          if (isAlreadyInHash) window.history.back();
-        }
-        else removeModal(key);
-        if (closeCb) closeCb();
-      }, closeDuration - 50);
+      const { isAlreadyInHash } = checkHash(key)
+      if (!preserveOnRoute || (preserveOnRoute && isAlreadyInHash)) {
+        let timeout;
+        if (timeout) timeout = undefined;
+        timeout = setTimeout(() => {
+          if (preserveOnRoute) {
+            const { isAlreadyInHash } = checkHash(key)
+            if (isAlreadyInHash) window.history.back();
+          }
+          else removeModal(key);
+          if (closeCb) closeCb();
+        }, closeDuration - 50);
+      }
+
     }
-  }, [key, willBeClosed]);
+  }, [key, willBeClosed, path]);
 
   const handleOpenModal = () => {
     if (!open) setOpen(key, true);
