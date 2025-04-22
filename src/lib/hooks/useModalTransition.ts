@@ -49,7 +49,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
   }, [key, willBeClosed]);
 
   const handleOpenModal = () => {
-    setOpen(key, true);
+    if (!willBeClosed) setOpen(key, true);
   };
 
   const handleCloseModal = () => {

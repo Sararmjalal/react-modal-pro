@@ -6,7 +6,7 @@ export const useModalController = (key: string) => {
   const thisModal = modals[key] ?? initialModal
 
   const handleOpenModal = () => {
-    setOpen(modalKey, true)
+    if (!thisModal.willBeClosed) setOpen(modalKey, true)
   };
 
   const handleCloseModal = () => {
