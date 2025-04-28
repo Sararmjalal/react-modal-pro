@@ -38,7 +38,7 @@
   border-top-right-radius: var(--react-modal-pro-sheet-radius);
   border-top-left-radius: var(--react-modal-pro-sheet-radius);
   transform: translateX(-50%);
-  max-height: 80vh;
+  max-height: 80svh;
 }
 
 .sheet.top {
@@ -47,7 +47,7 @@
   border-bottom-right-radius: var(--react-modal-pro-sheet-radius);
   border-bottom-left-radius: var(--react-modal-pro-sheet-radius);
   transform: translateX(-50%);
-  max-height: 80vh;
+  max-height: 80svh;
 }
 
 .sheet.left {
@@ -70,7 +70,7 @@
 
   .sheet.bottom,
   .sheet.top {
-    width: 100vw;
+    width: 100svw;
     max-width: calc(100% - 24px);
     min-height: 458px;
   }

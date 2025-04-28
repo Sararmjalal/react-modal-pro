@@ -2,8 +2,8 @@
     top: 0;
     left: 0;
     opacity: 1;
-    width: 100vw;
-    height: 100vh;
+    width: 100svw;
+    height: 100svh;
     position: fixed;
     background: var(--react-modal-pro-backdrop-background);
     z-index: var(--react-modal-pro-dialog-backdrop-z-index);

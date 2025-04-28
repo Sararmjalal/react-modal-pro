@@ -51,10 +51,13 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
             if (isAlreadyInHash) window.history.back();
           }
           else removeModal(key);
-          if (closeCb) closeCb();
         }, closeDuration - 50);
+        if (closeCb) {
+          let timeout
+          if (timeout) timeout = undefined
+          timeout = setTimeout(() => closeCb(), closeDuration)
+        }
       }
-
     }
   }, [key, willBeClosed, path]);
 
