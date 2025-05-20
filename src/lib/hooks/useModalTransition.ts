@@ -5,9 +5,8 @@ import { useModals, useRouter } from "../../context";
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, preserveOnRoute = true }: UseModalTransitionProps) => {
   const modalKey = `#${key}`;
-  const { navigate, path } = useRouter();
+  const { navigate, path, setPath } = useRouter();
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
-
   const thisModal = modals[key] ?? initialModal;
   const { willBeClosed, open } = thisModal;
 
@@ -39,6 +38,31 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
     }
   }, [open, preserveOnRoute])
 
+  const handleEvents = (e: PopStateEvent) => {
+    console.log("popstate occured", e)
+    const { currentHash } = checkHash(key);
+    console.log({ currentHash })
+    if (currentHash) {
+      const hashesh = currentHash.replace("#", "").split("#")
+      console.log({ hashesh })
+      hashesh.forEach(hash => {
+        console.log({ modallll: modals[hash], hash })
+        if (!modals[hash].open) {
+          console.log("backkkk", hash)
+          window.history.back()
+        }
+      })
+    }
+    setPath(window.location.pathname + window.location.hash)
+  }
+
+  useEffect(() => {
+    window.addEventListener("popstate", handleEvents);
+    return () => {
+      window.removeEventListener("popstate", handleEvents);
+    };
+  }, []);
+
   useEffect(() => {
     if (willBeClosed) {
       const { isAlreadyInHash } = checkHash(key)
@@ -47,8 +71,14 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
         if (timeout) timeout = undefined;
         timeout = setTimeout(() => {
           if (preserveOnRoute) {
-            const { isAlreadyInHash } = checkHash(key)
-            if (isAlreadyInHash) window.history.back();
+            if (!window.lastClickedHref) {
+              const { isAlreadyInHash } = checkHash(key)
+              if (isAlreadyInHash) window.history.back()
+            }
+            else {
+              window.lastClickedHref = undefined
+              removeModal(key)
+            }
           }
           else removeModal(key);
         }, closeDuration - 50);
