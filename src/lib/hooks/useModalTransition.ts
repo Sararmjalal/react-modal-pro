@@ -3,7 +3,7 @@ import { checkHash } from "../utils/checkHash";
 import { UseModalTransitionProps } from "../types";
 import { useModals, useRouter } from "../../context";
 
-export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, preserveOnRoute = true }: UseModalTransitionProps) => {
+export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
   const modalKey = `#${key}`;
   const { navigate, path, setPath } = useRouter();
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
@@ -15,12 +15,12 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
   }, [key, path]);
 
   useEffect(() => {
-    if (open && preserveOnRoute) {
+    if (open) {
       const { isAlreadyInHash, currentHash } = checkHash(key);
       if (isAlreadyInHash) return;
       navigate(currentHash + modalKey);
     }
-  }, [open, preserveOnRoute])
+  }, [open])
 
   const handleEvents = () => {
     const storageModals = localStorage.getItem("react-modal-pro-modals")
