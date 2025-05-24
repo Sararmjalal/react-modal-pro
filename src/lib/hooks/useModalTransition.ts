@@ -15,22 +15,6 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
   }, [key, path]);
 
   useEffect(() => {
-    if (preserveOnRoute) {
-      const { isAlreadyInHash } = checkHash(key);
-      if (!isAlreadyInHash) {
-        setOpen(key, false);
-        setWillBeClosed(key, false);
-      }
-    }
-  }, [key, path]);
-
-  useEffect(() => {
-    return () => {
-      if (preserveOnRoute) removeModal(key)
-    }
-  }, [])
-
-  useEffect(() => {
     if (open && preserveOnRoute) {
       const { isAlreadyInHash, currentHash } = checkHash(key);
       if (isAlreadyInHash) return;
@@ -38,19 +22,19 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
     }
   }, [open, preserveOnRoute])
 
-  const handleEvents = (e: PopStateEvent) => {
+  const handleEvents = () => {
+    const storageModals = localStorage.getItem("react-modal-pro-modals")
+      && JSON.parse(localStorage.getItem("react-modal-pro-modals")!)
+    const { hashesh } = checkHash(key);
     if (window.lastClickedHref) {
-      const { currentHash } = checkHash(key);
-      if (currentHash) {
-        const hashesh = currentHash.replace("#", "").split("#")
-        const storageModals = localStorage.getItem("react-modal-pro-modals") && JSON.parse(localStorage.getItem("react-modal-pro-modals")!)
-        if (storageModals) {
-          const sum = hashesh.reduce((acc, cur) => (storageModals[cur] ? acc + 1 : acc), 0)
-          if (sum) window.history.go(-sum)
-        }
+      if (hashesh[0] && storageModals) {
+        const sum = hashesh.reduce((acc, cur) => (storageModals[cur] ? acc + 1 : acc), 0)
+        if (sum) window.history.go(-sum)
       }
       window.lastClickedHref = undefined
     }
+    const lastModalKey = localStorage.getItem("react-modal-pro-last-modal")
+    if (lastModalKey) setWillBeClosed(lastModalKey, true)
     setPath(window.location.pathname + window.location.hash)
   }
 
@@ -62,25 +46,21 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
   }, []);
 
   useEffect(() => {
+    if (!modals[key]) setModal(key);
+  }, [key]);
+
+  useEffect(() => {
     if (willBeClosed) {
-      const { isAlreadyInHash } = checkHash(key)
-      if (!preserveOnRoute || (preserveOnRoute && isAlreadyInHash)) {
-        let timeout;
-        if (timeout) timeout = undefined;
-        timeout = setTimeout(() => {
-          if (preserveOnRoute) {
-            if (!window.lastClickedHref) {
-              const { isAlreadyInHash } = checkHash(key)
-              if (isAlreadyInHash) window.history.back()
-            }
-          }
-          else removeModal(key);
-        }, closeDuration - 50);
-        if (closeCb) {
-          let timeout
-          if (timeout) timeout = undefined
-          timeout = setTimeout(() => closeCb(), closeDuration)
-        }
+      let timeout;
+      if (timeout) timeout = undefined;
+      timeout = setTimeout(() => {
+        const lastModalKey = localStorage.getItem("react-modal-pro-last-modal")
+        if (lastModalKey) removeModal(lastModalKey);
+      }, closeDuration - 50);
+      if (closeCb) {
+        let timeout
+        if (timeout) timeout = undefined
+        timeout = setTimeout(() => closeCb(), closeDuration)
       }
     }
   }, [key, willBeClosed, path]);
@@ -90,7 +70,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
   };
 
   const handleCloseModal = () => {
-    if (canDismiss && !willBeClosed) setWillBeClosed(key, true);
+    if (canDismiss && !willBeClosed) window.history.back()
   };
 
   return { ...thisModal, handleOpenModal, handleCloseModal };

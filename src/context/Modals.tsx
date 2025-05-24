@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { checkHash } from "../lib";
 
 interface Modal {
     open: boolean;
@@ -24,20 +25,29 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
     const initialModal = JSON.parse(JSON.stringify({ open: false, willBeClosed: false }))
 
+    const getStorageModal = () => {
+        if (localStorage.getItem("react-modal-pro-modals"))
+            return JSON.parse(localStorage.getItem("react-modal-pro-modals")!)
+        return {}
+    }
     const [modals, setModals] = useState<Record<string, Modal>>({});
+
+    const setStorageModal = (newModals: Record<string, Modal | undefined>) => {
+        const storageModals = getStorageModal()
+        localStorage.setItem("react-modal-pro-modals", JSON.stringify({
+            ...storageModals && ({
+                ...storageModals
+            }),
+            ...newModals
+        }))
+    }
 
     const setModal = (key: string) => {
         setModals((prev) => ({
             ...prev,
             [key]: initialModal,
         }));
-        const storageModals = localStorage.getItem("react-modal-pro-modals")
-        localStorage.setItem("react-modal-pro-modals", JSON.stringify({
-            [key]: true,
-            ...storageModals && ({
-                ...JSON.parse(storageModals)
-            })
-        }))
+        setStorageModal({ [key]: initialModal })
     };
 
     const setOpen = (key: string, open: boolean) => {
@@ -45,6 +55,8 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
             ...prev,
             [key]: { ...prev[key], open },
         }));
+        setStorageModal({ [key]: { ...modals[key], open } })
+        localStorage.setItem("react-modal-pro-last-modal", key)
     };
 
     const setWillBeClosed = (key: string, willBeClosed: boolean) => {
@@ -52,16 +64,16 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
             ...prev,
             [key]: { ...prev[key], willBeClosed },
         }));
+        setStorageModal({ [key]: { ...modals[key], willBeClosed }, })
     };
 
     const removeModal = (key: string) => {
-        setModals((prev) => {
-            const newModals = { ...prev };
-            if (newModals[key]) {
-                newModals[key] = initialModal
-            }
-            return newModals;
-        });
+        const newModals = { ...modals }
+        newModals[key] = initialModal
+        setModals(newModals);
+        const { hashesh } = checkHash(key)
+        localStorage.setItem("react-modal-pro-modals", JSON.stringify(newModals))
+        localStorage.setItem("react-modal-pro-last-modal", hashesh[0] ? hashesh[hashesh.length - 1] : "")
     };
 
     return (
