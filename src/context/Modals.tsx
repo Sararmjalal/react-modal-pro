@@ -26,17 +26,18 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
     const [modals, setModals] = useState<Record<string, Modal>>({});
 
-    useEffect(() => {
-        const initialModals = localStorage.getItem("react-modal-pro-modals") ?
-            JSON.parse(localStorage.getItem("react-modal-pro-modals")!) : {}
-        localStorage.setItem("react-modal-pro-modals", JSON.stringify({ ...modals, ...initialModals }))
-    }, [modals])
-
     const setModal = (key: string) => {
         setModals((prev) => ({
             ...prev,
             [key]: initialModal,
         }));
+        const storageModals = localStorage.getItem("react-modal-pro-modals")
+        localStorage.setItem("react-modal-pro-modals", JSON.stringify({
+            [key]: true,
+            ...storageModals && ({
+                ...JSON.parse(storageModals)
+            })
+        }))
     };
 
     const setOpen = (key: string, open: boolean) => {

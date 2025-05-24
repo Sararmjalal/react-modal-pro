@@ -26,7 +26,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
 
   useEffect(() => {
     return () => {
-      removeModal(key)
+      if (preserveOnRoute) removeModal(key)
     }
   }, [])
 
@@ -39,18 +39,17 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
   }, [open, preserveOnRoute])
 
   const handleEvents = (e: PopStateEvent) => {
-    console.log("popstate occured", e)
-    const { currentHash } = checkHash(key);
-    console.log({ currentHash })
-    if (currentHash) {
-      const hashesh = currentHash.replace("#", "").split("#")
-      const initialModals = localStorage.getItem("react-modal-pro-modals") && JSON.parse(localStorage.getItem("react-modal-pro-modals")!)
-      if (initialModals) {
-        const sum = hashesh.reduce((acc, cur) => (initialModals[cur] ? acc + 1 : acc), 0)
-        console.log("SUMMMM", sum)
-        if (sum) window.history.go(-sum)
+    if (window.lastClickedHref) {
+      const { currentHash } = checkHash(key);
+      if (currentHash) {
+        const hashesh = currentHash.replace("#", "").split("#")
+        const storageModals = localStorage.getItem("react-modal-pro-modals") && JSON.parse(localStorage.getItem("react-modal-pro-modals")!)
+        if (storageModals) {
+          const sum = hashesh.reduce((acc, cur) => (storageModals[cur] ? acc + 1 : acc), 0)
+          if (sum) window.history.go(-sum)
+        }
       }
-      console.log({ hashesh, initialModals })
+      window.lastClickedHref = undefined
     }
     setPath(window.location.pathname + window.location.hash)
   }
@@ -73,10 +72,6 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
             if (!window.lastClickedHref) {
               const { isAlreadyInHash } = checkHash(key)
               if (isAlreadyInHash) window.history.back()
-            }
-            else {
-              window.lastClickedHref = undefined
-              removeModal(key)
             }
           }
           else removeModal(key);
