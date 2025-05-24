@@ -2,6 +2,13 @@ import "../../assets/styles.css";
 import { ReactNode, useEffect } from "react"
 import { ModalProviderProps } from "../types"
 import { ModalDefaultsProvider, ModalsProvider, RouterProvider } from "../../context"
+import { LinkClickProvider } from "../../context/LinkClick";
+
+declare global {
+    interface Window {
+        lastClickedHref?: string
+    }
+}
 
 const ProModalProvider = ({ children, ...props }: ModalProviderProps & { children: ReactNode }) => {
 
@@ -16,11 +23,13 @@ const ProModalProvider = ({ children, ...props }: ModalProviderProps & { childre
 
     return (
         <ModalDefaultsProvider {...props}>
-            <RouterProvider>
-                <ModalsProvider>
-                    {children}
-                </ModalsProvider>
-            </RouterProvider>
+            <LinkClickProvider>
+                <RouterProvider>
+                    <ModalsProvider>
+                        {children}
+                    </ModalsProvider>
+                </RouterProvider>
+            </LinkClickProvider>
         </ModalDefaultsProvider>
     )
 }
