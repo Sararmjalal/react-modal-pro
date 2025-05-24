@@ -44,14 +44,13 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
     console.log({ currentHash })
     if (currentHash) {
       const hashesh = currentHash.replace("#", "").split("#")
-      console.log({ hashesh })
-      hashesh.forEach(hash => {
-        console.log({ modallll: modals[hash], hash })
-        if (!modals[hash].open) {
-          console.log("backkkk", hash)
-          window.history.back()
-        }
-      })
+      const initialModals = localStorage.getItem("react-modal-pro-modals") && JSON.parse(localStorage.getItem("react-modal-pro-modals")!)
+      if (initialModals) {
+        const sum = hashesh.reduce((acc, cur) => (initialModals[cur] ? acc + 1 : acc), 0)
+        console.log("SUMMMM", sum)
+        if (sum) window.history.go(-sum)
+      }
+      console.log({ hashesh, initialModals })
     }
     setPath(window.location.pathname + window.location.hash)
   }

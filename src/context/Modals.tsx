@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 interface Modal {
     open: boolean;
@@ -25,6 +25,12 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
     const initialModal = JSON.parse(JSON.stringify({ open: false, willBeClosed: false }))
 
     const [modals, setModals] = useState<Record<string, Modal>>({});
+
+    useEffect(() => {
+        const initialModals = localStorage.getItem("react-modal-pro-modals") ?
+            JSON.parse(localStorage.getItem("react-modal-pro-modals")!) : {}
+        localStorage.setItem("react-modal-pro-modals", JSON.stringify({ ...modals, ...initialModals }))
+    }, [modals])
 
     const setModal = (key: string) => {
         setModals((prev) => ({
