@@ -55,7 +55,7 @@
   left: 0;
   border-top-right-radius: var(--react-modal-pro-sheet-radius);
   border-bottom-right-radius: var(--react-modal-pro-sheet-radius);
-  height: 100svh;
+  height: -webkit-fill-available;
 }
 
 .sheet.right {
@@ -63,7 +63,7 @@
   right: 0;
   border-top-left-radius: var(--react-modal-pro-sheet-radius);
   border-bottom-left-radius: var(--react-modal-pro-sheet-radius);
-  height: 100svh;
+  height: -webkit-fill-available;
 }
 
 @media only screen and (max-width: 600px) {
