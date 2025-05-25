@@ -1,73 +1,109 @@
-import { useEffect } from "react";
-import { checkHash } from "../utils/checkHash";
+import { useEffect, useMemo } from "react";
 import { UseModalTransitionProps } from "../types";
 import { useModals, useRouter } from "../../context";
 
-export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, preserveOnRoute = true }: UseModalTransitionProps) => {
-  const modalKey = `#${key}`;
-  const { navigate, path } = useRouter();
+export const useModalTransition = ({
+  key,
+  closeCb,
+  canDismiss,
+  closeDuration,
+  preserveOnRoute = true
+}: UseModalTransitionProps) => {
+  const { navigate, path, state: routerState } = useRouter();
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
 
   const thisModal = modals[key] ?? initialModal;
   const { willBeClosed, open } = thisModal;
 
+  const isModalActive = useMemo(
+    () => routerState?.activeModals?.includes(key),
+    [routerState, key]
+  );
+
+  // Initialize modal entry if not exists
   useEffect(() => {
     if (!modals[key]) setModal(key);
-  }, [key, path]);
+  }, [key, modals, setModal]);
 
+  // Sync with router state changes
   useEffect(() => {
     if (preserveOnRoute) {
-      const { isAlreadyInHash } = checkHash(key);
-      if (!isAlreadyInHash) {
-        setOpen(key, false);
-        setWillBeClosed(key, false);
+      const shouldBeOpen = isModalActive ?? false;
+      if (open !== shouldBeOpen) {
+        setOpen(key, shouldBeOpen);
       }
     }
-  }, [key, path]);
+  }, [isModalActive, preserveOnRoute, key, open, setOpen]);
 
+  // Handle opening through state
   useEffect(() => {
-    return () => {
-      removeModal(key)
+    if (open && preserveOnRoute && !isModalActive) {
+      navigate(path, {
+        ...routerState,
+        activeModals: [...(routerState?.activeModals || []), key]
+      });
     }
-  }, [])
+  }, [open, preserveOnRoute, isModalActive, navigate, path, routerState, key]);
 
-  useEffect(() => {
-    if (open && preserveOnRoute) {
-      const { isAlreadyInHash, currentHash } = checkHash(key);
-      if (isAlreadyInHash) return;
-      navigate(currentHash + modalKey);
-    }
-  }, [open, preserveOnRoute])
-
+  // Handle closing animation and state cleanup
   useEffect(() => {
     if (willBeClosed) {
-      const { isAlreadyInHash } = checkHash(key)
-      if (!preserveOnRoute || (preserveOnRoute && isAlreadyInHash)) {
-        let timeout;
-        if (timeout) timeout = undefined;
-        timeout = setTimeout(() => {
-          if (preserveOnRoute) {
-            const { isAlreadyInHash } = checkHash(key)
-            if (isAlreadyInHash) window.history.back();
-          }
-          else removeModal(key);
-        }, closeDuration - 50);
-        if (closeCb) {
-          let timeout
-          if (timeout) timeout = undefined
-          timeout = setTimeout(() => closeCb(), closeDuration)
+      const timeout = setTimeout(() => {
+        if (preserveOnRoute && isModalActive) {
+          navigate(path, {
+            ...routerState,
+            activeModals: (routerState?.activeModals || []).filter((k: string) => k !== key)
+          });
+        }
+        removeModal(key);
+        closeCb?.();
+      }, closeDuration - 50);
+
+      if (preserveOnRoute) {
+        let timeout
+        if (timeout) {
+          timeout = undefined
+        } else {
+          timeout = setTimeout(() => {
+            window.history.go(-2)
+          }, closeDuration + 2000);
         }
       }
+
+      return () => clearTimeout(timeout);
     }
-  }, [key, willBeClosed, path]);
+  }, [willBeClosed, preserveOnRoute, isModalActive, navigate, path, routerState, key, closeDuration, closeCb, removeModal]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (!preserveOnRoute) {
+        removeModal(key);
+        if (isModalActive) {
+          navigate(path, {
+            ...routerState,
+            activeModals: (routerState?.activeModals || []).filter((k: string) => k !== key)
+          });
+        }
+      }
+    };
+  }, [key, preserveOnRoute, isModalActive, navigate, path, routerState, removeModal]);
 
   const handleOpenModal = () => {
-    if (!open) setOpen(key, true);
+    if (!open && canDismiss) setOpen(key, true);
   };
 
   const handleCloseModal = () => {
-    if (canDismiss && !willBeClosed) setWillBeClosed(key, true);
+    if (canDismiss && !willBeClosed) {
+      if (preserveOnRoute) return window.history.back()
+      setWillBeClosed(key, true)
+    };
   };
 
-  return { ...thisModal, handleOpenModal, handleCloseModal };
+  return {
+    open: preserveOnRoute ? isModalActive ?? open : open,
+    willBeClosed,
+    handleOpenModal,
+    handleCloseModal
+  };
 };
