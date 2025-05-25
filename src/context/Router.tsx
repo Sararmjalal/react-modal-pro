@@ -12,44 +12,29 @@ interface RouterProviderProps {
     children: ReactNode;
 }
 
-const history: any[] = []
-
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const [path, setPath] = useState(window.location.pathname + window.location.hash);
 
     useEffect(() => {
         const originalPushState = window.history.pushState;
         window.history.pushState = function (...args) {
-            history.push({ data: args, from: "pushState" })
             originalPushState.apply(window.history, args);
             const newPath = window.location.pathname + window.location.hash;
             setPath(newPath);
         };
         const originalReplaceState = window.history.replaceState;
         window.history.replaceState = function (...args) {
-            history.push({ data: args, from: "replaceState" })
             originalReplaceState.apply(window.history, args);
             const newPath = window.location.pathname + window.location.hash;
             setPath(newPath);
         };
-        const originalBack = window.history.back;
-        window.history.back = function (...args) {
-            history.push({ data: args, from: "back" })
-            originalBack.apply(window.history, args)
-        }
     }, []);
 
     const navigate = (to: string) => {
         window.history.pushState({}, "", to);
     };
 
-    const handleEvents = (e: PopStateEvent) => {
-        history.push({ data: e, from: "popstate" })
-        setPath(window.location.pathname + window.location.hash)
-    }
-
     const handleEvents2 = (e: HashChangeEvent) => {
-        history.push({ data: `old: ${e.oldURL}, new: ${e.newURL}`, from: "hashchange" })
         setPath(window.location.pathname + window.location.hash)
     }
 

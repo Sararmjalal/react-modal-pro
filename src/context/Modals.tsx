@@ -13,6 +13,7 @@ interface ModalsContextType {
     removeModal: (key: string) => void;
     setOpen: (key: string, open: boolean) => void;
     setWillBeClosed: (key: string, willBeClosed: boolean) => void;
+    lastModalKey: string
 }
 
 const ModalsContext = createContext<ModalsContextType | undefined>(undefined);
@@ -23,31 +24,42 @@ interface ModalsProviderProps {
 
 export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
+    const [queue, setQueue] = useState<string[]>([])
     const initialModal = JSON.parse(JSON.stringify({ open: false, willBeClosed: false }))
 
-    const getStorageModal = () => {
-        if (localStorage.getItem("react-modal-pro-modals"))
-            return JSON.parse(localStorage.getItem("react-modal-pro-modals")!)
-        return {}
+    const addToQueue = (key: string) => {
+        setQueue((prev) => [...prev, key])
     }
+
+    const removeFromQueue = (key: string) => {
+        setQueue((prev) => prev.filter(item => item !== key))
+    }
+
+    // const [lastModalKey, setLastModalKey] = useState("")
+
+    // const getStorageModal = () => {
+    //     if (localStorage.getItem("react-modal-pro-modals"))
+    //         return JSON.parse(localStorage.getItem("react-modal-pro-modals")!)
+    //     return {}
+    // }
     const [modals, setModals] = useState<Record<string, Modal>>({});
 
-    const setStorageModal = (newModals: Record<string, Modal | undefined>) => {
-        const storageModals = getStorageModal()
-        localStorage.setItem("react-modal-pro-modals", JSON.stringify({
-            ...storageModals && ({
-                ...storageModals
-            }),
-            ...newModals
-        }))
-    }
+    // const setStorageModal = (newModals: Record<string, Modal | undefined>) => {
+    //     const storageModals = getStorageModal()
+    //     localStorage.setItem("react-modal-pro-modals", JSON.stringify({
+    //         ...storageModals && ({
+    //             ...storageModals
+    //         }),
+    //         ...newModals
+    //     }))
+    // }
 
     const setModal = (key: string) => {
         setModals((prev) => ({
             ...prev,
             [key]: initialModal,
         }));
-        setStorageModal({ [key]: initialModal })
+        // setStorageModal({ [key]: initialModal })
     };
 
     const setOpen = (key: string, open: boolean) => {
@@ -55,8 +67,9 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
             ...prev,
             [key]: { ...prev[key], open },
         }));
-        setStorageModal({ [key]: { ...modals[key], open } })
-        localStorage.setItem("react-modal-pro-last-modal", key)
+        addToQueue(key)
+        // setStorageModal({ [key]: { ...modals[key], open } })
+        // localStorage.setItem("react-modal-pro-last-modal", key)
     };
 
     const setWillBeClosed = (key: string, willBeClosed: boolean) => {
@@ -64,20 +77,23 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
             ...prev,
             [key]: { ...prev[key], willBeClosed },
         }));
-        setStorageModal({ [key]: { ...modals[key], willBeClosed }, })
+        // setStorageModal({ [key]: { ...modals[key], willBeClosed }, })
     };
 
     const removeModal = (key: string) => {
         const newModals = { ...modals }
         newModals[key] = initialModal
+        removeFromQueue(key);
         setModals(newModals);
-        const { hashesh } = checkHash(key)
-        localStorage.setItem("react-modal-pro-modals", JSON.stringify(newModals))
-        localStorage.setItem("react-modal-pro-last-modal", hashesh[0] ? hashesh[hashesh.length - 1] : "")
+        // const { hashesh } = checkHash(key)
+        // localStorage.setItem("react-modal-pro-modals", JSON.stringify(newModals))
+        // localStorage.setItem("react-modal-pro-last-modal", hashesh[0] ? hashesh[hashesh.length - 1] : "")
     };
 
+
+
     return (
-        <ModalsContext.Provider value={{ modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal }}>
+        <ModalsContext.Provider value={{ modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal, lastModalKey: queue[queue.length - 1] ?? "" }}>
             {children}
         </ModalsContext.Provider>
     );
