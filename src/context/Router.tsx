@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode, useRe
 interface RouterContextType {
     path: string;
     navigate: (to: string) => void;
+    historyState: Record<string, string>;
 }
 
 const RouterContext = createContext<RouterContextType | null>(null);
@@ -13,25 +14,41 @@ interface RouterProviderProps {
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const [path, setPath] = useState(window.location.pathname + window.location.hash);
+    const [historyState, setHistoryState] = useState(window.history.state || {})
 
-    const handleEvents = () => setPath(window.location.pathname + window.location.hash)
+    const handleEvents = (event: PopStateEvent) => {
+        console.log(event.state)
+        setPath(window.location.pathname + window.location.hash)
+    }
+
+    useEffect(() => {
+        console.log({ newHistoryState: historyState })
+    }, [historyState])
 
     useEffect(() => {
         const originalPushState = window.history.pushState;
         window.history.pushState = function (...args) {
             originalPushState.apply(window.history, args);
             const newPath = window.location.pathname + window.location.hash;
+            setHistoryState(args[0]);
+            setPath(newPath);
+        };
+        const originalReplaceState = window.history.replaceState;
+        window.history.replaceState = function (...args) {
+            originalReplaceState.apply(window.history, args);
+            const newPath = window.location.pathname + window.location.hash;
+            setHistoryState(args[0]);
             setPath(newPath);
         };
     }, []);
 
     useEffect(() => {
         window.addEventListener("popstate", handleEvents);
-        window.addEventListener("hashchange", handleEvents);
+        // window.addEventListener("hashchange", handleEvents);
 
         return () => {
-            window.removeEventListener("", handleEvents);
-            window.removeEventListener("hashchange", handleEvents);
+            window.removeEventListener("popstate", handleEvents);
+            // window.removeEventListener("hashchange", handleEvents);
         };
     }, []);
 
@@ -40,7 +57,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     };
 
     return (
-        <RouterContext.Provider value={{ path, navigate }}>
+        <RouterContext.Provider value={{ path, navigate, historyState }}>
             {children}
         </RouterContext.Provider>
     );

@@ -1,68 +1,50 @@
 import { useEffect } from "react";
-import { checkHash } from "../utils/checkHash";
 import { UseModalTransitionProps } from "../types";
 import { useModals, useRouter } from "../../context";
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, preserveOnRoute = true }: UseModalTransitionProps) => {
-  const modalKey = `#${key}`;
-  const { navigate, path } = useRouter();
+  const { historyState } = useRouter();
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
-
   const thisModal = modals[key] ?? initialModal;
   const { willBeClosed, open } = thisModal;
 
   useEffect(() => {
-    if (!modals[key]) setModal(key);
-  }, [key, path]);
+    if (!modals[key]) setModal(key, preserveOnRoute);
+  }, [key]);
 
   useEffect(() => {
-    if (preserveOnRoute) {
-      const { isAlreadyInHash } = checkHash(key);
-      if (!isAlreadyInHash) {
-        setOpen(key, false);
-        setWillBeClosed(key, false);
-      }
+    const isAlreadyInState = historyState[key]
+    if (isAlreadyInState && !open) setOpen(key, true)
+    else if (!isAlreadyInState && open) {
+      if (!willBeClosed) setWillBeClosed(key, true)
     }
-  }, [key, path]);
-
-  useEffect(() => {
-    return () => {
-      removeModal(key)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (open && preserveOnRoute) {
-      const { isAlreadyInHash, currentHash } = checkHash(key);
-      if (isAlreadyInHash) return;
-      navigate(currentHash + modalKey);
-    }
-  }, [open, preserveOnRoute])
+  }, [key, historyState, open])
 
   useEffect(() => {
     if (willBeClosed) {
-      const { isAlreadyInHash } = checkHash(key)
-      if (!preserveOnRoute || (preserveOnRoute && isAlreadyInHash)) {
-        let timeout;
-        if (timeout) timeout = undefined;
-        timeout = setTimeout(() => {
-          if (preserveOnRoute) {
-            const { isAlreadyInHash } = checkHash(key)
-            if (isAlreadyInHash) window.history.back();
-          }
-          else removeModal(key);
-        }, closeDuration - 50);
-        if (closeCb) {
-          let timeout
-          if (timeout) timeout = undefined
-          timeout = setTimeout(() => closeCb(), closeDuration)
-        }
+      const isAlreadyInState = historyState[key]
+      if (isAlreadyInState) {
+        if (preserveOnRoute) window.history.back();
+        else window.history.replaceState({ ...historyState, [key]: false }, '')
+      }
+      let timeout;
+      if (timeout) timeout = undefined;
+      timeout = setTimeout(() => {
+        removeModal(key);
+      }, closeDuration - 50);
+      if (closeCb) {
+        let timeout
+        if (timeout) timeout = undefined
+        timeout = setTimeout(() => closeCb(), closeDuration)
       }
     }
-  }, [key, willBeClosed, path]);
+  }, [key, willBeClosed]);
 
   const handleOpenModal = () => {
-    if (!open) setOpen(key, true);
+    const isAlreadyInState = historyState[key]
+    if (!isAlreadyInState) {
+      window.history[preserveOnRoute ? "pushState" : "replaceState"]({ ...historyState, [key]: true }, '')
+    }
   };
 
   const handleCloseModal = () => {
