@@ -16,11 +16,6 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const [path, setPath] = useState(window.location.pathname + window.location.hash);
     const [historyState, setHistoryState] = useState(window.history.state || {})
 
-    const handleEvents = (event: PopStateEvent) => {
-        console.log(event.state)
-        setPath(window.location.pathname + window.location.hash)
-    }
-
     useEffect(() => {
         console.log({ newHistoryState: historyState })
     }, [historyState])
@@ -44,13 +39,24 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         };
     }, []);
 
+
+    const handlePopStateEvent = (event: PopStateEvent) => {
+        setHistoryState(event.state)
+        setPath(window.location.pathname + window.location.hash)
+    }
+
+    const handleBeforeUnloadEvent = () => {
+        setHistoryState({})
+        setPath(window.location.pathname + window.location.hash)
+    }
+
     useEffect(() => {
-        window.addEventListener("popstate", handleEvents);
-        // window.addEventListener("hashchange", handleEvents);
+        window.addEventListener("popstate", handlePopStateEvent);
+        window.addEventListener("beforeunload", handleBeforeUnloadEvent);
 
         return () => {
-            window.removeEventListener("popstate", handleEvents);
-            // window.removeEventListener("hashchange", handleEvents);
+            window.removeEventListener("popstate", handlePopStateEvent);
+            window.removeEventListener("beforeunload", handleBeforeUnloadEvent);
         };
     }, []);
 

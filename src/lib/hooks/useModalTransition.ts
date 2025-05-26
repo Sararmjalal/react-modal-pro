@@ -25,7 +25,11 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
       const isAlreadyInState = historyState[key]
       if (isAlreadyInState) {
         if (preserveOnRoute) window.history.back();
-        else window.history.replaceState({ ...historyState, [key]: false }, '')
+        else {
+          const clone = { ...historyState }
+          delete clone[key]
+          window.history.replaceState({ ...clone }, '')
+        }
       }
       let timeout;
       if (timeout) timeout = undefined;
@@ -33,11 +37,6 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
         removeModal(key);
         if (closeCb) closeCb();
       }, closeDuration - 50);
-      // if (closeCb) {
-      //   let timeout
-      //   if (timeout) timeout = undefined
-      //   timeout = setTimeout(() => closeCb(), closeDuration)
-      // }
     }
   }, [key, willBeClosed]);
 
