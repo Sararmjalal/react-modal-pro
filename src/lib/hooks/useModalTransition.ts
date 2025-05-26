@@ -31,12 +31,13 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
       if (timeout) timeout = undefined;
       timeout = setTimeout(() => {
         removeModal(key);
+        if (closeCb) closeCb();
       }, closeDuration - 50);
-      if (closeCb) {
-        let timeout
-        if (timeout) timeout = undefined
-        timeout = setTimeout(() => closeCb(), closeDuration)
-      }
+      // if (closeCb) {
+      //   let timeout
+      //   if (timeout) timeout = undefined
+      //   timeout = setTimeout(() => closeCb(), closeDuration)
+      // }
     }
   }, [key, willBeClosed]);
 

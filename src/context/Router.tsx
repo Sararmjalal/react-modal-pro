@@ -28,6 +28,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     useEffect(() => {
         const originalPushState = window.history.pushState;
         window.history.pushState = function (...args) {
+            console.log("pushState is happening", ...args)
             originalPushState.apply(window.history, args);
             const newPath = window.location.pathname + window.location.hash;
             setHistoryState(args[0]);
@@ -35,6 +36,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         };
         const originalReplaceState = window.history.replaceState;
         window.history.replaceState = function (...args) {
+            console.log("replaceState is happening", ...args)
             originalReplaceState.apply(window.history, args);
             const newPath = window.location.pathname + window.location.hash;
             setHistoryState(args[0]);
