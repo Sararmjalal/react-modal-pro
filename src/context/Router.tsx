@@ -28,6 +28,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
             const newPath = window.location.pathname + window.location.hash;
             setHistoryState(args[0]);
             setPath(newPath);
+            window.dispatchEvent(new Event("onpushstate"))
         };
         const originalReplaceState = window.history.replaceState;
         window.history.replaceState = function (...args) {
@@ -36,6 +37,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
             const newPath = window.location.pathname + window.location.hash;
             setHistoryState(args[0]);
             setPath(newPath);
+            window.dispatchEvent(new Event("onreplacestate"))
         };
     }, []);
 

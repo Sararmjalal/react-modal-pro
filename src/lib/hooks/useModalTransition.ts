@@ -19,14 +19,20 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
       if (!willBeClosed) setWillBeClosed(key, true)
     }
   }, [key, historyState, open])
-
+  console.log({ key, preserveOnRoute, thisModal })
   useEffect(() => {
-    if (willBeClosed) {
-      const isAlreadyInState = historyState[key]
+    if (open && willBeClosed) {
+      const currentState = window.history.state || {};
+      const isAlreadyInState = currentState[key]
       if (isAlreadyInState) {
-        if (preserveOnRoute) window.history.back();
+        console.log({ isAlreadyInState })
+        if (preserveOnRoute) {
+          console.log("in if - going back")
+          window.history.back();
+        }
         else {
-          const clone = { ...historyState }
+          console.log("in else - replaceState")
+          const clone = { ...currentState }
           delete clone[key]
           window.history.replaceState({ ...clone }, '')
         }
@@ -35,18 +41,25 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
       if (timeout) timeout = undefined;
       timeout = setTimeout(() => {
         removeModal(key);
-        if (closeCb) closeCb();
       }, closeDuration - 50);
+      if (closeCb) {
+        let timeout;
+        if (timeout) timeout = undefined;
+        timeout = setTimeout(() => {
+          closeCb()
+        }, closeDuration + 100);
+      }
     }
   }, [key, willBeClosed]);
 
   const handleOpenModal = () => {
-    const isAlreadyInState = historyState[key]
-    if (!isAlreadyInState) {
-      window.history[preserveOnRoute ? "pushState" : "replaceState"]({ ...historyState, [key]: true }, '')
+    console.log("in open modal - first", key)
+    const currentState = window.history.state || {};
+    console.log({ currentState }, { key }, { ...currentState, [key]: true })
+    if (!currentState[key]) {
+      window.history[thisModal.preserveOnRoute ? "pushState" : "replaceState"]({ ...currentState, [key]: true }, '');
     }
   };
-
   const handleCloseModal = () => {
     if (canDismiss && !willBeClosed) setWillBeClosed(key, true);
   };
