@@ -4,6 +4,7 @@ interface Modal {
     open: boolean;
     willBeClosed: boolean;
     preserveOnRoute: boolean;
+    isRecentlyClosed: boolean;
 }
 
 interface ModalsContextType {
@@ -23,7 +24,7 @@ interface ModalsProviderProps {
 
 export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
-    const initialModal = JSON.parse(JSON.stringify({ open: false, willBeClosed: false, preserveOnRoute: true }))
+    const initialModal = JSON.parse(JSON.stringify({ open: false, willBeClosed: false, preserveOnRoute: true, isRecentlyClosed: false }))
 
     const [modals, setModals] = useState<Record<string, Modal>>({});
 
@@ -52,7 +53,7 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
         setModals((prev) => {
             const newModals = { ...prev };
             if (newModals[key]) {
-                newModals[key] = initialModal
+                newModals[key] = { ...initialModal, isRecentlyClosed: true }
             }
             return newModals;
         });

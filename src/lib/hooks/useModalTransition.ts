@@ -42,15 +42,15 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
       timeout = setTimeout(() => {
         removeModal(key);
       }, closeDuration - 50);
-      if (closeCb) {
-        let timeout;
-        if (timeout) timeout = undefined;
-        timeout = setTimeout(() => {
-          closeCb()
-        }, closeDuration + 100);
-      }
     }
   }, [key, willBeClosed]);
+
+  useEffect(() => {
+    if (thisModal.isRecentlyClosed) {
+      if (closeCb) closeCb()
+      setModal(key, preserveOnRoute)
+    }
+  }, [thisModal.isRecentlyClosed])
 
   const handleOpenModal = () => {
     console.log("in open modal - first", key)
