@@ -13,7 +13,8 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
   }, [key]);
 
   useEffect(() => {
-    const isAlreadyInState = historyState[key]
+    const currentState = window.history.state || {};
+    const isAlreadyInState = currentState[key]
     if (isAlreadyInState && !open) setOpen(key, true)
     else if (!isAlreadyInState && open) {
       if (!willBeClosed) setWillBeClosed(key, true)
@@ -26,15 +27,13 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
       const isAlreadyInState = currentState[key]
       if (isAlreadyInState) {
         console.log({ isAlreadyInState })
+        const clone = { ...currentState }
+        delete clone[key]
+        window.history.replaceState({ ...clone }, '')
+        console.log({ newState: window.history.state })
         if (preserveOnRoute) {
           console.log("in if - going back")
           window.history.back();
-        }
-        else {
-          console.log("in else - replaceState")
-          const clone = { ...currentState }
-          delete clone[key]
-          window.history.replaceState({ ...clone }, '')
         }
       }
       let timeout;
@@ -47,7 +46,13 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
 
   useEffect(() => {
     if (thisModal.isRecentlyClosed) {
-      if (closeCb) closeCb()
+      if (closeCb) {
+        let timeout;
+        if (timeout) timeout = undefined;
+        timeout = setTimeout(() => {
+          closeCb();
+        }, 50);
+      }
       setModal(key, preserveOnRoute)
     }
   }, [thisModal.isRecentlyClosed])
@@ -57,9 +62,12 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
     const currentState = window.history.state || {};
     console.log({ currentState }, { key }, { ...currentState, [key]: true })
     if (!currentState[key]) {
-      window.history[thisModal.preserveOnRoute ? "pushState" : "replaceState"]({ ...currentState, [key]: true }, '');
+      requestAnimationFrame(() => {
+        window.history.pushState({ ...currentState, [key]: true, __id: crypto.randomUUID() }, "");
+      });
     }
   };
+
   const handleCloseModal = () => {
     if (canDismiss && !willBeClosed) setWillBeClosed(key, true);
   };

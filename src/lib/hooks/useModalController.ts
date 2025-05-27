@@ -1,4 +1,4 @@
-import { useModals, useRouter } from "../../context";
+import { useModals } from "../../context";
 
 export const useModalController = (key: string) => {
 
@@ -10,7 +10,9 @@ export const useModalController = (key: string) => {
     const currentState = window.history.state || {};
     console.log({ currentState }, { key }, { ...currentState, [key]: true })
     if (!currentState[key]) {
-      window.history[thisModal.preserveOnRoute ? "pushState" : "replaceState"]({ ...currentState, [key]: true }, '');
+      requestAnimationFrame(() => {
+        window.history.pushState({ ...currentState, [key]: true, __id: crypto.randomUUID() }, "");
+      });
     }
   };
 
