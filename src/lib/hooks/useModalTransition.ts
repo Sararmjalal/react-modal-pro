@@ -31,6 +31,21 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
     onClose({ closeDuration, key, removeModal, thisModal, closeCb })
   }, [key, willBeClosed]);
 
+  useEffect(() => {
+    return () => {
+      alert("unmount happening")
+      const currentState = window.history.state || {};
+      const isAlreadyInState = currentState.modalStack ? currentState.modalStack.includes(key) : false
+      if (isAlreadyInState) {
+        const clone = { ...currentState }
+        const newStack = clone.modalStack.filter((item: string) => item !== key)
+        clone.modalStack = newStack
+        window.history.replaceState({ ...clone }, '')
+      }
+      removeModal(key)
+    }
+  }, [])
+
   const handleOpenModal = () => {
     const currentState = window.history.state || {};
     if (!currentState.modalStack || !currentState.modalStack.includes(key)) {
