@@ -39,16 +39,15 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
       if (timeout) timeout = undefined;
       timeout = setTimeout(() => {
         removeModal(key);
+        if (closeCb) closeCb()
       }, closeDuration - 50);
+      if (closeCb) {
+        let timeout;
+        if (timeout) timeout = undefined;
+        timeout = setTimeout(() => closeCb(), closeDuration);
+      }
     }
   }, [key, willBeClosed]);
-
-  useEffect(() => {
-    if (thisModal.isRecentlyClosed) {
-      if (closeCb) closeCb()
-      setModal(key);
-    }
-  }, [thisModal.isRecentlyClosed]);
 
   const handleOpenModal = () => {
     const currentState = window.history.state || {};
