@@ -16,22 +16,24 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
 
   useEffect(() => {
     if (!modals[key]) setModal(key);
-  }, [key]);
+  }, []);
 
   useEffect(() => {
     const currentState = window.history.state || {};
     const isAlreadyInState = currentState.modalStack ? currentState.modalStack.includes(key) : false
-    if (isAlreadyInState && !open) setOpen(key, true)
+    if (isAlreadyInState && !open) {
+      setOpen(key, true)
+      setWillBeClosed(key, false)
+    }
     else if (!isAlreadyInState && open) {
       if (!willBeClosed) setWillBeClosed(key, true)
     }
   }, [key, historyState, open])
 
-  useEffect(() => {
-    onClose({ closeDuration, key, removeModal, thisModal, closeCb })
-  }, [key, willBeClosed]);
+  console.log({ thisModal, key })
 
   useEffect(() => {
+    onClose({ closeDuration, key, removeModal, thisModal, closeCb })
     return () => {
       alert("unmount happening")
       const currentState = window.history.state || {};
@@ -44,7 +46,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
       }
       removeModal(key)
     }
-  }, [])
+  }, [willBeClosed]);
 
   const handleOpenModal = () => {
     const currentState = window.history.state || {};
