@@ -9,7 +9,8 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   const { willBeClosed, open } = thisModal;
 
   useEffect(() => {
-    window.history.pushState(null, "")
+    const currentState = window.history.state || {};
+    if (!currentState.modalStack) window.history.pushState(null, "")
   }, [])
 
   useEffect(() => {
@@ -39,7 +40,6 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
       if (timeout) timeout = undefined;
       timeout = setTimeout(() => {
         removeModal(key);
-        if (closeCb) closeCb()
       }, closeDuration - 50);
       if (closeCb) {
         let timeout;
