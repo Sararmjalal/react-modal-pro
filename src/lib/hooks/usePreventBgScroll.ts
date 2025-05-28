@@ -3,6 +3,7 @@ import { useEffect } from "react";
 export const usePreventBgScroll = (open: boolean) => {
     useEffect(() => {
         if (open) {
+            window.scrollTo(0, 0);
             document.body.style.overflow = "hidden";
             document.body.style.overscrollBehavior = "none";
             return () => {
