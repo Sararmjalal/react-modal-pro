@@ -6,7 +6,7 @@ import { useScrollNearEdges } from "./useScrollNearEdges";
 
 export const useModalPro = (props: UseModalProProps) => {
   const { modalKey, swipeThreshold, swipeToClose = false, swipeToOpen = false, sidebarDirection, backdropClassName,
-    sheetClassName, canDismiss, openDuration, closeDuration, sheetRef, closeCb, preserveOnRoute } = props;
+    sheetClassName, canDismiss, openDuration, closeDuration, sheetRef, closeCb } = props;
 
   const currentModalKey = modalKey.replaceAll(" ", "");
 
@@ -18,7 +18,6 @@ export const useModalPro = (props: UseModalProProps) => {
 
   const { open, willBeClosed, handleOpenModal, handleCloseModal } = useModalTransition({
     closeCb,
-    preserveOnRoute,
     key: currentModalKey,
     canDismiss: canDismiss ?? defaultCanDismiss,
     closeDuration: closeDuration ?? defaultCloseDuration
@@ -81,7 +80,6 @@ export const useModalPro = (props: UseModalProProps) => {
     sheetClassName: sheetClassName ?? defaultSheetClassName,
     handleOpenModal,
     handleCloseModal,
-    preserveOnRoute,
     open,
     willBeClosed,
   };

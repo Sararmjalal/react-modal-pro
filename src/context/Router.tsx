@@ -1,8 +1,6 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 interface RouterContextType {
-    path: string;
-    navigate: (to: string) => void;
     historyState: Record<string, string>;
 }
 
@@ -13,61 +11,42 @@ interface RouterProviderProps {
 }
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
-    const [path, setPath] = useState(window.location.pathname + window.location.hash);
     const [historyState, setHistoryState] = useState(window.history.state || {})
 
     useEffect(() => {
-        console.log({ newHistoryState: historyState })
-    }, [historyState])
-
-    useEffect(() => {
-        const originalPushState = window.history.pushState;
-        window.history.pushState = function (...args) {
-            console.log("pushState is happening", ...args)
-            originalPushState.apply(window.history, args);
-            const newPath = window.location.pathname + window.location.hash;
-            setHistoryState(args[0]);
-            setPath(newPath);
-            window.dispatchEvent(new Event("onpushstate"))
-        };
         const originalReplaceState = window.history.replaceState;
         window.history.replaceState = function (...args) {
-            console.log("replaceState is happening", ...args)
-            originalReplaceState.apply(window.history, args);
-            const newPath = window.location.pathname + window.location.hash;
             setHistoryState(args[0]);
-            setPath(newPath);
-            window.dispatchEvent(new Event("onreplacestate"))
+            originalReplaceState.apply(window.history, args);
         };
     }, []);
 
-
     const handlePopStateEvent = (event: PopStateEvent) => {
+        const currentState = event.state || {}
+        const isSomeModalOpen = currentState.modalStack ? !!currentState.modalStack[0] : false
+        if (isSomeModalOpen) window.history.forward()
+        const clone = { ...currentState }
+        clone.modalStack.pop()
+        window.history.replaceState({ ...clone }, '')
         setHistoryState(event.state)
-        setPath(window.location.pathname + window.location.hash)
     }
 
     const handleBeforeUnloadEvent = () => {
         setHistoryState({})
-        setPath(window.location.pathname + window.location.hash)
+        window.history.replaceState(null, '')
     }
 
     useEffect(() => {
         window.addEventListener("popstate", handlePopStateEvent);
         window.addEventListener("beforeunload", handleBeforeUnloadEvent);
-
         return () => {
             window.removeEventListener("popstate", handlePopStateEvent);
             window.removeEventListener("beforeunload", handleBeforeUnloadEvent);
         };
     }, []);
 
-    const navigate = (to: string) => {
-        window.history.pushState({}, "", to);
-    };
-
     return (
-        <RouterContext.Provider value={{ path, navigate, historyState }}>
+        <RouterContext.Provider value={{ historyState }}>
             {children}
         </RouterContext.Provider>
     );

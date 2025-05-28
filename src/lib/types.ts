@@ -22,7 +22,6 @@ export type UseModalTransitionProps = {
   closeCb?: () => void;
   canDismiss: boolean;
   closeDuration: number;
-  preserveOnRoute?: boolean;
 };
 
 export type DrawerDirection = "left" | "right" | "top" | "bottom"
@@ -40,7 +39,6 @@ export type UseModalProProps = {
   swipeToOpen?: boolean;
   swipeToClose?: boolean;
   swipeThreshold?: number;
-  preserveOnRoute?: boolean;
   closeCb?: () => void;
   sheetRef: React.RefObject<HTMLElement | undefined>;
   sidebarDirection?: DrawerDirection;

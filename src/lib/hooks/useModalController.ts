@@ -6,12 +6,10 @@ export const useModalController = (key: string) => {
   const thisModal = modals[key] ?? initialModal
 
   const handleOpenModal = () => {
-    console.log("in open modal - controller", key)
     const currentState = window.history.state || {};
-    console.log({ currentState }, { key }, { ...currentState, [key]: true })
-    if (!currentState[key]) {
+    if (!currentState.modalStack || !currentState.modalStack.includes(key)) {
       requestAnimationFrame(() => {
-        window.history.pushState({ ...currentState, [key]: true, __id: crypto.randomUUID() }, "");
+        window.history.replaceState({ modalStack: currentState.modalStack ? [...currentState.modalStack, key] : [key] }, "");
       });
     }
   };

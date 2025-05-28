@@ -3,14 +3,13 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 interface Modal {
     open: boolean;
     willBeClosed: boolean;
-    preserveOnRoute: boolean;
     isRecentlyClosed: boolean;
 }
 
 interface ModalsContextType {
     initialModal: Modal;
     modals: Record<string, Modal>;
-    setModal: (key: string, preserveOnRoute: boolean) => void;
+    setModal: (key: string) => void;
     removeModal: (key: string) => void;
     setOpen: (key: string, open: boolean) => void;
     setWillBeClosed: (key: string, willBeClosed: boolean) => void;
@@ -24,14 +23,14 @@ interface ModalsProviderProps {
 
 export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
-    const initialModal = JSON.parse(JSON.stringify({ open: false, willBeClosed: false, preserveOnRoute: true, isRecentlyClosed: false }))
+    const initialModal = JSON.parse(JSON.stringify({ open: false, willBeClosed: false, isRecentlyClosed: false }))
 
     const [modals, setModals] = useState<Record<string, Modal>>({});
 
-    const setModal = (key: string, preserveOnRoute: boolean) => {
+    const setModal = (key: string) => {
         setModals((prev) => ({
             ...prev,
-            [key]: { ...initialModal, preserveOnRoute },
+            [key]: { ...initialModal },
         }));
     };
 

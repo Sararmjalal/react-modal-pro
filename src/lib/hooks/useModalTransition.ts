@@ -2,39 +2,37 @@ import { useEffect } from "react";
 import { UseModalTransitionProps } from "../types";
 import { useModals, useRouter } from "../../context";
 
-export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, preserveOnRoute = true }: UseModalTransitionProps) => {
+export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
   const { historyState } = useRouter();
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
   const thisModal = modals[key] ?? initialModal;
   const { willBeClosed, open } = thisModal;
 
   useEffect(() => {
-    if (!modals[key]) setModal(key, preserveOnRoute);
+    window.history.pushState(null, "")
+  }, [])
+
+  useEffect(() => {
+    if (!modals[key]) setModal(key);
   }, [key]);
 
   useEffect(() => {
     const currentState = window.history.state || {};
-    const isAlreadyInState = currentState[key]
+    const isAlreadyInState = currentState.modalStack ? currentState.modalStack.includes(key) : false
     if (isAlreadyInState && !open) setOpen(key, true)
     else if (!isAlreadyInState && open) {
       if (!willBeClosed) setWillBeClosed(key, true)
     }
   }, [key, historyState, open])
-  console.log({ key, preserveOnRoute, thisModal })
+
   useEffect(() => {
     if (open && willBeClosed) {
       const currentState = window.history.state || {};
-      const isAlreadyInState = currentState[key]
+      const isAlreadyInState = currentState.modalStack ? currentState.modalStack.includes(key) : false
       if (isAlreadyInState) {
-        console.log({ isAlreadyInState })
         const clone = { ...currentState }
-        delete clone[key]
+        clone.modalStack.pop()
         window.history.replaceState({ ...clone }, '')
-        console.log({ newState: window.history.state })
-        if (preserveOnRoute) {
-          console.log("in if - going back")
-          window.history.back();
-        }
       }
       let timeout;
       if (timeout) timeout = undefined;
@@ -46,24 +44,16 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration, pr
 
   useEffect(() => {
     if (thisModal.isRecentlyClosed) {
-      if (closeCb) {
-        let timeout;
-        if (timeout) timeout = undefined;
-        timeout = setTimeout(() => {
-          closeCb();
-        }, 50);
-      }
-      setModal(key, preserveOnRoute)
+      if (closeCb) closeCb()
+      setModal(key);
     }
-  }, [thisModal.isRecentlyClosed])
+  }, [thisModal.isRecentlyClosed]);
 
   const handleOpenModal = () => {
-    console.log("in open modal - first", key)
     const currentState = window.history.state || {};
-    console.log({ currentState }, { key }, { ...currentState, [key]: true })
-    if (!currentState[key]) {
+    if (!currentState.modalStack || !currentState.modalStack.includes(key)) {
       requestAnimationFrame(() => {
-        window.history.pushState({ ...currentState, [key]: true, __id: crypto.randomUUID() }, "");
+        window.history.replaceState({ modalStack: currentState.modalStack ? [...currentState.modalStack, key] : [key] }, "");
       });
     }
   };
