@@ -31,7 +31,8 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
       const isAlreadyInState = currentState.modalStack ? currentState.modalStack.includes(key) : false
       if (isAlreadyInState) {
         const clone = { ...currentState }
-        clone.modalStack.pop()
+        const newStack = clone.modalStack.filter((item: string) => item !== key)
+        clone.modalStack = newStack
         window.history.replaceState({ ...clone }, '')
       }
       let timeout;
