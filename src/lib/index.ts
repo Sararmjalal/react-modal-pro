@@ -1,4 +1,5 @@
 export { uid } from "./utils/uid"
+export { onClose } from "./utils/onClose"
 export { checkHash } from "./utils/checkHash"
 
 export { useSwiper } from "./hooks/useSwiper"

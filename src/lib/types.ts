@@ -43,3 +43,11 @@ export type UseModalProProps = {
   sheetRef: React.RefObject<HTMLElement | undefined>;
   sidebarDirection?: DrawerDirection;
 } & ModalControls;
+
+export type onCloseProps = {
+  thisModal: { open: boolean, willBeClosed: boolean }
+  closeDuration: number
+  closeCb?: () => void
+  removeModal: (key: string) => void
+  key: string
+}

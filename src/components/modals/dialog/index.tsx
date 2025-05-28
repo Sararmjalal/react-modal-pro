@@ -1,19 +1,20 @@
 import DialogBase from "../../dialog";
-import { DialogModalProps } from "../../types";
 import { Fragment, useRef } from "react";
+import { DialogModalProps } from "../../types";
 import { useModalPro, useModalUnmount, usePreventBgScroll } from "../../../lib";
 
-const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
+const Dialog = ({ TriggerElement, children, closeDuration = 300, closeCb, ...props }: DialogModalProps) => {
 
     const dialogRef = useRef<HTMLDivElement>(null)
-
     const { handleOpenModal, handleCloseModal, currentModalKey, ...modalProps } = useModalPro({
         ...props,
+        closeCb,
+        closeDuration,
         sheetRef: dialogRef
     })
 
-    useModalUnmount(props.modalKey);
     usePreventBgScroll(modalProps.open);
+    useModalUnmount({ key: currentModalKey, closeDuration, closeCb });
 
     return (
         <Fragment>
@@ -24,6 +25,7 @@ const Dialog = ({ TriggerElement, children, ...props }: DialogModalProps) => {
             </div>
             <DialogBase
                 {...modalProps}
+                closeDuration={closeDuration}
                 key={currentModalKey}
                 handleClose={handleCloseModal}
                 ref={dialogRef}>

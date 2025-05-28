@@ -3,18 +3,19 @@ import { Fragment, useRef } from "react";
 import { SidebarModalProps } from "../../types";
 import { useModalPro, useModalUnmount, usePreventBgScroll } from "../../../lib";
 
-const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
+const Sidebar = ({ direction, closeCb, closeDuration = 300, ...sidebarProps }: SidebarModalProps) => {
 
   const sheetRef = useRef<HTMLDivElement>(null);
 
   const { handleOpenModal, handleCloseModal, currentModalKey, ...props } = useModalPro({
     sheetRef,
+    closeCb,
     ...sidebarProps,
     sidebarDirection: direction
   });
 
   usePreventBgScroll(props.open);
-  useModalUnmount(sidebarProps.modalKey);
+  useModalUnmount({ key: currentModalKey, closeDuration, closeCb });
 
   return (
     <Fragment>
@@ -28,6 +29,7 @@ const Sidebar = ({ direction, ...sidebarProps }: SidebarModalProps) => {
         mode="sidebar"
         key={currentModalKey}
         direction={direction}
+        closeDuration={closeDuration}
         handleClose={handleCloseModal}
         ref={sheetRef}
       >

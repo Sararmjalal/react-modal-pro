@@ -24,10 +24,13 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const handlePopStateEvent = (event: PopStateEvent) => {
         const currentState = event.state || {}
         const isSomeModalOpen = currentState.modalStack ? !!currentState.modalStack[0] : false
-        if (isSomeModalOpen) window.history.forward()
-        const clone = { ...currentState }
-        if (Array.isArray(clone.modalStack)) clone.modalStack.pop()
-        window.history.replaceState({ ...clone }, '')
+        if (isSomeModalOpen) {
+            window.history.forward()
+            const clone = { ...currentState }
+            const newStack = clone.modalStack.splice(clone.modalStack.length - 1, 1)
+            clone.modalStack = newStack
+            window.history.replaceState({ ...clone }, '')
+        }
         setHistoryState(event.state)
     }
 

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { onClose } from "../../lib";
 import { UseModalTransitionProps } from "../types";
 import { useModals, useRouter } from "../../context";
 
@@ -27,26 +28,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   }, [key, historyState, open])
 
   useEffect(() => {
-    if (open && willBeClosed) {
-      const currentState = window.history.state || {};
-      const isAlreadyInState = currentState.modalStack ? currentState.modalStack.includes(key) : false
-      if (isAlreadyInState) {
-        const clone = { ...currentState }
-        const newStack = clone.modalStack.filter((item: string) => item !== key)
-        clone.modalStack = newStack
-        window.history.replaceState({ ...clone }, '')
-      }
-      let timeout;
-      if (timeout) timeout = undefined;
-      timeout = setTimeout(() => {
-        removeModal(key);
-      }, closeDuration - 50);
-      if (closeCb) {
-        let timeout;
-        if (timeout) timeout = undefined;
-        timeout = setTimeout(() => closeCb(), closeDuration);
-      }
-    }
+    onClose({ closeDuration, key, removeModal, thisModal, closeCb })
   }, [key, willBeClosed]);
 
   const handleOpenModal = () => {
