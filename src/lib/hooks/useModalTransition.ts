@@ -10,11 +10,6 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   const { willBeClosed, open } = thisModal;
 
   useEffect(() => {
-    const currentState = window.history.state || {};
-    if (!currentState.modalStack) window.history.pushState(null, "")
-  }, [])
-
-  useEffect(() => {
     if (!modals[key]) setModal(key);
   }, []);
 
