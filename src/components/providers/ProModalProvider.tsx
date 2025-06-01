@@ -3,6 +3,12 @@ import { ReactNode, useEffect } from "react"
 import { ModalProviderProps } from "../types"
 import { ModalDefaultsProvider, ModalsProvider, RouterProvider } from "../../context"
 
+declare global {
+    interface Window {
+        isSomeModalOpen?: boolean
+    }
+}
+
 const ProModalProvider = ({ children, ...props }: ModalProviderProps & { children: ReactNode }) => {
 
     useEffect(() => {
