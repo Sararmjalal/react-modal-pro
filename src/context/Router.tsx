@@ -48,7 +48,6 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const handlePopStateEvent = (event: PopStateEvent) => {
         const currentState = window.historyState
         const isSomeModalOpen = window.isSomeModalOpen
-        console.log({ currentStateINPOP: currentState, isSomeModalOpen, cause })
         if (isSomeModalOpen) {
             if (cause === "back") {
                 window.history.go(1)

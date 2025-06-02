@@ -7,13 +7,10 @@ export const useModalController = (key: string) => {
   const thisModal = modals[key] ?? initialModal
 
   const handleOpenModal = () => {
-    // console.log("NEW OPENNN8888N")
     const currentState = window.history.state || {};
     if (!currentState.modalStack || !currentState.modalStack[0]) {
       const currentPath = window.location.pathname
-      // console.log("in push", { currentPath, alreadyPushedLocations })
       if (!alreadyPushedLocations[currentPath]) {
-        // console.log("in push state")
         alreadyPushedLocations[currentPath] = true
         window.history.pushState(null, "")
       }
@@ -23,7 +20,6 @@ export const useModalController = (key: string) => {
       if (timeout) timeout = undefined
       else timeout = setTimeout(() => {
         const thisState = window.history.state || {};
-        // console.log("replaceState happening", thisState)
         requestAnimationFrame(() => {
           window.history.replaceState({ modalStack: thisState.modalStack ? [...thisState.modalStack, key] : [key] }, "");
         });
