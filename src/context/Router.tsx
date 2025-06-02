@@ -17,21 +17,17 @@ const alreadyPushedLocations: Record<string, boolean> = {}
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const [historyState, setHistoryState] = useState({})
-    const [popstateCause, setPopstateCause] = useState<"forward" | "back">("back")
 
     useEffect(() => {
         const originalPushState = window.history.pushState;
         window.history.pushState = function (...args) {
             originalPushState.apply(window.history, args);
-            // setHistoryState(args[0]);
         };
         const originalReplaceState = window.history.replaceState;
         window.history.replaceState = function (...args) {
-            // console.log("replacestate in original happened", args[0])
             originalReplaceState.apply(window.history, args);
             const isSomeModalOpen = window.isSomeModalOpen
             if (isSomeModalOpen && !args[0].modalStack) {
-                // console.log("replace with open & without modal stack")
                 return
             }
             setHistoryState(args[0]);
@@ -39,9 +35,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         const originalGo = window.history.go;
         window.history.go = function (delta: number) {
             if (delta === 1) {
-                // console.log('Attempting forward navigation');
                 cause = "forward"
-                // setPopstateCause("forward")
             }
             originalGo.call(window.history, delta);
         };
@@ -49,7 +43,6 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
 
     useEffect(() => {
         window.historyState = JSON.parse(JSON.stringify(historyState))
-        // console.log("window updated", { historyState: window.historyState })
     }, [historyState])
 
     const handlePopStateEvent = (event: PopStateEvent) => {
@@ -61,7 +54,6 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
                 window.history.go(1)
                 const clone = { ...currentState }
                 clone.modalStack = []
-                // console.log({ clone }, "NEWWWWWWWWWW5555555555566666666666")
                 window.history.replaceState({ ...clone }, '')
             }
             setTimeout(() => {
@@ -70,11 +62,9 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         }
         if (!isSomeModalOpen) {
             const currentPath = window.location.pathname;
-            // console.log({ currentPath, alreadyPushedLocations })
             if (alreadyPushedLocations[currentPath]) {
                 alreadyPushedLocations[currentPath] = false
                 setTimeout(() => {
-                    // console.log("going backward");
                     window.history.back();
                 }, 0);
             }
@@ -82,9 +72,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     };
 
     const handleBeforeUnloadEvent = () => {
-        console.log("before unload happened!")
-        // setHistoryState({})
-        // window.history.replaceState(null, '')
+        window.history.replaceState(null, '')
     }
 
     useEffect(() => {
