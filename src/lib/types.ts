@@ -45,7 +45,7 @@ export type UseModalProProps = {
 } & ModalControls;
 
 export type onCloseProps = {
-  thisModal: { open: boolean, willBeClosed: boolean }
+  modals: Record<string, { open: boolean, willBeClosed: boolean, isRecentlyClosed: boolean }>
   closeDuration: number
   closeCb?: () => void
   removeModal: (key: string) => void

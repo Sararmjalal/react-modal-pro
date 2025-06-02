@@ -7,10 +7,11 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   const { historyState, alreadyPushedLocations } = useRouter();
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
   const thisModal = modals[key] ?? initialModal;
-  const { willBeClosed, open } = thisModal;
+  const { willBeClosed, open, isRecentlyClosed } = thisModal;
 
   useEffect(() => {
     if (!modals[key]) setModal(key);
+    console.log("hello")
   }, []);
 
   useEffect(() => {
@@ -26,9 +27,11 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   }, [key, historyState, open])
 
   useEffect(() => {
-    onClose({ closeDuration, key, removeModal, thisModal, closeCb })
+    console.log("in mount", key, thisModal)
+    onClose({ closeDuration, key, removeModal, modals, closeCb })
     return () => {
-      onClose({ closeDuration, key, removeModal, thisModal, closeCb })
+      console.log("in unmount", key, thisModal)
+      onClose({ closeDuration, key, removeModal, modals, closeCb })
     }
   }, [willBeClosed]);
 
@@ -36,26 +39,40 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
     window.isSomeModalOpen = Object.values(modals).some(item => item.open)
   }, [modals])
 
+  useEffect(() => {
+    if (isRecentlyClosed) {
+      console.log("in recently", key)
+      if (closeCb) closeCb()
+      setModal(key)
+    }
+  }, [isRecentlyClosed])
+
+  // 
+  // console.log("new vvvv")
+
   const handleOpenModal = () => {
+    // console.log("NEW OPENNNN55555")
     const currentState = window.history.state || {};
     if (!currentState.modalStack || !currentState.modalStack[0]) {
       const currentPath = window.location.pathname
-      console.log("in push", { currentPath, alreadyPushedLocations })
+      // console.log("in push", { currentPath, alreadyPushedLocations })
       if (!alreadyPushedLocations[currentPath]) {
-        console.log("in push state")
+        // console.log("in push state")
         alreadyPushedLocations[currentPath] = true
         window.history.pushState(null, "")
       }
     }
-    let timeout
-    if (timeout) timeout = undefined
-    else timeout = setTimeout(() => {
-      const thisState = window.history.state || {};
-      console.log("replaceState happening", thisState)
-      requestAnimationFrame(() => {
-        window.history.replaceState({ modalStack: thisState.modalStack ? [...thisState.modalStack, key] : [key] }, "");
-      });
-    }, 100)
+    if (!currentState.modalStack || !currentState.modalStack.includes(key)) {
+      let timeout
+      if (timeout) timeout = undefined
+      else timeout = setTimeout(() => {
+        const thisState = window.history.state || {};
+        // console.log("replaceState happening", thisState)
+        requestAnimationFrame(() => {
+          window.history.replaceState({ modalStack: thisState.modalStack ? [...thisState.modalStack, key] : [key] }, "");
+        });
+      }, 10)
+    }
   }
 
   const handleCloseModal = () => {

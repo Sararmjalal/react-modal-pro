@@ -10,7 +10,8 @@ export const useModalUnmount = ({ ...props }: Omit<onCloseProps, "removeModal" |
 
     useEffect(() => {
         return () => {
-            onClose({ ...props, removeModal, thisModal })
+            // console.log("unmount", { key: props.key })
+            // onClose({ ...props, removeModal, thisModal })
         }
     }, [])
 }

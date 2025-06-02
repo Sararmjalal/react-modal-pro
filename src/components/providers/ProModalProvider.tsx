@@ -6,6 +6,7 @@ import { ModalDefaultsProvider, ModalsProvider, RouterProvider } from "../../con
 declare global {
     interface Window {
         isSomeModalOpen?: boolean
+        historyState: History["state"]
     }
 }
 
