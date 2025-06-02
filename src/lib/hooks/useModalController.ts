@@ -2,16 +2,20 @@ import { useModals, useRouter } from "../../context";
 
 export const useModalController = (key: string) => {
 
-  const { thisHistory } = useRouter();
-  const { modals, setWillBeClosed, initialModal, isInitializing, updateInitializing } = useModals();
+  const { alreadyPushedLocations } = useRouter();
+  const { modals, setWillBeClosed, initialModal } = useModals();
   const thisModal = modals[key] ?? initialModal
 
   const handleOpenModal = () => {
     const currentState = window.history.state || {};
-    if (!currentState.modalStack || (Array.isArray(currentState.modalStack) && !currentState.modalStack[0])) {
-      const currentPathInHistory = thisHistory.reduce((acc, cur) => cur === window.location.pathname ? acc + 1 : acc, 0)
-      console.log({ currentPathInHistory, thisHistory, path: window.location.pathname })
-      if (currentPathInHistory < 1) window.history.pushState(null, "")
+    if (!currentState.modalStack || !currentState.modalStack[0]) {
+      const currentPath = window.location.pathname
+      console.log("in push", { currentPath, alreadyPushedLocations })
+      if (!alreadyPushedLocations[currentPath]) {
+        console.log("in push state")
+        alreadyPushedLocations[currentPath] = true
+        window.history.pushState(null, "")
+      }
     }
     let timeout
     if (timeout) timeout = undefined
@@ -23,15 +27,6 @@ export const useModalController = (key: string) => {
       });
     }, 100)
   }
-
-  // const handleOpenModal = () => {
-  //   const currentState = window.history.state || {};
-  //   if (!currentState.modalStack || !currentState.modalStack.includes(key)) {
-  //     requestAnimationFrame(() => {
-  //       window.history.replaceState({ modalStack: currentState.modalStack ? [...currentState.modalStack, key] : [key] }, "");
-  //     });
-  //   }
-  // }
 
   const handleCloseModal = () => {
     if (!thisModal.willBeClosed) setWillBeClosed(key, true);

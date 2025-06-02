@@ -13,8 +13,6 @@ interface ModalsContextType {
     removeModal: (key: string) => void;
     setOpen: (key: string, open: boolean) => void;
     setWillBeClosed: (key: string, willBeClosed: boolean) => void;
-    updateInitializing: (value: boolean) => void
-    isInitializing: boolean
 }
 
 const ModalsContext = createContext<ModalsContextType | undefined>(undefined);
@@ -29,12 +27,6 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
     const [modals, setModals] = useState<Record<string, Modal>>({});
     const [isInitializing, setInitializing] = useState(true)
-
-    // useEffect(() => {
-    //     const currentState = window.history.state || {};
-    //     if (!currentState.modalStack) window.history.pushState(null, "")
-    // }, [])
-
 
     const updateInitializing = (value: boolean) => setInitializing(value)
 
@@ -70,7 +62,7 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
     };
 
     return (
-        <ModalsContext.Provider value={{ modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal, isInitializing, updateInitializing }}>
+        <ModalsContext.Provider value={{ modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal }}>
             {children}
         </ModalsContext.Provider>
     );

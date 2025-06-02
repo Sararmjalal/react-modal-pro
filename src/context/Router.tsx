@@ -1,11 +1,8 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from "react";
 
 interface RouterContextType {
     historyState: Record<string, string>;
-    prevLocation: string;
-    currentLocation: string;
-    updatePrevLocation: (Location: string) => void
-    thisHistory: string[]
+    alreadyPushedLocations: Record<string, boolean>
 }
 
 const RouterContext = createContext<RouterContextType | null>(null);
@@ -15,36 +12,30 @@ interface RouterProviderProps {
 }
 
 const thisHistory: string[] = [window.location.pathname]
+const alreadyPushedLocations: Record<string, boolean> = {}
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const [historyState, setHistoryState] = useState(window.history.state || {})
-    const [prevLocation, setPrevLocation] = useState("")
-    const [currentLocation, setCcurrentLocation] = useState("")
-
-    const updatePrevLocation = (location: string) => setPrevLocation(location)
 
     useEffect(() => {
         const originalPushState = window.history.pushState;
         window.history.pushState = function (...args) {
-            setHistoryState(args[0]);
             originalPushState.apply(window.history, args);
-            // setCcurrentLocation(window.location.pathname);
+            setHistoryState(args[0]);
             thisHistory.push(window.location.pathname);
         };
         const originalReplaceState = window.history.replaceState;
         window.history.replaceState = function (...args) {
-            setHistoryState(args[0]);
             originalReplaceState.apply(window.history, args);
+            setHistoryState(args[0]);
         };
     }, []);
-
 
     const handlePopStateEvent = (event: PopStateEvent) => {
         const currentState = event.state || {}
         const isSomeModalOpen = window.isSomeModalOpen
         console.log({ currentStateINPOP: currentState, isSomeModalOpen })
         if (isSomeModalOpen) {
-            console.log({ "modalIsOPen": thisHistory })
             const clone = { ...currentState }
             if (Array.isArray(clone.modalStack)) {
                 const newStack = clone.modalStack.length > 1 ? clone.modalStack.slice(0, clone.modalStack.length - 1) : []
@@ -53,23 +44,23 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
             console.log({ clone })
             window.history.replaceState({ ...clone }, '')
             setHistoryState({ ...clone })
-            console.log("going forward")
             setTimeout(() => {
                 console.log("going forward");
-                thisHistory.pop()
                 window.history.forward();
-                console.log("historuy after forwadrd", thisHistory)
             }, 0);
         }
-        else if (!isSomeModalOpen && thisHistory[2]) {
-            console.log({ "modal not open": thisHistory })
-            console.log({ thisHistory })
-            if (thisHistory[thisHistory.length - 2] === thisHistory[thisHistory.length - 1]) {
-                thisHistory.pop()
-                window.history.back()
+        else if (!isSomeModalOpen) {
+            const currentPath = window.location.pathname;
+            console.log({ currentPath, alreadyPushedLocations })
+            if (alreadyPushedLocations[currentPath]) {
+                alreadyPushedLocations[currentPath] = false
+                setTimeout(() => {
+                    console.log("going backward");
+                    window.history.back();
+                }, 0);
             }
         }
-    }
+    };
 
     const handleBeforeUnloadEvent = () => {
         setHistoryState({})
@@ -86,7 +77,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     }, []);
 
     return (
-        <RouterContext.Provider value={{ historyState, prevLocation, currentLocation, updatePrevLocation, thisHistory }}>
+        <RouterContext.Provider value={{ historyState, alreadyPushedLocations }}>
             {children}
         </RouterContext.Provider>
     );
