@@ -1,6 +1,6 @@
 import { onCloseProps } from "../types";
 
-export const onClose = ({ thisModal, closeDuration, removeModal, key }: onCloseProps) => {
+export const onClose = ({ thisModal, closeDuration, removeModal, key, updateCloseCb }: onCloseProps) => {
   const { open, willBeClosed, isRecentlyClosed } = thisModal
   if (open && willBeClosed && !isRecentlyClosed) {
     const currentState = window.history.state || {};
@@ -16,6 +16,7 @@ export const onClose = ({ thisModal, closeDuration, removeModal, key }: onCloseP
     if (timeout) timeout = undefined;
     timeout = setTimeout(() => {
       removeModal(key);
+      updateCloseCb()
     }, closeDuration - 50);
   }
 }

@@ -30,6 +30,7 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
     const [modals, setModals] = useState<Record<string, Modal>>({});
 
+
     const setModal = (key: string) => {
         setModals((prev) => ({
             ...prev,

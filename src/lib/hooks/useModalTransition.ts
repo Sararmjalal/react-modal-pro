@@ -11,7 +11,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
 
   useEffect(() => {
     if (!modals[key]) setModal(key);
-    closeCbs[key] = closeCb
+    // closeCbs[key] = closeCb
   }, []);
 
   useEffect(() => {
@@ -26,10 +26,14 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
     }
   }, [key, historyState, open])
 
+  const updateCloseCb = () => {
+    closeCbs[key] = closeCb
+  }
+
   useEffect(() => {
-    onClose({ closeDuration, key, removeModal, thisModal, closeCb })
+    onClose({ closeDuration, key, removeModal, thisModal, updateCloseCb })
     return () => {
-      onClose({ closeDuration, key, removeModal, thisModal, closeCb })
+      onClose({ closeDuration, key, removeModal, thisModal, updateCloseCb })
     }
   }, [willBeClosed]);
 

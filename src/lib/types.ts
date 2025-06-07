@@ -47,7 +47,8 @@ export type UseModalProProps = {
 export type onCloseProps = {
   thisModal: { open: boolean, willBeClosed: boolean, isRecentlyClosed: boolean }
   closeDuration: number
-  closeCb?: () => void
+  // closeCb?: () => void
   removeModal: (key: string) => void
   key: string
+  updateCloseCb: () => void
 }
