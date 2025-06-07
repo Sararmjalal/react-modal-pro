@@ -1,7 +1,7 @@
 import { onCloseProps } from "../types";
 
-export const onClose = ({ modals, closeDuration, closeCb, removeModal, key }: onCloseProps) => {
-  const { open, willBeClosed, isRecentlyClosed } = modals[key] ?? { open: false, willBeClosed: false }
+export const onClose = ({ thisModal, closeDuration, removeModal, key }: onCloseProps) => {
+  const { open, willBeClosed, isRecentlyClosed } = thisModal
   if (open && willBeClosed && !isRecentlyClosed) {
     const currentState = window.history.state || {};
     const isAlreadyInState = currentState.modalStack ? currentState.modalStack.includes(key) : false

@@ -5,12 +5,13 @@ import { useModals, useRouter } from "../../context";
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
   const { historyState, alreadyPushedLocations } = useRouter();
-  const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal } = useModals();
+  const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal, closeCbs } = useModals();
   const thisModal = modals[key] ?? initialModal;
-  const { willBeClosed, open, isRecentlyClosed } = thisModal;
+  const { willBeClosed, open } = thisModal;
 
   useEffect(() => {
     if (!modals[key]) setModal(key);
+    closeCbs[key] = closeCb
   }, []);
 
   useEffect(() => {
@@ -26,23 +27,15 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   }, [key, historyState, open])
 
   useEffect(() => {
-    onClose({ closeDuration, key, removeModal, modals, closeCb })
+    onClose({ closeDuration, key, removeModal, thisModal, closeCb })
     return () => {
-      onClose({ closeDuration, key, removeModal, modals, closeCb })
+      onClose({ closeDuration, key, removeModal, thisModal, closeCb })
     }
   }, [willBeClosed]);
 
   useEffect(() => {
     window.isSomeModalOpen = Object.values(modals).some(item => item.open)
   }, [modals])
-
-  useEffect(() => {
-    if (isRecentlyClosed) {
-      if (closeCb) closeCb()
-      setModal(key)
-    }
-  }, [isRecentlyClosed])
-
 
   const handleOpenModal = () => {
     const currentState = window.history.state || {};

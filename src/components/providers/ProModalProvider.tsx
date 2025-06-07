@@ -2,6 +2,7 @@ import "../../assets/styles.css";
 import { ReactNode, useEffect } from "react"
 import { ModalProviderProps } from "../types"
 import { ModalDefaultsProvider, ModalsProvider, RouterProvider } from "../../context"
+import CloseCbProvider from "./CloseCbProvider";
 
 declare global {
     interface Window {
@@ -25,7 +26,9 @@ const ProModalProvider = ({ children, ...props }: ModalProviderProps & { childre
         <ModalDefaultsProvider {...props}>
             <RouterProvider>
                 <ModalsProvider>
-                    {children}
+                    <CloseCbProvider>
+                        {children}
+                    </CloseCbProvider>
                 </ModalsProvider>
             </RouterProvider>
         </ModalDefaultsProvider>

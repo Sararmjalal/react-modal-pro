@@ -13,6 +13,7 @@ interface ModalsContextType {
     removeModal: (key: string) => void;
     setOpen: (key: string, open: boolean) => void;
     setWillBeClosed: (key: string, willBeClosed: boolean) => void;
+    closeCbs: Record<string, (() => void) | undefined>
 }
 
 const ModalsContext = createContext<ModalsContextType | undefined>(undefined);
@@ -21,14 +22,13 @@ interface ModalsProviderProps {
     children: ReactNode;
 }
 
+const closeCbs: ModalsContextType["closeCbs"] = {}
+
 export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
 
     const initialModal = JSON.parse(JSON.stringify({ open: false, willBeClosed: false, isRecentlyClosed: false }))
 
     const [modals, setModals] = useState<Record<string, Modal>>({});
-    const [isInitializing, setInitializing] = useState(true)
-
-    const updateInitializing = (value: boolean) => setInitializing(value)
 
     const setModal = (key: string) => {
         setModals((prev) => ({
@@ -62,7 +62,7 @@ export const ModalsProvider: React.FC<ModalsProviderProps> = ({ children }) => {
     };
 
     return (
-        <ModalsContext.Provider value={{ modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal }}>
+        <ModalsContext.Provider value={{ modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal, closeCbs }}>
             {children}
         </ModalsContext.Provider>
     );
