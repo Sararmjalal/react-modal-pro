@@ -14,7 +14,7 @@ const Dialog = ({ TriggerElement, children, closeDuration = 300, closeCb, ...pro
     })
 
     usePreventBgScroll(modalProps.open);
-    // useModalUnmount({ key: currentModalKey, closeDuration, closeCb });
+    useModalUnmount(currentModalKey);
 
     return (
         <Fragment>

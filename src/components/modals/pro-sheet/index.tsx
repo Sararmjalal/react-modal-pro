@@ -14,7 +14,7 @@ const ProSheet = ({ TriggerElement, direction, children, closeCb, closeDuration 
     })
 
     usePreventBgScroll(modalProps.open);
-    // useModalUnmount({ key: currentModalKey, closeDuration, closeCb });
+    useModalUnmount(currentModalKey);
 
     return (
         <Fragment>

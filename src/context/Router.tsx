@@ -19,19 +19,21 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const [historyState, setHistoryState] = useState({})
 
     useEffect(() => {
-        const originalPushState = window.history.pushState;
-        window.history.pushState = function (...args) {
-            originalPushState.apply(window.history, args);
-        };
         const originalReplaceState = window.history.replaceState;
         window.history.replaceState = function (...args) {
             originalReplaceState.apply(window.history, args);
             const isSomeModalOpen = window.isSomeModalOpen
-            if (isSomeModalOpen && !args[0].modalStack) {
+            if (isSomeModalOpen && !args[0]?.modalStack) {
                 return
             }
             setHistoryState(args[0]);
         };
+        const originalPushState = window.history.pushState;
+        window.history.pushState = function (...args) {
+            originalPushState.apply(window.history, args);
+            setHistoryState({})
+        };
+
         const originalGo = window.history.go;
         window.history.go = function (delta: number) {
             if (delta === 1) {
@@ -71,7 +73,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     };
 
     const handleBeforeUnloadEvent = () => {
-        window.history.replaceState(null, '')
+        window.history.replaceState({}, '')
     }
 
     useEffect(() => {

@@ -12,7 +12,7 @@ export const useModalController = (key: string) => {
       const currentPath = window.location.pathname
       if (!alreadyPushedLocations[currentPath]) {
         alreadyPushedLocations[currentPath] = true
-        window.history.pushState(null, "")
+        window.history.pushState({}, "")
       }
     }
     if (!currentState.modalStack || !currentState.modalStack.includes(key)) {

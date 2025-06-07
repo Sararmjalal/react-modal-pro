@@ -16,7 +16,11 @@ export const onClose = ({ thisModal, closeDuration, removeModal, key, updateClos
     if (timeout) timeout = undefined;
     timeout = setTimeout(() => {
       removeModal(key);
-      updateCloseCb()
     }, closeDuration - 50);
+    let timeout2;
+    if (timeout2) timeout = undefined;
+    timeout2 = setTimeout(() => {
+      updateCloseCb()
+    }, closeDuration);
   }
 }

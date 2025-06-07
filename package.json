@@ -1,6 +1,6 @@
 {
   "name": "react-modal-pro",
-  "version": "3.4.6",
+  "version": "3.4.7",
   "description": "Reusable react modal with dialog, sidebar and sheet.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

@@ -15,7 +15,7 @@ const Sidebar = ({ direction, closeCb, closeDuration = 300, ...sidebarProps }: S
   });
 
   usePreventBgScroll(props.open);
-  // useModalUnmount({ key: currentModalKey, closeDuration, closeCb });
+  useModalUnmount(currentModalKey);
 
   return (
     <Fragment>
