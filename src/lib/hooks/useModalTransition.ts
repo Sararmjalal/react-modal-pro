@@ -10,13 +10,15 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   const { willBeClosed, open } = thisModal;
 
   useEffect(() => {
-    if (!modals[key]) setModal(key);
-    // closeCbs[key] = closeCb
+    if (!modals[key]) setModal(key, canDismiss);
   }, []);
 
   useEffect(() => {
     const currentState = window.history.state || {};
-    const isAlreadyInState = currentState.modalStack ? currentState.modalStack.includes(key) : false
+    const isAlreadyInState = currentState.modalStack ?
+      currentState.modalStack.some((item: { key: string, canDismiss: boolean }) => item.key === key)
+      :
+      false
     if (isAlreadyInState && !open) {
       setOpen(key, true)
       setWillBeClosed(key, false)
@@ -50,13 +52,18 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
         window.history.pushState(null, "")
       }
     }
-    if (!currentState.modalStack || !currentState.modalStack.includes(key)) {
+    if (!currentState.modalStack || !currentState.modalStack.some((item: { key: string, canDismiss: boolean }) => item.key === key)) {
       let timeout
       if (timeout) timeout = undefined
       else timeout = setTimeout(() => {
         const thisState = window.history.state || {};
         requestAnimationFrame(() => {
-          window.history.replaceState({ modalStack: thisState.modalStack ? [...thisState.modalStack, key] : [key] }, "");
+          window.history.replaceState({
+            modalStack: thisState.modalStack ?
+              [...thisState.modalStack, { key, canDismiss }]
+              :
+              [{ key, canDismiss }]
+          }, "");
         });
       }, 10)
     }

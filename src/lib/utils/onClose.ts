@@ -5,7 +5,10 @@ export const onClose = ({ thisModal, closeDuration, removeModal, key, updateClos
   if (open && willBeClosed && !isRecentlyClosed) {
     updateCloseCb()
     const currentState = window.history.state || {};
-    const isAlreadyInState = currentState.modalStack ? currentState.modalStack.includes(key) : false
+    const isAlreadyInState = currentState.modalStack ?
+      currentState.modalStack.some((item: { key: string, canDismiss: boolean }) => item.key === key)
+      :
+      false
     if (isAlreadyInState) {
       const clone = { ...currentState }
       const modalIndex = clone.modalStack.findIndex((item: string) => item === key)
