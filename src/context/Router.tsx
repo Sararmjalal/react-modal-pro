@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 interface RouterContextType {
   historyState: Record<string, string>;
@@ -20,34 +20,41 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const originalReplaceState = window.history.replaceState;
-    window.history.replaceState = function (...args) {
-      originalReplaceState.apply(window.history, args);
-      const isSomeModalOpen = window.isSomeModalOpen
-      if (isSomeModalOpen && !args[0]?.modalStack) {
-        return
-      }
-      setHistoryState(args[0]);
-    };
     const originalPushState = window.history.pushState;
-    window.history.pushState = function (...args) {
-      originalPushState.apply(window.history, args);
-      setHistoryState({})
-    };
-
     const originalGo = window.history.go;
-    window.history.go = function (delta: number) {
-      if (delta === 1) {
-        cause = "forward"
-      }
-      originalGo.call(window.history, delta);
-    };
+
+    Object.defineProperty(window.history, 'replaceState', {
+      configurable: true,
+      value: function (...args: any) {
+        originalReplaceState.apply(window.history, args);
+        const isSomeModalOpen = (window as any).isSomeModalOpen;
+        if (isSomeModalOpen && !args[0]?.modalStack) return;
+        setHistoryState(args[0]);
+      },
+    });
+
+    Object.defineProperty(window.history, 'pushState', {
+      configurable: true,
+      value: function (...args: any) {
+        originalPushState.apply(window.history, args);
+        setHistoryState({});
+      },
+    });
+
+    Object.defineProperty(window.history, 'go', {
+      configurable: true,
+      value: function (delta: number) {
+        if (delta === 1) cause = 'forward';
+        originalGo.call(window.history, delta);
+      },
+    });
   }, []);
 
   useEffect(() => {
     window.historyState = JSON.parse(JSON.stringify(historyState))
   }, [historyState])
 
-  const handlePopStateEvent = (event: PopStateEvent) => {
+  const handlePopStateEvent = () => {
     const currentState = window.historyState
     const isSomeModalOpen = window.isSomeModalOpen
     if (isSomeModalOpen) {
