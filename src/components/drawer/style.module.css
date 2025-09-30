@@ -1,10 +1,13 @@
 .backdrop {
-  top: 0;
-  left: 0;
-  width: 100svw;
-  height: 100svh;
-  position: fixed;
+  inset: 0;
   opacity: 1;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: fixed;
+  overscroll-behavior: contain;
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
   background: var(--react-modal-pro-backdrop-background);
 }
 
@@ -55,7 +58,8 @@
   left: 0;
   border-top-right-radius: var(--react-modal-pro-sheet-radius);
   border-bottom-right-radius: var(--react-modal-pro-sheet-radius);
-  height: -webkit-fill-available;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .sheet.right {
@@ -63,7 +67,8 @@
   right: 0;
   border-top-left-radius: var(--react-modal-pro-sheet-radius);
   border-bottom-left-radius: var(--react-modal-pro-sheet-radius);
-  height: -webkit-fill-available;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 @media only screen and (max-width: 600px) {
