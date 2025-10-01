@@ -18,36 +18,52 @@ const alreadyPushedLocations: Record<string, boolean> = {}
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
   const [historyState, setHistoryState] = useState({})
 
+  const replaceStateHandler = (originalReplaceState: typeof history.replaceState, args: any) => {
+    originalReplaceState.apply(window.history, args);
+    const isSomeModalOpen = (window as any).isSomeModalOpen;
+    if (isSomeModalOpen && !args[0]?.modalStack) return;
+    setHistoryState(args[0]);
+  }
+
+  const pushStateHandler = (originalPushState: typeof history.pushState, args: any) => {
+    originalPushState.apply(window.history, args);
+    setHistoryState({});
+  }
+
+  const goHandler = (originalGo: typeof history.go, delta: number) => {
+    if (delta === 1) cause = 'forward';
+    originalGo.call(window.history, delta);
+  }
+
   useEffect(() => {
-    const originalReplaceState = window.history.replaceState;
-    const originalPushState = window.history.pushState;
-    const originalGo = window.history.go;
-
-    Object.defineProperty(window.history, 'replaceState', {
-      configurable: true,
-      value: function (...args: any) {
-        originalReplaceState.apply(window.history, args);
-        const isSomeModalOpen = (window as any).isSomeModalOpen;
-        if (isSomeModalOpen && !args[0]?.modalStack) return;
-        setHistoryState(args[0]);
-      },
-    });
-
-    Object.defineProperty(window.history, 'pushState', {
-      configurable: true,
-      value: function (...args: any) {
-        originalPushState.apply(window.history, args);
-        setHistoryState({});
-      },
-    });
-
-    Object.defineProperty(window.history, 'go', {
-      configurable: true,
-      value: function (delta: number) {
-        if (delta === 1) cause = 'forward';
-        originalGo.call(window.history, delta);
-      },
-    });
+    if (typeof window !== undefined) {
+      const originalGo = window.history.go
+      const originalPushState = window.history.pushState
+      const originalReplaceState = window.history.replaceState
+      const proto = Object.getPrototypeOf(window.history)
+      if (proto && typeof proto.replaceState === 'function') {
+        window.history.go = function (delta: number) { goHandler(originalGo, delta) }
+        window.history.pushState = function (...args) { pushStateHandler(originalPushState, args) }
+        window.history.replaceState = function (...args) { replaceStateHandler(originalReplaceState, args) }
+      }
+      else {
+        Object.defineProperty(window.history, "replaceState", {
+          writable: true,
+          configurable: true,
+          value: (...args: any) => replaceStateHandler(originalReplaceState, args)
+        })
+        Object.defineProperty(window.history, "pushState", {
+          writable: true,
+          configurable: true,
+          value: (...args: any) => pushStateHandler(originalPushState, args)
+        })
+        Object.defineProperty(window.history, "go", {
+          writable: true,
+          configurable: true,
+          value: (delta: number) => goHandler(originalGo, delta)
+        })
+      }
+    }
   }, []);
 
   useEffect(() => {
