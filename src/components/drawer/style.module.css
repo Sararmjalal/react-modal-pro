@@ -2,9 +2,13 @@
   inset: 0;
   opacity: 1;
   width: 100%;
+  position: fixed;
+  backdrop-filter: blur(1px);
+  transform: translateY(0px);
   min-height: 100vh;
   min-height: 100dvh;
-  position: fixed;
+  touch-action: none;
+  -ms-touch-action: none;
   overscroll-behavior: contain;
   padding-top: env(safe-area-inset-top, 0);
   padding-bottom: env(safe-area-inset-bottom, 0);
@@ -54,8 +58,9 @@
 }
 
 .sheet.left {
-  bottom: 0;
   left: 0;
+  bottom: 0;
+  top: 0;
   border-top-right-radius: var(--react-modal-pro-sheet-radius);
   border-bottom-right-radius: var(--react-modal-pro-sheet-radius);
   min-height: 100vh;
@@ -65,6 +70,7 @@
 .sheet.right {
   top: 0;
   right: 0;
+  bottom: 0;
   border-top-left-radius: var(--react-modal-pro-sheet-radius);
   border-bottom-left-radius: var(--react-modal-pro-sheet-radius);
   min-height: 100vh;

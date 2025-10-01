@@ -1,10 +1,14 @@
 .backdrop {
   inset: 0;
   width: 100%;
+  opacity: 1;
+  backdrop-filter: blur(1px);
+  transform: translateY(0px);
+  position: fixed;
   min-height: 100vh;
   min-height: 100dvh;
-  position: fixed;
-  opacity: 1;
+  touch-action: none;
+  -ms-touch-action: none;
   padding-bottom: env(safe-area-inset-bottom, 0);
   padding-top: env(safe-area-inset-top, 0);
   overscroll-behavior: contain;
