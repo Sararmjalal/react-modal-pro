@@ -37,16 +37,10 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (typeof window !== undefined) {
-      const originalGo = window.history.go
-      const originalPushState = window.history.pushState
-      const originalReplaceState = window.history.replaceState
-      const proto = Object.getPrototypeOf(window.history)
-      if (proto && typeof proto.replaceState === 'function') {
-        window.history.go = function (delta: number) { goHandler(originalGo, delta) }
-        window.history.pushState = function (...args) { pushStateHandler(originalPushState, args) }
-        window.history.replaceState = function (...args) { replaceStateHandler(originalReplaceState, args) }
-      }
-      else {
+      const timeout = setTimeout(() => {
+        const originalGo = window.history.go
+        const originalPushState = window.history.pushState
+        const originalReplaceState = window.history.replaceState
         Object.defineProperty(window.history, "replaceState", {
           writable: true,
           configurable: true,
@@ -62,7 +56,8 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
           configurable: true,
           value: (delta: number) => goHandler(originalGo, delta)
         })
-      }
+      }, 1000)
+      return () => clearTimeout(timeout)
     }
   }, []);
 
