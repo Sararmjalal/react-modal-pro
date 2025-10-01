@@ -77,9 +77,12 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
       if (cause === "back") {
         window.history.go(1)
         const clone = { ...currentState }
-        if (clone.modalStack?.every((item: { key: string, canDismiss: boolean }) => item.canDismiss)) {
-          clone.modalStack = []
-          window.history.replaceState({ ...clone }, '')
+        if (clone.modalStack.length) {
+          const lastModal = clone.modalStack[clone.modalStack.length - 1]
+          if (lastModal.canDismiss) {
+            clone.modalStack.pop()
+            window.history.replaceState({ ...clone }, '')
+          }
         }
       }
       setTimeout(() => {
