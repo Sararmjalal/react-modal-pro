@@ -3,12 +3,12 @@ import { ReactNode, useEffect } from "react"
 import { ModalProviderProps } from "../types"
 import CloseCbProvider from "./CloseCbProvider"
 import { ModalDefaultsProvider, ModalsProvider, RouterProvider } from "../../context"
+import { ModalStackItem } from "../../lib/types"
 
 declare global {
   interface Window {
     goingForward?: boolean
-    isSomeModalOpen?: boolean
-    historyState: History["state"]
+    modalStack: ModalStackItem[]
   }
 }
 

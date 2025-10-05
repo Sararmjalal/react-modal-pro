@@ -1,24 +1,20 @@
-import { useEffect } from "react";
-import { onClose } from "../../lib";
-import { UseModalTransitionProps } from "../types";
-import { useModals, useRouter } from "../../context";
+import { useEffect } from "react"
+import { onClose } from "../../lib"
+import { UseModalTransitionProps } from "../types"
+import { useModals, useRouter } from "../../context"
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
-  const { historyState, alreadyPushedLocations } = useRouter();
-  const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal, closeCbs } = useModals();
-  const thisModal = modals[key] ?? initialModal;
-  const { willBeClosed, open } = thisModal;
+  const { alreadyPushedLocations, modalStack, setModalStack } = useRouter()
+  const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal, closeCbs } = useModals()
+  const thisModal = modals[key] ?? initialModal
+  const { willBeClosed, open } = thisModal
 
   useEffect(() => {
-    if (!modals[key]) setModal(key, canDismiss);
-  }, []);
+    if (!modals[key]) setModal(key, canDismiss)
+  }, [])
 
   useEffect(() => {
-    const currentState = window.history.state || {};
-    const isAlreadyInState = currentState.modalStack ?
-      currentState.modalStack.some((item: { key: string, canDismiss: boolean }) => item.key === key)
-      :
-      false
+    const isAlreadyInState = modalStack ? modalStack.some((item) => item.key === key) : false
     if (isAlreadyInState && !open) {
       setOpen(key, true)
       setWillBeClosed(key, false)
@@ -26,7 +22,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
     else if (!isAlreadyInState && open) {
       if (!willBeClosed) setWillBeClosed(key, true)
     }
-  }, [key, historyState, open])
+  }, [key, modalStack, open])
 
   const updateCloseCb = () => {
     closeCbs[key] = closeCb
@@ -37,41 +33,24 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
     return () => {
       onClose({ closeDuration, key, removeModal, thisModal, updateCloseCb })
     }
-  }, [willBeClosed]);
-
-  useEffect(() => {
-    window.isSomeModalOpen = Object.values(modals).some(item => item.open)
-  }, [modals])
+  }, [willBeClosed])
 
   const handleOpenModal = () => {
-    const currentState = window.history.state || {};
-    if (!currentState.modalStack || !currentState.modalStack[0]) {
+    if (!modalStack[0]) {
       const currentPath = window.location.pathname
       if (!alreadyPushedLocations[currentPath]) {
         alreadyPushedLocations[currentPath] = true
-        window.history.pushState(null, "")
+        window.history.pushState(window.history.state, "")
       }
     }
-    if (!currentState.modalStack || !currentState.modalStack.some((item: { key: string, canDismiss: boolean }) => item.key === key)) {
-      let timeout
-      if (timeout) timeout = undefined
-      else timeout = setTimeout(() => {
-        const thisState = window.history.state || {};
-        requestAnimationFrame(() => {
-          window.history.replaceState({
-            modalStack: thisState.modalStack ?
-              [...thisState.modalStack, { key, canDismiss }]
-              :
-              [{ key, canDismiss }]
-          }, "");
-        });
-      }, 10)
+    if (!modalStack.some((item) => item.key === key)) {
+      const clone = modalStack ? [...modalStack, { key, canDismiss }] : [{ key, canDismiss }]
+      window.modalStack = clone
+      setModalStack(clone)
     }
   }
 
-  const handleCloseModal = () => {
-    if (canDismiss && !willBeClosed) setWillBeClosed(key, true);
-  };
+  const handleCloseModal = () => window.history.back()
 
-  return { ...thisModal, handleOpenModal, handleCloseModal };
-};
+  return { ...thisModal, handleOpenModal, handleCloseModal }
+}

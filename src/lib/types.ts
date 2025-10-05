@@ -47,8 +47,12 @@ export type UseModalProProps = {
 export type onCloseProps = {
   thisModal: { open: boolean, willBeClosed: boolean, isRecentlyClosed: boolean }
   closeDuration: number
-  // closeCb?: () => void
   removeModal: (key: string) => void
   key: string
   updateCloseCb: () => void
+}
+
+export interface ModalStackItem {
+  key: string
+  canDismiss?: boolean
 }
