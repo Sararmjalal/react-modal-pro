@@ -26,22 +26,23 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     originalReplaceState.apply(window.history, args)
     const isSomeModalOpen = (window as any).isSomeModalOpen
     if (isSomeModalOpen && !args[0]?.modalStack) return
+    window.historyState = args[0]
     setHistoryState(args[0])
   }
 
   const pushStateHandler = (originalPushState: typeof history.pushState, args: any) => {
     originalPushState.apply(window.history, args)
+    window.historyState = {}
     setHistoryState({})
   }
+  const originalGo = window.history.go
 
   useEffect(() => {
     if (typeof window === "undefined") return
-
     const patchHistory = () => {
       if ((window.history.pushState as any).__patched) return
       const originalPushState = window.history.pushState
       const originalReplaceState = window.history.replaceState
-
       Object.defineProperty(window.history, "pushState", {
         writable: true,
         configurable: true,
@@ -52,53 +53,51 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         configurable: true,
         value: (...args: any) => replaceStateHandler(originalReplaceState, args),
       })
+      Object.defineProperty(window.history, "go", {
+        writable: true,
+        configurable: true,
+        value: (_delta: number) => {
+          window.goingForward = _delta > 0
+          originalGo.call(window.history, _delta);
+        }
+      })
     }
-
     requestAnimationFrame(() => {
       patchHistory()
     })
-
   }, [])
 
-  useEffect(() => {
-    window.historyState = JSON.parse(JSON.stringify(historyState))
-  }, [historyState])
-
-  const handlePopStateEvent = (event: PopStateEvent) => {
-    const currentState = event.state || window.history.state || {}
-    const isSomeModalOpen = window.isSomeModalOpen
-    if (isSomeModalOpen && !navigationState.isProcessing) {
-      navigationState.isProcessing = true
-      navigationState.pendingAction = 'back'
-      window.history.go(1)
-      const clone = { ...currentState }
-      if (clone.modalStack?.length) {
-        const lastModal = clone.modalStack[clone.modalStack.length - 1]
-        if (lastModal.canDismiss) {
-          clone.modalStack.pop()
-          window.history.replaceState({ ...clone }, '')
+  const handlePopStateEvent = () => {
+    const isForward = !!window.goingForward
+    const currentState = window.historyState
+    if (!isForward) {
+      const isSomeModalOpen = window.isSomeModalOpen
+      if (isSomeModalOpen && !navigationState.isProcessing) {
+        window.history.go(1)
+        const clone = { ...currentState }
+        if (clone.modalStack?.length) {
+          const lastModal = clone.modalStack[clone.modalStack.length - 1]
+          if (lastModal.canDismiss) {
+            clone.modalStack.pop()
+            window.history.replaceState({ ...clone }, '')
+          }
         }
       }
-      requestAnimationFrame(() => {
-        navigationState.isProcessing = false
-        navigationState.pendingAction = null
-      })
-    }
-    if (!isSomeModalOpen && !navigationState.isHandlingPathNavigation) {
-      const currentPath = window.location.pathname
-      if (alreadyPushedLocations[currentPath]) {
-        alreadyPushedLocations[currentPath] = false
-        navigationState.isHandlingPathNavigation = true
-        requestAnimationFrame(() => {
-          window.history.back()
+      if (!isSomeModalOpen && !navigationState.isHandlingPathNavigation) {
+        const currentPath = window.location.pathname
+        if (alreadyPushedLocations[currentPath]) {
+          alreadyPushedLocations[currentPath] = false
+          navigationState.isHandlingPathNavigation = true
           requestAnimationFrame(() => {
-            navigationState.isHandlingPathNavigation = false
+            window.history.back()
           })
-        })
+        }
       }
     }
+    else requestAnimationFrame(() => {
+      window.goingForward = false
+    })
   }
-
 
   const handleBeforeUnloadEvent = () => {
     window.history.replaceState({}, '')
