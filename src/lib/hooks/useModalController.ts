@@ -22,7 +22,7 @@ export const useModalController = (key: string) => {
   }
 
   const handleCloseModal = () => {
-    if (canDismiss) updateModalStack(modalStack.filter((item) => item.key !== key))
+    updateModalStack(modalStack.filter((item) => item.key !== key))
   }
 
   return { open: thisModal.open, willBeClosed: thisModal.willBeClosed, handleOpenModal, handleCloseModal };
