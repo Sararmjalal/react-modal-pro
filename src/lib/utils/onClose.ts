@@ -1,6 +1,6 @@
 import { onCloseProps } from "../types";
 
-export const onClose = ({ thisModal, closeDuration, removeModal, key, updateCloseCb, updateModalStack, modalStack }: onCloseProps) => {
+export const onClose = ({ thisModal, closeDuration, removeModal, key, updateCloseCb, updateModalStack }: onCloseProps) => {
   const { open, willBeClosed } = thisModal
   updateCloseCb()
   if (open && willBeClosed) {
@@ -8,7 +8,7 @@ export const onClose = ({ thisModal, closeDuration, removeModal, key, updateClos
     if (timeout) timeout = undefined;
     timeout = setTimeout(() => {
       removeModal(key)
-      updateModalStack(modalStack.filter((item) => item.key !== key))
+      updateModalStack((prev) => prev.filter((item) => item.key !== key))
     }, closeDuration - 50);
   }
 }

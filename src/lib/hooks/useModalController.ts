@@ -15,14 +15,12 @@ export const useModalController = (key: string) => {
         window.history.pushState(window.history.state, "")
       }
     }
-    if (!modalStack.some((item) => item.key === key)) {
-      const clone = modalStack ? [...modalStack, { key, canDismiss }] : [{ key, canDismiss }]
-      updateModalStack(clone)
-    }
+    if (!modalStack.some((item) => item.key === key))
+      updateModalStack((prev) => [...prev, { key, canDismiss }])
   }
 
   const handleCloseModal = () => {
-    updateModalStack(modalStack.filter((item) => item.key !== key))
+    updateModalStack((prev) => prev.filter((item) => item.key !== key))
   }
 
   return { open: thisModal.open, willBeClosed: thisModal.willBeClosed, handleOpenModal, handleCloseModal };

@@ -4,7 +4,7 @@ import { ModalStackItem } from "../lib/types"
 interface RouterContextType {
   alreadyPushedLocations: Record<string, boolean>
   modalStack: ModalStackItem[]
-  updateModalStack: (newStack: ModalStackItem[]) => void
+  updateModalStack: (newStack: (prevStack: ModalStackItem[]) => ModalStackItem[]) => void
 }
 
 const RouterContext = createContext<RouterContextType | null>(null)
@@ -41,9 +41,12 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     })
   }, [])
 
-  const updateModalStack = (newStack: typeof modalStack) => {
-    window.modalStack = newStack
-    setModalStack(newStack)
+  const updateModalStack = (newStack: (prevStack: typeof modalStack) => typeof modalStack) => {
+    setModalStack(prev => {
+      const updatedStack = newStack(prev)
+      window.modalStack = updatedStack
+      return updatedStack
+    })
   }
 
   const handlePopStateEvent = () => {
@@ -64,11 +67,11 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
           console.log({ lastModal })
           if (lastModal.canDismiss) {
             clone.pop()
-            updateModalStack(clone)
+            updateModalStack(() => clone)
           }
         }
       } else {
-        updateModalStack([])
+        updateModalStack(() => [])
         const currentPath = window.location.pathname
         if (alreadyPushedLocations[currentPath]) {
           alreadyPushedLocations[currentPath] = false
