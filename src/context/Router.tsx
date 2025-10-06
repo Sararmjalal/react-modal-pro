@@ -26,7 +26,6 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         writable: true,
         configurable: true,
         value: (delta: number) => {
-          console.log(`history.go called with delta: ${delta}`)
           window.goingForward = delta > 0
           window.isProgrammaticGo = true
           setTimeout(() => {
@@ -64,7 +63,6 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         const clone = [...modalStack]
         if (clone.length) {
           const lastModal = clone[clone.length - 1]
-          console.log({ lastModal })
           if (lastModal.canDismiss) {
             clone.pop()
             updateModalStack(() => clone)
