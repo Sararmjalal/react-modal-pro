@@ -1,27 +1,18 @@
 import { useEffect } from "react"
-import { useModals } from "../../context"
+import { useModals, useRouter } from "../../context"
 
 export const useModalUnmount = (key: string) => {
 
   const { removeModal, modals, initialModal } = useModals()
+  const { modalStack, updateModalStack } = useRouter()
   const thisModal = modals[key] ?? initialModal
 
   useEffect(() => {
     return () => {
+      console.log("here", key)
       if (thisModal.open || thisModal.willBeClosed) {
+        console.log("here2", key)
         removeModal(key);
-        const currentState = window.history.state || {};
-        const isAlreadyInState = currentState.modalStack ?
-          currentState.modalStack.some((item: { key: string, canDismiss: boolean }) => item.key === key)
-          :
-          false
-        if (isAlreadyInState) {
-          const clone = { ...currentState }
-          const modalIndex = clone.modalStack.findIndex((item: string) => item === key)
-          const newStack = clone.modalStack.slice(0, modalIndex)
-          clone.modalStack = newStack
-          window.history.replaceState({ ...clone }, '')
-        }
       }
     }
   }, [])

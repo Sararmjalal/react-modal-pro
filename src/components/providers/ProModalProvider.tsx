@@ -8,6 +8,7 @@ import { ModalStackItem } from "../../lib/types"
 declare global {
   interface Window {
     goingForward?: boolean
+    isProgrammaticGo?: boolean
     modalStack: ModalStackItem[]
   }
 }

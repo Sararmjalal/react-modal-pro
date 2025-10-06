@@ -1,10 +1,10 @@
 import { useEffect } from "react"
-import { onClose } from "../../lib"
 import { UseModalTransitionProps } from "../types"
 import { useModals, useRouter } from "../../context"
+import { onClose } from "../utils/onClose"
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
-  const { alreadyPushedLocations, modalStack, setModalStack } = useRouter()
+  const { alreadyPushedLocations, modalStack, updateModalStack } = useRouter()
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal, closeCbs } = useModals()
   const thisModal = modals[key] ?? initialModal
   const { willBeClosed, open } = thisModal
@@ -14,25 +14,25 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   }, [])
 
   useEffect(() => {
-    const isAlreadyInState = modalStack ? modalStack.some((item) => item.key === key) : false
+    const isAlreadyInState = modalStack.some((item) => item.key === key)
     if (isAlreadyInState && !open) {
       setOpen(key, true)
       setWillBeClosed(key, false)
+      console.log("opening", key)
     }
-    else if (!isAlreadyInState && open) {
-      if (!willBeClosed) setWillBeClosed(key, true)
+    else if (!isAlreadyInState && open && !willBeClosed) {
+      setWillBeClosed(key, true)
+      console.log("closing", key)
     }
-  }, [key, modalStack, open])
+    console.log({ isAlreadyInState, key, open, willBeClosed, modalStack })
+  }, [key, modalStack, open, willBeClosed])
 
-  const updateCloseCb = () => {
-    closeCbs[key] = closeCb
-  }
+  const updateCloseCb = () => closeCbs[key] = closeCb
+
+  console.log("NEW7")
 
   useEffect(() => {
-    onClose({ closeDuration, key, removeModal, thisModal, updateCloseCb })
-    return () => {
-      onClose({ closeDuration, key, removeModal, thisModal, updateCloseCb })
-    }
+    onClose({ closeDuration, key, removeModal, thisModal, updateCloseCb, modalStack, updateModalStack })
   }, [willBeClosed])
 
   const handleOpenModal = () => {
@@ -45,12 +45,13 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
     }
     if (!modalStack.some((item) => item.key === key)) {
       const clone = modalStack ? [...modalStack, { key, canDismiss }] : [{ key, canDismiss }]
-      window.modalStack = clone
-      setModalStack(clone)
+      updateModalStack(clone)
     }
   }
 
-  const handleCloseModal = () => window.history.back()
+  const handleCloseModal = () => {
+    updateModalStack(modalStack.filter((item) => item.key !== key))
+  }
 
   return { ...thisModal, handleOpenModal, handleCloseModal }
 }

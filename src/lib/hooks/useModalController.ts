@@ -3,7 +3,7 @@ import { useModals, useRouter } from "../../context";
 export const useModalController = (key: string) => {
 
   const { modals, initialModal, canDismisses } = useModals();
-  const { alreadyPushedLocations, modalStack, setModalStack } = useRouter();
+  const { alreadyPushedLocations, modalStack, updateModalStack } = useRouter();
   const thisModal = modals[key] ?? initialModal
   const canDismiss = canDismisses[key]
 
@@ -17,12 +17,13 @@ export const useModalController = (key: string) => {
     }
     if (!modalStack.some((item) => item.key === key)) {
       const clone = modalStack ? [...modalStack, { key, canDismiss }] : [{ key, canDismiss }]
-      window.modalStack = clone
-      setModalStack(clone)
+      updateModalStack(clone)
     }
   }
 
-  const handleCloseModal = () => window.history.back()
+  const handleCloseModal = () => {
+    updateModalStack(modalStack.filter((item) => item.key !== key))
+  }
 
   return { open: thisModal.open, willBeClosed: thisModal.willBeClosed, handleOpenModal, handleCloseModal };
 };

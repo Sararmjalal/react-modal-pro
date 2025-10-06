@@ -50,6 +50,8 @@ export type onCloseProps = {
   removeModal: (key: string) => void
   key: string
   updateCloseCb: () => void
+  modalStack: ModalStackItem[]
+  updateModalStack: (newStack: ModalStackItem[]) => void
 }
 
 export interface ModalStackItem {
