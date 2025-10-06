@@ -18,22 +18,27 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
     if (isAlreadyInState && !open) {
       setOpen(key, true)
       setWillBeClosed(key, false)
-      console.log("opening", key)
     }
     else if (!isAlreadyInState && open && !willBeClosed) {
       setWillBeClosed(key, true)
-      console.log("closing", key)
     }
-    console.log({ isAlreadyInState, key, open, willBeClosed, modalStack })
   }, [key, modalStack, open, willBeClosed])
-
   const updateCloseCb = () => closeCbs[key] = closeCb
 
-  console.log("NEW7")
+  useEffect(() => {
+    if (open) console.log({ thisModal })
+  }, [open])
 
   useEffect(() => {
-    onClose({ closeDuration, key, removeModal, thisModal, updateCloseCb, modalStack, updateModalStack })
+    onClose({ closeDuration, key, removeModal, thisModal, updateCloseCb, modalStack, updateModalStack, closeCb })
   }, [willBeClosed])
+
+  useEffect(() => {
+    if (thisModal.isRecentlyClosed) {
+      if (closeCb) closeCb()
+      setModal(key, canDismiss)
+    }
+  }, [thisModal.isRecentlyClosed])
 
   const handleOpenModal = () => {
     if (!modalStack[0]) {
@@ -50,7 +55,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
   }
 
   const handleCloseModal = () => {
-    updateModalStack(modalStack.filter((item) => item.key !== key))
+    if (canDismiss) updateModalStack(modalStack.filter((item) => item.key !== key))
   }
 
   return { ...thisModal, handleOpenModal, handleCloseModal }

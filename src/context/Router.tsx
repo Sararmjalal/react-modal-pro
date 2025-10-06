@@ -46,84 +46,28 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     setModalStack(newStack)
   }
 
-  // const handlePopStateEvent = () => {
-  //   const isForward = !!window.goingForward
-  //   const isProgrammaticGo = !!window.isProgrammaticGo
-
-  //   console.log({ isForward, isProgrammaticGo })
-
-  //   // If it's programmatic forward navigation (your history.go(1)), don't close modals
-  //   if (isForward && isProgrammaticGo) {
-  //     console.log('Programmatic history.go(1) detected - not closing modals')
-  //     return
-  //   }
-  //   console.log({ isForward })
-  //   if (!isForward) {
-  //     const modalStack = window.modalStack
-  //     console.log({ modalStack })
-  //     const isSomeModalOpen = !!modalStack[0]
-  //     if (isSomeModalOpen) {
-  //       window.history.go(1)
-  //       console.log("after go - going forward value", window.goingForward)
-  //       const clone = [...modalStack]
-  //       if (clone.length) {
-  //         const lastModal = clone[clone.length - 1]
-  //         if (lastModal.canDismiss) {
-  //           clone.pop()
-  //           updateModalStack(clone)
-  //         }
-  //       }
-  //     }
-  //     else {
-  //       updateModalStack([])
-  //       const currentPath = window.location.pathname
-  //       if (alreadyPushedLocations[currentPath]) {
-  //         alreadyPushedLocations[currentPath] = false
-  //         requestAnimationFrame(() => {
-  //           window.history.back()
-  //         })
-  //       }
-  //     }
-  //   }
-  //   else requestAnimationFrame(() => {
-  //     window.goingForward = false
-  //   })
-  // }
   const handlePopStateEvent = () => {
     const isForward = !!window.goingForward
     const isProgrammaticGo = !!window.isProgrammaticGo
-
-    console.log('popstate event:', { isForward, isProgrammaticGo })
-
-    // If it's programmatic forward navigation (your history.go(1)), don't close modals
     if (isForward || isProgrammaticGo) {
-      console.log('Programmatic history.go(1) detected - skipping modal logic')
-      // Reset the goingForward flag since we handled this programmatic navigation
       window.goingForward = false
       return
     }
-
-    // Handle backward navigation (user back button or programmatic back)
     if (!isForward) {
       const modalStack = window.modalStack || []
-      console.log('Backward navigation detected:', { modalStack })
       const isSomeModalOpen = !!modalStack[0]
-
       if (isSomeModalOpen) {
-        // Counter the back navigation with forward navigation
-        window.history.go(1) // This will trigger another popstate with isProgrammaticGo=true
-
-        // Close the top modal
+        window.history.go(1)
         const clone = [...modalStack]
         if (clone.length) {
           const lastModal = clone[clone.length - 1]
+          console.log({ lastModal })
           if (lastModal.canDismiss) {
             clone.pop()
             updateModalStack(clone)
           }
         }
       } else {
-        // No modals open, handle normal navigation
         updateModalStack([])
         const currentPath = window.location.pathname
         if (alreadyPushedLocations[currentPath]) {
@@ -134,8 +78,6 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         }
       }
     } else {
-      // Forward navigation that's not programmatic (user forward button)
-      console.log('User forward navigation detected')
       window.goingForward = false
     }
   }
