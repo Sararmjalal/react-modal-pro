@@ -4,7 +4,7 @@ import { useModals, useRouter } from "../../context"
 import { onClose } from "../utils/onClose"
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
-  const { alreadyPushedLocations, modalStack, updateModalStack } = useRouter()
+  const { alreadyPushedLocations, modalStack, updateModalStack, pushedLocationsCount } = useRouter()
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal, closeCbs } = useModals()
   const thisModal = modals[key] ?? initialModal
   const { willBeClosed, open } = thisModal
@@ -41,6 +41,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
       const currentPath = window.location.pathname
       if (!alreadyPushedLocations[currentPath]) {
         alreadyPushedLocations[currentPath] = true
+        pushedLocationsCount[currentPath] = (pushedLocationsCount[currentPath] || 0) + 1
         window.history.pushState(window.history.state, "")
       }
     }

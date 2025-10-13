@@ -2,8 +2,9 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { ModalStackItem } from "../lib/types"
 
 interface RouterContextType {
-  alreadyPushedLocations: Record<string, boolean>
   modalStack: ModalStackItem[]
+  pushedLocationsCount: Record<string, number>
+  alreadyPushedLocations: Record<string, boolean>
   updateModalStack: (newStack: (prevStack: ModalStackItem[]) => ModalStackItem[]) => void
 }
 
@@ -13,7 +14,8 @@ interface RouterProviderProps {
   children: ReactNode
 }
 
-const alreadyPushedLocations: Record<string, boolean> = {}
+const pushedLocationsCount: RouterContextType["pushedLocationsCount"] = {}
+const alreadyPushedLocations: RouterContextType["alreadyPushedLocations"] = {}
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
   const [modalStack, setModalStack] = useState<RouterContextType["modalStack"]>(window.modalStack || [])
@@ -21,6 +23,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
   useEffect(() => {
     if (typeof window === "undefined") return
     const originalGo = window.history.go
+    const originalPushState = window.history.pushState
     const patchHistory = () => {
       Object.defineProperty(window.history, "go", {
         writable: true,
@@ -32,6 +35,20 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
             window.isProgrammaticGo = false
           }, 50)
           return originalGo.call(window.history, delta)
+        }
+      })
+      Object.defineProperty(window.history, "pushState", {
+        writable: true,
+        configurable: true,
+        value: (...args: any) => {
+          const prevPathname = window.location.pathname
+          if (args[2]) {
+            const newPathname = new URL(args[2], window.location.origin)?.pathname
+            if (prevPathname !== newPathname && alreadyPushedLocations[newPathname]) {
+              alreadyPushedLocations[newPathname] = false;
+            }
+          }
+          return originalPushState.apply(window.history, args)
         }
       })
     }
@@ -51,37 +68,47 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
   const handlePopStateEvent = () => {
     const isForward = !!window.goingForward
     const isProgrammaticGo = !!window.isProgrammaticGo
+    const isRemovingExtraPush = !!window.isRemovingExtraPush
+
     if (isForward || isProgrammaticGo) {
-      window.goingForward = false
+      requestAnimationFrame(() => {
+        window.goingForward = false
+      })
       return
     }
-    if (!isForward) {
-      const modalStack = window.modalStack || []
-      const isSomeModalOpen = !!modalStack[0]
-      if (isSomeModalOpen) {
-        window.history.go(1)
-        const clone = [...modalStack]
-        if (clone.length) {
-          const lastModal = clone[clone.length - 1]
-          if (lastModal.canDismiss) {
-            clone.pop()
-            updateModalStack(() => clone)
-          }
-        }
-      } else {
-        updateModalStack(() => [])
-        const currentPath = window.location.pathname
-        if (alreadyPushedLocations[currentPath]) {
-          alreadyPushedLocations[currentPath] = false
-          requestAnimationFrame(() => {
-            window.history.back()
-          })
+    if (isRemovingExtraPush) {
+      requestAnimationFrame(() => {
+        window.isRemovingExtraPush = false
+      })
+      return
+    }
+
+    const modalStack = window.modalStack || []
+    const isSomeModalOpen = !!modalStack[0]
+    if (isSomeModalOpen) {
+      window.isProgrammaticGo = true
+      window.history.go(1)
+      const clone = [...modalStack]
+      if (clone.length) {
+        const lastModal = clone[clone.length - 1]
+        if (lastModal.canDismiss) {
+          clone.pop()
+          updateModalStack(() => clone)
         }
       }
-    } else {
-      window.goingForward = false
+    }
+    else {
+      updateModalStack(() => [])
+      const currentPath = window.location.pathname
+      if (pushedLocationsCount[currentPath] > 0) {
+        pushedLocationsCount[currentPath] = pushedLocationsCount[currentPath] - 1
+        alreadyPushedLocations[currentPath] = pushedLocationsCount[currentPath] !== 0
+        window.isRemovingExtraPush = true
+        window.history.back()
+      }
     }
   }
+
   const handleBeforeUnload = () => setModalStack([])
 
   useEffect(() => {
@@ -94,7 +121,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
   }, [])
 
   return (
-    <RouterContext.Provider value={{ alreadyPushedLocations, modalStack, updateModalStack }}>
+    <RouterContext.Provider value={{ alreadyPushedLocations, modalStack, updateModalStack, pushedLocationsCount }}>
       {children}
     </RouterContext.Provider>
   )

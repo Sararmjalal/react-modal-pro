@@ -9,6 +9,7 @@ declare global {
     goingForward?: boolean
     isProgrammaticGo?: boolean
     modalStack: ModalStackItem[]
+    isRemovingExtraPush?: boolean
   }
 }
 

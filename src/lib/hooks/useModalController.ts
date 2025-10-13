@@ -3,7 +3,7 @@ import { useModals, useRouter } from "../../context";
 export const useModalController = (key: string) => {
 
   const { modals, initialModal, canDismisses } = useModals();
-  const { alreadyPushedLocations, modalStack, updateModalStack } = useRouter();
+  const { alreadyPushedLocations, modalStack, updateModalStack, pushedLocationsCount } = useRouter();
   const thisModal = modals[key] ?? initialModal
   const canDismiss = canDismisses[key]
 
@@ -12,6 +12,7 @@ export const useModalController = (key: string) => {
       const currentPath = window.location.pathname
       if (!alreadyPushedLocations[currentPath]) {
         alreadyPushedLocations[currentPath] = true
+        pushedLocationsCount[currentPath] = (pushedLocationsCount[currentPath] || 0) + 1
         window.history.pushState(window.history.state, "")
       }
     }
