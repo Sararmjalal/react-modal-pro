@@ -2,6 +2,7 @@ import DialogBase from "../../dialog";
 import { Fragment, useRef } from "react";
 import { DialogModalProps } from "../../types";
 import { useModalPro, usePreventBgScroll } from "../../../lib";
+import { useModalUnmount } from "../../../lib/hooks/useModalUnmount";
 
 const Dialog = ({ TriggerElement, children, closeDuration = 300, closeCb, headless, ...props }: DialogModalProps) => {
 
@@ -13,6 +14,7 @@ const Dialog = ({ TriggerElement, children, closeDuration = 300, closeCb, headle
     sheetRef: dialogRef
   })
 
+  useModalUnmount(props.modalKey);
   usePreventBgScroll(modalProps.open);
 
   return (

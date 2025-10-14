@@ -2,6 +2,7 @@ import DrawerBase from "../../drawer";
 import { Fragment, useRef } from "react";
 import { ProSheetModalProps } from "../../types";
 import { useModalPro, usePreventBgScroll } from "../../../lib";
+import { useModalUnmount } from "../../../lib/hooks/useModalUnmount";
 
 const ProSheet = ({ TriggerElement, direction, children, closeCb, closeDuration = 300, ...props }: ProSheetModalProps) => {
 
@@ -13,6 +14,7 @@ const ProSheet = ({ TriggerElement, direction, children, closeCb, closeDuration 
     sidebarDirection: direction
   })
 
+  useModalUnmount(props.modalKey);
   usePreventBgScroll(modalProps.open);
 
   return (
