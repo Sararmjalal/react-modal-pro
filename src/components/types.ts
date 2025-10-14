@@ -8,7 +8,9 @@ export type ModalProps = {
 }
 
 export type DialogBaseProps = {
-  children: ReactNode, ref?: React.Ref<HTMLDivElement | null>
+  headless?: boolean
+  children: ReactNode,
+  ref?: React.Ref<HTMLDivElement | null>
 } & ModalProps & Required<Omit<ModalControls, "modalKey">>;
 
 export type DrawerBaseProps = {
@@ -45,6 +47,7 @@ export type ProSheetModalProps = {
 } & Omit<UseModalProProps, "sheetRef" | "sidebarDirection"> & ProSheetExtendedProps;
 
 export type DialogExtendedProps = {
+  headless?: boolean
   children: ReactNode;
   TriggerElement: ReactNode;
 }

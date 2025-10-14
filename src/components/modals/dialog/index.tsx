@@ -3,7 +3,7 @@ import { Fragment, useRef } from "react";
 import { DialogModalProps } from "../../types";
 import { useModalPro, usePreventBgScroll } from "../../../lib";
 
-const Dialog = ({ TriggerElement, children, closeDuration = 300, closeCb, ...props }: DialogModalProps) => {
+const Dialog = ({ TriggerElement, children, closeDuration = 300, closeCb, headless, ...props }: DialogModalProps) => {
 
   const dialogRef = useRef<HTMLDivElement>(null)
   const { handleOpenModal, handleCloseModal, currentModalKey, ...modalProps } = useModalPro({
@@ -24,6 +24,7 @@ const Dialog = ({ TriggerElement, children, closeDuration = 300, closeCb, ...pro
       </div>
       <DialogBase
         {...modalProps}
+        headless={headless}
         closeDuration={closeDuration}
         key={currentModalKey}
         handleClose={handleCloseModal}
