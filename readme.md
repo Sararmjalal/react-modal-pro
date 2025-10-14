@@ -1,6 +1,6 @@
 # react-modal-pro
 
-A tiny, professional React/Next.js modal package (Dialog, Sidebar, ProSheet) that renders into a portal and preserves a native-like modal experience across client-side URL changes. 🚀
+A professional React/Next.js modal package (Dialog, Sidebar, ProSheet) that renders into a portal and preserves a native-like modal experience across client-side URL changes. 🚀
 
 Navigation
 - [Install](#install)
@@ -48,8 +48,9 @@ import { Dialog } from "react-modal-pro";
 export default function ExampleDialog() {
   return (
     <Dialog
-      modalKey="unique-dialog-key"               // required — must be unique
-      TriggerElement={<button>Open dialog</button>} // optional — can be null if opening programmatically
+      modalKey="unique-key"                       // required — must be unique
+      headless={false}                           // set to true for fully custom styled sheet
+      TriggerElement={<button>Open dialog</button>} // can be null if opening programmatically
       canDismiss={true}                           // allow backdrop click / Escape to close
       openDuration={200}                          // open animation duration (ms)
       closeDuration={180}                         // close animation duration (ms)
@@ -210,6 +211,8 @@ Component-specific props
 
 - Dialog  
   - Behavior: centered dialog. No direction prop. Use for classic modal windows.
+  - headless?: boolean  
+    When true, renders only the modal's functional logic without default styles, allowing complete custom styling control.
 
 - Sidebar  
   - direction: "left" | "right" (required for Sidebar)  
