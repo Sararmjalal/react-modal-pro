@@ -3,11 +3,21 @@ import { useModals, useRouter } from "../../context"
 
 export const useModalUnmount = (modalKey: string) => {
   const { updateModalStack } = useRouter()
-  const { modals, removeModal } = useModals()
+  const { removeModal } = useModals()
   useEffect(() => {
     return () => {
-      updateModalStack(() => [])
-      if (modals[modalKey]?.open || modals[modalKey]?.willBeClosed) removeModal(modalKey)
+      updateModalStack((prev) => {
+        if (prev[0]) {
+          return prev.filter(item => {
+            if (item.key === modalKey) {
+              removeModal(modalKey)
+              return false
+            }
+            return true
+          })
+        }
+        return prev
+      })
     }
   }, [])
 }
