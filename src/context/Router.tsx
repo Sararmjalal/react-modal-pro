@@ -16,7 +16,7 @@ interface RouterProviderProps {
 }
 
 let pushIndex = 0
-const pushStack: RouterContextType["pushStack"] = [""]
+const pushStack: RouterContextType["pushStack"] = []
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
   const [modalStack, setModalStack] = useState<RouterContextType["modalStack"]>(window.modalStack || [])
