@@ -1,5 +1,6 @@
 export { uid } from "./utils/uid"
 export { onClose } from "./utils/onClose"
+export { getCurrentPath } from "./utils/getCurrentPath"
 
 export { useSwiper } from "./hooks/useSwiper"
 export { useModalPro } from "./hooks/useModalPro"

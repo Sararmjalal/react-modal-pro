@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react"
+import { getCurrentPath } from "../lib"
 import { ModalStackItem } from "../lib/types"
+import React, { createContext, useContext, useEffect, useState, ReactNode } from "react"
 
 interface RouterContextType {
   modalStack: ModalStackItem[]
@@ -41,7 +42,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         writable: true,
         configurable: true,
         value: (...args: any) => {
-          const prevPathname = window.location.pathname
+          const prevPathname = getCurrentPath()
           if (args[2]) {
             const newPathname = new URL(args[2], window.location.origin)?.pathname
             if (prevPathname !== newPathname && alreadyPushedLocations[newPathname]) {
@@ -99,7 +100,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     }
     else {
       updateModalStack(() => [])
-      const currentPath = window.location.pathname
+      const currentPath = getCurrentPath()
       if (pushedLocationsCount[currentPath] > 0) {
         pushedLocationsCount[currentPath] = pushedLocationsCount[currentPath] - 1
         alreadyPushedLocations[currentPath] = pushedLocationsCount[currentPath] !== 0

@@ -1,7 +1,8 @@
 import { useEffect } from "react"
+import { onClose } from "../utils/onClose"
 import { UseModalTransitionProps } from "../types"
 import { useModals, useRouter } from "../../context"
-import { onClose } from "../utils/onClose"
+import { getCurrentPath } from "../utils/getCurrentPath"
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
   const { alreadyPushedLocations, modalStack, updateModalStack, pushedLocationsCount } = useRouter()
@@ -38,7 +39,7 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
 
   const handleOpenModal = () => {
     if (!modalStack[0]) {
-      const currentPath = window.location.pathname
+      const currentPath = getCurrentPath()
       if (!alreadyPushedLocations[currentPath]) {
         alreadyPushedLocations[currentPath] = true
         pushedLocationsCount[currentPath] = (pushedLocationsCount[currentPath] || 0) + 1

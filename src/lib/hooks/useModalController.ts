@@ -1,4 +1,5 @@
 import { useModals, useRouter } from "../../context";
+import { getCurrentPath } from "../utils/getCurrentPath";
 
 export const useModalController = (key: string) => {
 
@@ -9,7 +10,7 @@ export const useModalController = (key: string) => {
 
   const handleOpenModal = () => {
     if (!modalStack[0]) {
-      const currentPath = window.location.pathname
+      const currentPath = getCurrentPath()
       if (!alreadyPushedLocations[currentPath]) {
         alreadyPushedLocations[currentPath] = true
         pushedLocationsCount[currentPath] = (pushedLocationsCount[currentPath] || 0) + 1
