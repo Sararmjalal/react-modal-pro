@@ -5,7 +5,7 @@ import { useModals, useRouter } from "../../context"
 import { getCurrentPath } from "../utils/getCurrentPath"
 
 export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: UseModalTransitionProps) => {
-  const { alreadyPushedLocations, modalStack, updateModalStack, pushedLocationsCount } = useRouter()
+  const { modalStack, updateModalStack, pushIndex, pushStack } = useRouter()
   const { modals, setModal, setOpen, setWillBeClosed, removeModal, initialModal, closeCbs } = useModals()
   const thisModal = modals[key] ?? initialModal
   const { willBeClosed, open } = thisModal
@@ -39,12 +39,8 @@ export const useModalTransition = ({ key, closeCb, canDismiss, closeDuration }: 
 
   const handleOpenModal = () => {
     if (!modalStack[0]) {
-      const currentPath = getCurrentPath()
-      if (!alreadyPushedLocations[currentPath]) {
-        alreadyPushedLocations[currentPath] = true
-        pushedLocationsCount[currentPath] = (pushedLocationsCount[currentPath] || 0) + 1
-        window.history.pushState(window.history.state, "")
-      }
+      const isAlreadyPushed = pushStack[pushIndex] === getCurrentPath()
+      if (!isAlreadyPushed) window.history.pushState(window.history.state, "")
     }
     if (!modalStack.some((item) => item.key === key))
       updateModalStack((prev) => [...prev, { key, canDismiss }])

@@ -4,18 +4,14 @@ import { getCurrentPath } from "../utils/getCurrentPath";
 export const useModalController = (key: string) => {
 
   const { modals, initialModal, canDismisses } = useModals();
-  const { alreadyPushedLocations, modalStack, updateModalStack, pushedLocationsCount } = useRouter();
+  const { modalStack, updateModalStack, pushIndex, pushStack } = useRouter();
   const thisModal = modals[key] ?? initialModal
   const canDismiss = canDismisses[key]
 
   const handleOpenModal = () => {
     if (!modalStack[0]) {
-      const currentPath = getCurrentPath()
-      if (!alreadyPushedLocations[currentPath]) {
-        alreadyPushedLocations[currentPath] = true
-        pushedLocationsCount[currentPath] = (pushedLocationsCount[currentPath] || 0) + 1
-        window.history.pushState(window.history.state, "")
-      }
+      const isAlreadyPushed = pushStack[pushIndex] === getCurrentPath()
+      if (!isAlreadyPushed) window.history.pushState(window.history.state, "")
     }
     if (!modalStack.some((item) => item.key === key))
       updateModalStack((prev) => [...prev, { key, canDismiss }])

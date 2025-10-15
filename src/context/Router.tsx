@@ -3,9 +3,9 @@ import { ModalStackItem } from "../lib/types"
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react"
 
 interface RouterContextType {
+  pushIndex: number
+  pushStack: string[]
   modalStack: ModalStackItem[]
-  pushedLocationsCount: Record<string, number>
-  alreadyPushedLocations: Record<string, boolean>
   updateModalStack: (newStack: (prevStack: ModalStackItem[]) => ModalStackItem[]) => void
 }
 
@@ -15,8 +15,8 @@ interface RouterProviderProps {
   children: ReactNode
 }
 
-const pushedLocationsCount: RouterContextType["pushedLocationsCount"] = {}
-const alreadyPushedLocations: RouterContextType["alreadyPushedLocations"] = {}
+let pushIndex = 0
+const pushStack: RouterContextType["pushStack"] = [""]
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
   const [modalStack, setModalStack] = useState<RouterContextType["modalStack"]>(window.modalStack || [])
@@ -42,12 +42,9 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         writable: true,
         configurable: true,
         value: (...args: any) => {
-          const prevPathname = getCurrentPath()
-          if (args[2]) {
-            const newPathname = new URL(args[2], window.location.origin)?.pathname
-            if (prevPathname !== newPathname && alreadyPushedLocations[newPathname]) {
-              alreadyPushedLocations[newPathname] = false;
-            }
+          if (!args[2]) {
+            pushStack.push(getCurrentPath())
+            pushIndex = pushStack[pushIndex + 1] ? pushIndex + 1 : pushIndex
           }
           return originalPushState.apply(window.history, args)
         }
@@ -83,7 +80,6 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
       })
       return
     }
-
     const modalStack = window.modalStack || []
     const isSomeModalOpen = !!modalStack[0]
     if (isSomeModalOpen) {
@@ -100,10 +96,10 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     }
     else {
       updateModalStack(() => [])
-      const currentPath = getCurrentPath()
-      if (pushedLocationsCount[currentPath] > 0) {
-        pushedLocationsCount[currentPath] = pushedLocationsCount[currentPath] - 1
-        alreadyPushedLocations[currentPath] = pushedLocationsCount[currentPath] !== 0
+      const isInExtraPush = pushStack[pushIndex] === getCurrentPath()
+      if (isInExtraPush) {
+        pushStack.splice(pushIndex, 1)
+        pushIndex = pushIndex !== 0 ? pushIndex - 1 : pushIndex
         window.isRemovingExtraPush = true
         window.history.back()
       }
@@ -122,7 +118,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
   }, [])
 
   return (
-    <RouterContext.Provider value={{ alreadyPushedLocations, modalStack, updateModalStack, pushedLocationsCount }}>
+    <RouterContext.Provider value={{ modalStack, updateModalStack, pushStack, pushIndex }}>
       {children}
     </RouterContext.Provider>
   )
