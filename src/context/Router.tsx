@@ -16,6 +16,7 @@ interface RouterProviderProps {
 }
 
 let pushIndex = 0
+let lastURL = ""
 const pushStack: RouterContextType["pushStack"] = []
 
 export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
@@ -25,6 +26,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     if (typeof window === "undefined") return
     const originalGo = window.history.go
     const originalPushState = window.history.pushState
+    const originalReplaceState = window.history.replaceState
     const patchHistory = () => {
       Object.defineProperty(window.history, "go", {
         writable: true,
@@ -43,10 +45,20 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         configurable: true,
         value: (...args: any) => {
           if (!args[2]) {
+            lastURL = getCurrentPath()
             pushStack.push(getCurrentPath())
             pushIndex = pushStack[pushIndex + 1] ? pushIndex + 1 : pushIndex
           }
+          else lastURL = args[2]
           return originalPushState.apply(window.history, args)
+        }
+      })
+      Object.defineProperty(window.history, "replaceState", {
+        writable: true,
+        configurable: true,
+        value: (...args: any) => {
+         if(args[2]) lastURL = args[2] 
+          return originalReplaceState.apply(window.history, args)
         }
       })
     }
@@ -83,8 +95,11 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
     const modalStack = window.modalStack || []
     const isSomeModalOpen = !!modalStack[0]
     if (isSomeModalOpen) {
-      window.isProgrammaticGo = true
-      window.history.go(1)
+      const isInExtraPush = lastURL === getCurrentPath()
+      if (isInExtraPush) {
+        window.isProgrammaticGo = true
+        window.history.go(1)
+      }
       const clone = [...modalStack]
       if (clone.length) {
         const lastModal = clone[clone.length - 1]
@@ -104,6 +119,7 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({ children }) => {
         window.history.back()
       }
     }
+    lastURL = getCurrentPath()
   }
 
   const handleBeforeUnload = () => setModalStack([])
